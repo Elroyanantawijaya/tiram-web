@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SI-RETAM — Viewer 3D Interaktif</title>
+<style>
+  :root{--bg:#0f141a;--panel:#161d26;--ink:#e8edf2;--muted:#9fb0c0;--acc:#f1c40f;--line:#2a3644;}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  #app{display:flex;flex-direction:column;height:100%}
+  header{padding:10px 16px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  header h1{font-size:15px;margin:0 12px 0 0;font-weight:700;letter-spacing:.3px}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px}
+  .tabs button{background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12.5px}
+  .tabs button.active{background:var(--acc);color:#111;border-color:var(--acc);font-weight:700}
+  .tabs button:hover{border-color:var(--acc)}
+  main{flex:1;position:relative;min-height:0}
+  #c{display:block;width:100%;height:100%;touch-action:none}
+  #hud{position:absolute;left:12px;bottom:12px;background:rgba(16,22,30,.82);border:1px solid var(--line);border-radius:10px;padding:10px 12px;max-width:min(520px,92vw);backdrop-filter:blur(4px)}
+  #hud h2{margin:0 0 4px;font-size:14px}
+  #hud p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.5}
+  #ctrls{position:absolute;right:12px;top:12px;display:flex;gap:6px}
+  #ctrls button{background:rgba(16,22,30,.82);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:12px;cursor:pointer}
+  #ctrls button:hover{border-color:var(--acc)}
+  #tip{position:absolute;left:12px;top:12px;font-size:11.5px;color:var(--muted);background:rgba(16,22,30,.7);padding:5px 9px;border-radius:8px;border:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>SI-RETAM · Viewer 3D</h1>
+    <div class="tabs" id="tabs"></div>
+  </header>
+  <main>
+    <canvas id="c"></canvas>
+    <div id="tip">Seret = putar · Scroll = zoom · Klik-kanan seret = geser</div>
+    <div id="ctrls">
+      <button id="spin">Auto-putar: ON</button>
+      <button id="reset">Reset tampilan</button>
+    </div>
+    <div id="hud"><h2></h2><p></p></div>
+  </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const S=THREE;
+const canvas=document.getElementById('c');
+const renderer=new S.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene=new S.Scene();
+scene.background=new S.Color(0x0f141a);
+scene.fog=new S.Fog(0x0f141a,30,70);
+const camera=new S.PerspectiveCamera(45,1,0.1,300);
+
+scene.add(new S.HemisphereLight(0xcfe4ff,0x2a2f36,0.9));
+const dl=new S.DirectionalLight(0xffffff,0.9);dl.position.set(8,14,10);scene.add(dl);
+const dl2=new S.DirectionalLight(0x88aaff,0.35);dl2.position.set(-10,6,-8);scene.add(dl2);
+scene.add(new S.GridHelper(80,80,0x2a3644,0x1b2430));
+
+const M=(c,m,r)=>new S.MeshStandardMaterial({color:c,metalness:m,roughness:r});
+const steel=M(0x9aa3ab,.8,.35),dark=M(0x55606a,.7,.5),copper=M(0xb87333,.75,.4),
+      yellow=M(0xf1c40f,.3,.5),lead=M(0x6b7078,.5,.6),pipe=M(0x8a9096,.7,.4),
+      rubber=M(0x2b2f36,.1,.9),innerM=M(0x3a4048,.3,.9);
+
+function cyl(r1,r2,h,mat,seg){return new S.Mesh(new S.CylinderGeometry(r1,r2,h,seg||28),mat);}
+function box(w,h,d,mat){return new S.Mesh(new S.BoxGeometry(w,h,d),mat);}
+function torus(r,t,mat,seg){return new S.Mesh(new S.TorusGeometry(r,t,14,seg||26),mat);}
+function sphere(r,mat){return new S.Mesh(new S.SphereGeometry(r,24,18),mat);}
+function pipeBetween(a,b,r,mat){
+  const A=new S.Vector3(a[0],a[1],a[2]),B=new S.Vector3(b[0],b[1],b[2]),d=new S.Vector3().subVectors(B,A);
+  const m=cyl(r,r,d.length(),mat,20);
+  m.position.copy(A).addScaledVector(d,0.5);
+  m.quaternion.setFromUnitVectors(new S.Vector3(0,1,0),d.clone().normalize());return m;
+}
+function arrowPipe(a,b,r,mat){const g=new S.Group();g.add(pipeBetween(a,b,r,mat));
+  const B=new S.Vector3(b[0],b[1],b[2]),A=new S.Vector3(a[0],a[1],a[2]),d=new S.Vector3().subVectors(B,A).normalize();
+  const cone=new S.Mesh(new S.ConeGeometry(r*2,r*4,16),mat);cone.position.copy(B);
+  cone.quaternion.setFromUnitVectors(new S.Vector3(0,1,0),d);g.add(cone);return g;}
+function route(pts,r,mat){const g=new S.Group();for(let i=0;i<pts.length-1;i++){g.add(pipeBetween(pts[i],pts[i+1],r,mat));if(i>0){const j=sphere(r*1.1,mat);j.position.set(pts[i][0],pts[i][1],pts[i][2]);g.add(j);}}return g;}
+function routeArrow(pts,r,mat){const g=route(pts,r,mat);const a=pts[pts.length-2],b=pts[pts.length-1];const d=new S.Vector3(b[0]-a[0],b[1]-a[1],b[2]-a[2]).normalize();const cone=new S.Mesh(new S.ConeGeometry(r*2,r*4,16),mat);cone.position.set(b[0],b[1],b[2]);cone.quaternion.setFromUnitVectors(new S.Vector3(0,1,0),d);g.add(cone);return g;}
+function roundRect(x,X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath();}
+function label(text,scale,x,y,z,bg,fg){
+  scale=scale||1;bg=bg||'rgba(20,26,34,.92)';fg=fg||'#e8edf2';
+  const pad=16,cv=document.createElement('canvas'),ctx=cv.getContext('2d');
+  ctx.font='bold 40px system-ui,Arial';const w=Math.ceil(ctx.measureText(text).width)+pad*2;
+  cv.width=w;cv.height=64;
+  ctx.font='bold 40px system-ui,Arial';ctx.fillStyle=bg;roundRect(ctx,0,0,w,64,12);ctx.fill();
+  ctx.fillStyle=fg;ctx.textBaseline='middle';ctx.fillText(text,pad,34);
+  const tex=new S.CanvasTexture(cv);tex.anisotropy=4;
+  const sp=new S.Sprite(new S.SpriteMaterial({map:tex,depthTest:false,transparent:true}));
+  sp.scale.set(w/64*0.85*scale,0.85*scale,1);sp.position.set(x,y,z);sp.renderOrder=999;return sp;
+}
+function trefoilTexture(){
+  const cv=document.createElement('canvas');cv.width=cv.height=256;const x=cv.getContext('2d');
+  x.fillStyle='#f1c40f';x.fillRect(0,0,256,256);x.fillStyle='#111';
+  const cx=128,cy=128;
+  for(let i=0;i<3;i++){const a=i*2*Math.PI/3-Math.PI/2;x.beginPath();x.moveTo(cx,cy);x.arc(cx,cy,110,a-0.52,a+0.52);x.closePath();x.fill();}
+  x.beginPath();x.arc(cx,cy,22,0,7);x.fill();
+  return new S.CanvasTexture(cv);
+}
+const trefoilTex=trefoilTexture();
+
+function bConditioner(){const g=new S.Group();
+  const body=cyl(1,1,2.2,steel);body.position.y=1.3;g.add(body);
+  const top=sphere(1,steel);top.scale.y=0.5;top.position.y=2.4;g.add(top);
+  const bot=sphere(1,steel);bot.scale.y=0.5;bot.position.y=0.2;g.add(bot);
+  const motor=cyl(0.28,0.28,0.5,dark);motor.position.y=3.0;g.add(motor);
+  const mbox=box(0.5,0.35,0.5,dark);mbox.position.y=3.35;g.add(mbox);
+  const shaft=cyl(0.05,0.05,1.4,steel);shaft.position.y=2.2;g.add(shaft);
+  const paddle=box(0.7,0.08,0.18,steel);paddle.position.y=1.55;g.add(paddle);
+  const vent=cyl(0.09,0.09,0.7,pipe);vent.position.set(0.55,3.0,0);vent.rotation.z=-0.5;g.add(vent);
+  g.add(pipeBetween([-1.6,0.6,0],[-0.9,0.6,0],0.16,pipe));
+  g.add(pipeBetween([0.9,0.6,0],[1.6,0.6,0],0.16,pipe));
+  g.add(label('vent udara',0.8,0.9,3.5,0));
+  g.add(label('motor pengaduk',0.8,0,3.95,0));
+  g.add(label('masuk (dari jig)',0.8,-1.7,0.1,0));
+  g.add(label('keluar',0.8,1.8,0.1,0));
+  g.userData={focus:new S.Vector3(0,1.6,0),dist:8};return g;}
+
+function bWHIMS(){const g=new S.Group();
+  const hous=box(2.2,1.8,1.6,dark);hous.position.y=1.4;g.add(hous);
+  const ring=torus(0.75,0.16,steel);ring.position.set(0,1.4,0.82);g.add(ring);
+  const matrix=torus(0.75,0.30,M(0x8b949c,.4,.85));matrix.position.set(0,1.4,0.7);g.add(matrix);
+  const coilL=cyl(0.34,0.34,0.5,copper);coilL.rotation.z=Math.PI/2;coilL.position.set(-1.2,1.4,0);g.add(coilL);
+  const coilR=coilL.clone();coilR.position.x=1.2;g.add(coilR);
+  g.add(pipeBetween([0,2.6,0.5],[0,3.3,0.5],0.15,pipe));
+  g.add(arrowPipe([-0.5,0.5,0.4],[-0.5,-0.4,0.4],0.14,pipe));
+  g.add(arrowPipe([0.5,0.5,0.4],[0.5,-0.4,0.4],0.14,pipe));
+  g.add(label('umpan (bubur)',0.8,0,3.6,0.5));
+  g.add(label('kumparan magnet',0.8,-2.0,1.4,0));
+  g.add(label('cincin + matriks baja',0.8,0,2.35,1.4));
+  g.add(label('fraksi magnetik',0.72,-0.7,-0.75,0.4));
+  g.add(label('non-magnetik → laut',0.72,1.1,-0.75,0.4));
+  g.userData={focus:new S.Vector3(0,1.4,0),dist:9};return g;}
+
+function bSensor(){const g=new S.Group();
+  const p=cyl(0.28,0.28,3.2,pipe);p.position.y=1.6;g.add(p);
+  const collar=cyl(0.55,0.55,0.7,yellow);collar.position.y=1.7;g.add(collar);
+  const collar2=cyl(0.6,0.6,0.2,dark);collar2.position.y=2.1;g.add(collar2);
+  const cab=box(0.9,1.3,0.6,steel);cab.position.set(1.6,0.75,0);g.add(cab);
+  const door=box(0.02,1.1,0.5,M(0x778391,.6,.4));door.position.set(1.14,0.8,0);g.add(door);
+  g.add(pipeBetween([0.55,1.7,0],[1.2,1.1,0],0.05,rubber));
+  g.add(arrowPipe([0,3.2,0],[0,3.9,0],0.1,pipe));
+  g.add(arrowPipe([0,0,0],[0,-0.5,0],0.1,pipe));
+  g.add(label('detektor NaI(Tl) + PMT',0.8,-1.3,1.95,0));
+  g.add(label('kabinet MCA / PLC',0.8,1.6,1.6,0));
+  g.add(label('fraksi magnetik masuk',0.75,0,4.1,0));
+  g.userData={focus:new S.Vector3(0.6,1.6,0),dist:8};return g;}
+
+function bValve(){const g=new S.Group();
+  g.add(pipeBetween([-1.5,0,0],[0,0,0],0.24,pipe));
+  const bodyv=cyl(0.34,0.34,0.7,rubber);bodyv.rotation.z=Math.PI/2;g.add(bodyv);
+  g.add(arrowPipe([0,0,0],[1.3,0.85,0],0.22,pipe));
+  g.add(arrowPipe([0,0,0],[1.3,-0.85,0],0.22,pipe));
+  const act=cyl(0.3,0.3,0.7,dark);act.position.y=0.75;g.add(act);
+  const knob=cyl(0.18,0.18,0.25,yellow);knob.position.y=1.2;g.add(knob);
+  g.add(label('aktuator pneumatik',0.8,0,1.65,0));
+  g.add(label('selongsong karet',0.8,-0.2,-0.95,0));
+  g.add(label('ke bunker',0.72,1.85,0.95,0));
+  g.add(label('ke laut',0.72,1.85,-0.95,0));
+  g.add(label('masuk',0.72,-1.8,0,0));
+  g.userData={focus:new S.Vector3(0,0,0),dist:7};return g;}
+
+function bBunker(){const g=new S.Group();
+  const w=2,h=1.6,d=1.6,t=0.16;
+  const wall=(ww,hh,dd,x,y,z)=>{const m=box(ww,hh,dd,lead);m.position.set(x,y,z);g.add(m);};
+  wall(w,t,d,0,0.0,0);
+  wall(w,h,t,0,h/2,d/2-t/2);
+  wall(w,h,t,0,h/2,-d/2+t/2);
+  wall(t,h,d,-w/2+t/2,h/2,0);
+  wall(t,h,d,w/2-t/2,h/2,0);
+  const inner=box(w-2*t,h-t,d-2*t,innerM);inner.position.y=h/2+0.06;g.add(inner);
+  const chute=cyl(0.3,0.3,0.6,pipe);chute.position.set(0,h+0.25,0);g.add(chute);
+  const tre=new S.Mesh(new S.PlaneGeometry(0.7,0.7),new S.MeshBasicMaterial({map:trefoilTex}));
+  tre.position.set(w/2-t/2+0.01,h*0.55,0);tre.rotation.y=Math.PI/2;g.add(tre);
+  g.add(label('masuk: konsentrat kaya monasit',0.72,0,h+0.75,0));
+  g.add(label('dinding berperisai (timbal)',0.8,-1.7,h*0.6,0));
+  g.userData={focus:new S.Vector3(0,h*0.5,0),dist:8};return g;}
+
+function stripLabels(grp){const rm=[];grp.traverse(o=>{if(o.isSprite)rm.push(o)});rm.forEach(o=>o.parent.remove(o));}
+
+function bAssembly(){const g=new S.Group();
+  const yB=0.17,HP=0.95,RR=0.11,Xc=-3.7,Xw=-1.6,Xs=0.2,Xv=1.9,Xb=3.7;
+  // ---- KIP deck + hull + water (konteks skala) ----
+  const deck=box(30,0.34,16,M(0x3a4653,.5,.75));deck.position.set(0,-0.17,-2.5);g.add(deck);
+  const hull=box(30,2.6,0.35,M(0x2c3540,.5,.7));hull.position.set(0,-1.3,5.6);g.add(hull);
+  const water=new S.Mesh(new S.PlaneGeometry(46,28),new S.MeshStandardMaterial({color:0x1c4a63,metalness:.2,roughness:.55,transparent:true,opacity:.85}));
+  water.rotation.x=-Math.PI/2;water.position.set(0,-2.5,16);g.add(water);
+  g.add(label('Dek KIP (alat hanya sebagian kecil dari kapal)',0.95,-8.4,0.2,-6));
+  // ---- skid + rel ----
+  const skid=box(10.2,0.25,3.4,M(0x4a5666,.5,.6));skid.position.set(0,0.05,0);g.add(skid);
+  [[-5,-1.6],[-2.5,-1.6],[0,-1.6],[2.5,-1.6],[5,-1.6],[-5,1.6],[5,1.6]].forEach(p=>{const c=cyl(0.045,0.045,0.95,yellow);c.position.set(p[0],0.5,p[1]);g.add(c);});
+  g.add(route([[-5,0.97,-1.6],[5,0.97,-1.6]],0.045,yellow));
+  g.add(route([[-5,0.97,-1.6],[-5,0.97,1.6]],0.045,yellow));
+  g.add(route([[5,0.97,-1.6],[5,0.97,1.6]],0.045,yellow));
+  // ---- 1 pengkondisi ----
+  (function(){const t=cyl(0.55,0.55,1.5,steel);t.position.set(Xc,0.92,0);g.add(t);
+    const dt=sphere(0.55,steel);dt.scale.y=0.5;dt.position.set(Xc,1.67,0);g.add(dt);
+    const db=sphere(0.55,steel);db.scale.y=0.5;db.position.set(Xc,0.25,0);g.add(db);
+    const mo=cyl(0.16,0.16,0.3,dark);mo.position.set(Xc,1.9,0);g.add(mo);
+    const mb=box(0.3,0.2,0.3,dark);mb.position.set(Xc,2.1,0);g.add(mb);})();
+  // ---- 2 WHIMS ----
+  (function(){const b=box(1.3,1.25,1.1,dark);b.position.set(Xw,0.795,0);g.add(b);
+    const cl=cyl(0.28,0.28,0.4,copper);cl.rotation.z=Math.PI/2;cl.position.set(Xw-0.72,0.795,0);g.add(cl);
+    const cr=cl.clone();cr.position.x=Xw+0.72;g.add(cr);
+    const rg=torus(0.42,0.1,steel);rg.position.set(Xw,0.795,0.56);g.add(rg);})();
+  // ---- 3 sensor ----
+  (function(){const p=cyl(0.16,0.16,1.25,pipe);p.position.set(Xs,0.925,0);g.add(p);
+    const co=cyl(0.32,0.32,0.42,yellow);co.position.set(Xs,0.98,0);g.add(co);
+    const cab=box(0.5,0.8,0.4,steel);cab.position.set(Xs+0.7,0.57,0.1);g.add(cab);
+    g.add(pipeBetween([Xs+0.16,0.98,0],[Xs+0.5,0.7,0.1],0.035,rubber));})();
+  // ---- 4 katup ----
+  (function(){g.add(pipeBetween([Xv-0.55,0.62,0],[Xv+0.15,0.62,0],0.16,pipe));
+    const bd=cyl(0.22,0.22,0.5,rubber);bd.rotation.z=Math.PI/2;bd.position.set(Xv-0.15,0.62,0);g.add(bd);
+    g.add(pipeBetween([Xv,0.62,0],[Xv+0.4,1.05,0],0.15,pipe));
+    g.add(pipeBetween([Xv,0.62,0],[Xv,0.62,0.5],0.15,pipe));
+    const ac=cyl(0.18,0.18,0.4,dark);ac.position.set(Xv-0.15,0.95,0);g.add(ac);
+    const kn=cyl(0.1,0.1,0.14,yellow);kn.position.set(Xv-0.15,1.2,0);g.add(kn);})();
+  // ---- 5 bunker ----
+  (function(){const w=1.5,h=1.4,d=1.4,t=0.14;const wl=(ww,hh,dd,x,y,z)=>{const m=box(ww,hh,dd,lead);m.position.set(x,y,z);g.add(m);};
+    wl(w,t,d,Xb,yB,0);wl(w,h,t,Xb,yB+h/2,d/2-t/2);wl(w,h,t,Xb,yB+h/2,-d/2+t/2);wl(t,h,d,Xb-w/2+t/2,yB+h/2,0);wl(t,h,d,Xb+w/2-t/2,yB+h/2,0);
+    const inr=box(w-2*t,h-t,d-2*t,innerM);inr.position.set(Xb,yB+h/2+0.05,0);g.add(inr);
+    const tre=new S.Mesh(new S.PlaneGeometry(0.55,0.55),new S.MeshBasicMaterial({map:trefoilTex}));tre.position.set(Xb+w/2-t/2+0.01,yB+h*0.55,0);tre.rotation.y=Math.PI/2;g.add(tre);})();
+  // ---- pipa tersambung ----
+  g.add(route([[-5.8,HP,0],[Xc-0.55,HP,0]],RR,pipe));
+  g.add(route([[Xc+0.55,HP,0],[Xw-0.65,HP,0]],RR,pipe));
+  g.add(route([[Xw,1.42,0],[Xw,1.75,0],[Xs,1.75,0],[Xs,1.55,0]],RR,pipe));
+  g.add(route([[Xs,0.30,0],[Xs,0.62,0],[Xv-0.55,0.62,0]],RR,pipe));
+  g.add(route([[Xv+0.4,1.05,0],[Xv+0.4,1.75,0],[Xb,1.75,0],[Xb,1.57,0]],RR,pipe));
+  g.add(route([[Xw,0.795,0.56],[Xw,0.62,1.3],[0,0.62,1.3]],RR,pipe));
+  g.add(route([[Xv,0.62,0.5],[Xv,0.62,1.3],[0,0.62,1.3]],RR,pipe));
+  const jn=sphere(0.13,pipe);jn.position.set(0,0.62,1.3);g.add(jn);
+  g.add(routeArrow([[0,0.62,1.3],[0,0.62,5.2],[0,0.2,5.9],[0,-2.0,6.6]],RR,pipe));
+  // ---- label ----
+  g.add(label('dari jig',0.95,-6.2,HP,0));
+  g.add(label('ke laut (lewat sisi kapal)',0.95,0,1.2,3.6));
+  [['1',Xc,2.45],['2',Xw,1.95],['3',Xs,1.95],['4',Xv,1.55],['5',Xb,1.95]].forEach(n=>g.add(label(n[0],1.25,n[1],n[2],0,'#f1c40f','#111')));
+  g.userData={focus:new S.Vector3(0,0.7,0.6),dist:19};return g;}
+
+const DATA=[
+  {id:'asm',name:'Rakitan (integrasi utuh)',build:bAssembly,
+   desc:'Kelima komponen berderet di atas satu skid kecil di dek KIP. Tiap pipa menyambung dari keluaran satu komponen ke masukan komponen berikutnya. Aliran yang dikembalikan ke laut dibuang lewat sisi luar kapal, bukan ke bawah. Ukuran alat hanya sebagian kecil dari kapal.'},
+  {id:'c1',name:'1 · Pengkondisi umpan',build:bConditioner,
+   desc:'Tangki penyangga sekaligus de-aerasi. Menenangkan aliran berdenyut dari jig, menyeragamkan kekentalan, dan membuang gelembung udara agar pemisahan magnetik dan pembacaan gamma tetap stabil dan akurat.'},
+  {id:'c2',name:'2 · Pemisah magnetik (WHIMS)',build:bWHIMS,
+   desc:'Pemisah fisik utama. Bubur melewati medan magnet kuat berisi matriks baja; monasit dan ilmenit yang magnetik tertahan, sedangkan kuarsa, zirkon, dan kasiterit yang non-magnetik lolos ke laut. Bekerja pada sifat magnetik, bukan berat jenis.'},
+  {id:'c3',name:'3 · Sensor gamma + PLC',build:bSensor,
+   desc:'Otak sistem. Detektor NaI(Tl) di luar pipa mencacah gamma dari fraksi magnetik. Karena hanya monasit yang radioaktif, bacaannya menjadi pengukur kadar monasit seketika. PLC mengolahnya lalu memerintah katup.'},
+  {id:'c4',name:'4 · Katup pengarah',build:bValve,
+   desc:'Katup jepit dua arah bergerak atas perintah PLC. Fraksi yang terbukti kaya monasit dialihkan ke bunker; sisanya ke laut. Selongsong karet dipilih karena tahan bubur berpasir yang abrasif.'},
+  {id:'c5',name:'5 · Bunker berperisai',build:bBunker,
+   desc:'Menampung konsentrat kaya monasit yang, setelah terpekatkan, menjadi TENORM yang panas. Dindingnya berperisai (timbal) sesuai kajian keselamatan, sebelum material diangkut ke darat untuk pemisahan elektrostatik dan proses kimia.'},
+];
+
+let current=null,currentData=null;
+function show(d){
+  if(current)scene.remove(current);
+  current=d.build();scene.add(current);currentData=d;
+  target.copy(current.userData.focus);radius=current.userData.dist;theta=0.9;phi=1.12;
+  document.querySelector('#hud h2').textContent=d.name;
+  document.querySelector('#hud p').textContent=d.desc;
+  [...tabs.children].forEach(b=>b.classList.toggle('active',b.dataset.id===d.id));
+}
+const tabs=document.getElementById('tabs');
+DATA.forEach(d=>{const b=document.createElement('button');b.textContent=d.name;b.dataset.id=d.id;b.onclick=()=>show(d);tabs.appendChild(b);});
+
+let theta=0.9,phi=1.12,radius=18;const target=new S.Vector3(0,0.6,0);
+let drag=false,pan=false,lx=0,ly=0;
+function updCam(){
+  phi=Math.max(0.15,Math.min(Math.PI-0.15,phi));radius=Math.max(3,Math.min(70,radius));
+  camera.position.set(target.x+radius*Math.sin(phi)*Math.cos(theta),target.y+radius*Math.cos(phi),target.z+radius*Math.sin(phi)*Math.sin(theta));
+  camera.lookAt(target);
+}
+canvas.addEventListener('pointerdown',e=>{drag=true;pan=(e.button===2);lx=e.clientX;ly=e.clientY;canvas.setPointerCapture(e.pointerId);});
+canvas.addEventListener('pointerup',()=>{drag=false;});
+canvas.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;
+  if(pan){const s=radius*0.0016;const right=new S.Vector3(Math.sin(theta-Math.PI/2),0,-Math.cos(theta-Math.PI/2));target.addScaledVector(right,-dx*s);target.y+=dy*s;}
+  else{theta-=dx*0.008;phi-=dy*0.008;}});
+canvas.addEventListener('wheel',e=>{e.preventDefault();radius*=(1+Math.sign(e.deltaY)*0.08);},{passive:false});
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
+
+let spin=true;
+document.getElementById('spin').onclick=function(){spin=!spin;this.textContent='Auto-putar: '+(spin?'ON':'OFF');};
+document.getElementById('reset').onclick=()=>{if(currentData){target.copy(current.userData.focus);radius=current.userData.dist;theta=0.9;phi=1.12;}};
+
+function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;if(canvas.width!==w||canvas.height!==h){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}}
+function loop(){requestAnimationFrame(loop);resize();if(spin&&!drag)theta+=0.0025;updCam();renderer.render(scene,camera);}
+show(DATA[0]);loop();
+</script>
+</body>
+</html>
