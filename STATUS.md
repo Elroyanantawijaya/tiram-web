@@ -3,9 +3,9 @@
 Daftar periksa penerimaan ada di `spec/PROMPT_Website_SI-RETAM.md` Lampiran B. Berkas ini
 mencatat posisi terkini terhadap daftar itu, diperbarui di akhir tiap sesi.
 
-**Posisi:** setelah sesi S1 dan dua perbaikan lanjutannya.
-**Cakupan yang sudah dikerjakan:** S0 preloader, S1 hero, infrastruktur bersama.
-**Belum disentuh:** S2–S10.
+**Posisi:** setelah sesi S2.
+**Cakupan yang sudah dikerjakan:** S0 preloader, S1 hero, S2 pendahuluan (a–f), infrastruktur bersama.
+**Belum disentuh:** S3–S10.
 
 Lampiran B adalah daftar penerimaan untuk **situs jadi**, bukan per sesi. Karena itu
 mayoritas butir di bawah wajar berstatus belum — bukan karena terlewat, melainkan karena
@@ -22,13 +22,14 @@ memang belum gilirannya.
 | Tidak ada foto/logo pihak ketiga | Seluruh visual prosedural (three.js, canvas, SVG). `#slot-foto-kip` ada dan sengaja kosong. |
 | Tidak ada angka di luar Lampiran A atau berkas esai | Seluruh angka bersumber dari `data/content.js`, yang disalin dari ketiga berkas sumber. Dua lubang data ditandai `TODO` alih-alih dikarang — lihat bagian bawah. |
 | Preloader kalibrasi detektor tampil dan keluar mulus (< 2,2 detik) | Diukur dengan `performance.measure('preloader')` di peramban, empat kali muat berturut-turut: **1027, 1027, 1028, 1030 ms**. Hero tampil ~1,11 detik sejak navigasi. Aturan §S0 "kalau aset sudah siap lebih cepat, percepat" kini diterapkan: kemajuan hanya merayap sampai font terpasang dan `load` selesai, lalu diselesaikan cepat. |
+| Enam sub-bagian pendahuluan (S2a–S2f) lengkap dan terhubung ke visual sticky | Diverifikasi lewat scroll terprogram melalui keempat sub-bagian a–d: panel sticky berganti tepat mengikuti posisi baca (`panel--a` aktif saat di S2a, dst., tanpa satu pun yang salah). S2e (linimasa lima regulasi) dan S2f (kalimat celah) tampil dengan naskah lengkap dari `content.js`. |
 
 ## Butir yang baru terpenuhi sebagian
 
 | Butir Lampiran B | Yang sudah | Yang belum |
 |---|---|---|
-| Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | Terverifikasi untuk S1: tanpa overflow horizontal di 360px, hero tepat 1,00× viewport di 360×800 dan 1440×900. Reduced-motion: lenis, kursor retikel, parallax, dan derau count-up mati; count-up langsung mengunci. Fallback WebGL: siluet SVG statis + bilah pesan yang tidak menimpa teks. | Hanya bisa diuji sejauh S1 ada. S2–S10 belum bisa dinilai. |
-| Daftar pustaka lengkap, tertaut, dapat dicari | 18 entri lengkap dengan DOI/URL di `s10.pustaka`. Mesin tooltip sitasi kini **aktif dan terverifikasi**: tiga sumber statistik di S1 dirender sebagai elemen `.sitasi`, tooltip muncul pada hover tetikus sungguhan maupun fokus keyboard, dan entri lengkap tampil benar. | S10 sendiri belum dirender, jadi belum ada daftar yang tampil dan belum ada pencarian. Klik sitasi melompat ke `#s10-referensi` yang masih kosong. |
+| Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | S1 **dan** S2 kini terverifikasi tanpa overflow horizontal di 360px dan 1440px. Di S2, panel sticky pindah ke atas kolom teks di layar sempit (bukan menumpuk di akhir) dan pin linimasa dilepas jadi daftar vertikal. Guard `kurangiGerak()` ada di titik yang benar dalam kode (loop gambar panel, pembuatan pin ScrollTrigger) dengan pola yang sama seperti S1 yang sudah terverifikasi jalan. | **Tidak bisa diverifikasi langsung**: lingkungan otomasi ini tidak punya cara mengemulasi `prefers-reduced-motion` di level OS, jadi perilaku reduced-motion S2 dijamin lewat pembacaan kode, bukan pengamatan runtime langsung — beda dengan S1 yang sempat diverifikasi dengan override `matchMedia`. S3–S10 belum bisa dinilai sama sekali. |
+| Daftar pustaka lengkap, tertaut, dapat dicari | 18 entri lengkap dengan DOI/URL di `s10.pustaka`. Mesin tooltip sitasi makin teruji: kini menangani sitasi ganda dalam satu kurung (dipecah per titik koma, tiap sub-sitasi resolve sendiri) dan dibangun ulang sebagai `<span role="button">` karena Chrome memaksa `<button>` jadi `inline-block` sehingga sitasi tak bisa pecah antar baris. 12 elemen `.sitasi` di S1+S2, semuanya resolve ke entri benar. | S10 sendiri belum dirender, jadi belum ada daftar yang tampil dan belum ada pencarian. Klik sitasi melompat ke `#s10-referensi` yang masih kosong. |
 
 ## Butir yang belum dikerjakan — di luar cakupan sesi ini
 
@@ -36,7 +37,6 @@ Naskah dan angkanya sudah lengkap di `data/content.js`; yang belum ada adalah ta
 
 | Butir Lampiran B | Naskah siap di |
 |---|---|
-| Enam sub-bagian pendahuluan (S2a–S2f) lengkap dan terhubung ke visual sticky | `s2.a` – `s2.f` |
 | Simulator "Empat Sifat" berfungsi untuk keempat mode dengan verdict yang benar | `s3.simulator` (termasuk data mineral terstruktur) |
 | Argumen "mengapa bukan sekadar menyetel ulang jig" lengkap dengan angka Rosita (2017) | `s3.b` |
 | Diagram batas sistem (hulu / SI-RETAM / hilir) jelas | `s4.diagramBatas` |
@@ -84,14 +84,49 @@ outline fokus `--gamma` 2px offset 3px tampil. Satu cacat ikutan ditemukan dan d
 sini: `entriLengkap()` menghasilkan titik ganda pada penulis yang berakhir dengan inisial
 (`"Manawan, M.. (2024)"`).
 
+**3. (Sesi S2) Kartu mineral awalnya `<button>` bersarang dengan sitasi — selesai.**
+Kartu mineral S2b semula `<button>`, padahal sitasi di dalam catatannya juga tombol.
+Tombol bersarang tidak sah dalam HTML dan merusak interaksi. Diganti `<article tabindex="0">`
+dengan `pointerenter`/`focusin` sebagai pemicu sorot, bukan semantik tombol.
+
+**4. (Sesi S2) Sitasi ganda dalam satu kurung hilang diam-diam — selesai.**
+`(Zglinicki dkk., 2021; Widana dkk., 2024)` hanya menghasilkan satu elemen `.sitasi` yang
+resolve ke penulis pertama; sitasi kedua lenyap dan tooltip menunjuk sumber yang salah.
+Untuk situs yang mengklaim kedisiplinan ilmiah ini bukan hal sepele. `tautkanSitasi()`
+sekarang memecah isi kurung pada `;` sehingga tiap sub-sitasi jadi elemen sendiri.
+
+**5. (Sesi S2) Sitasi `<button>` memutus alir baris — selesai.**
+Chrome memaksa `<button>` menjadi `display: inline-block` terlepas dari CSS, sehingga sitasi
+jadi kotak atomik yang tidak bisa pecah antar baris — kurung pembuka tertinggal sendirian di
+ujung baris sebelumnya. Diganti `<span role="button" tabindex="0">` dengan penanganan
+`Enter`/`Space` manual, yang mengikuti aliran teks seperti elemen inline lain.
+
+**6. (Sesi S2) Pin linimasa S2e tidak dievaluasi ulang saat ukuran layar berubah — selesai.**
+Keputusan pin-atau-tidak (§ambang 900px) hanya diambil sekali saat halaman dimuat. Jendela
+yang di-resize lintas ambang itu terkunci pada keputusan lama. Ditambahkan listener
+`matchMedia('(min-width: 900px)').addEventListener('change', ...)` yang membangun ulang
+pemicu ScrollTrigger.
+
+**7. (Sesi S2) Diagram SVG panel S2a terhimpit sampai tinggi nol di panel pendek — selesai.**
+Daftar lima langkah proses menghabiskan seluruh tinggi panel sticky sebelum diagram sempat
+kebagian ruang. SVG kini punya `min-height`, dan di layar sempit daftar hanya menampilkan
+langkah yang sedang berjalan alih-alih kelimanya sekaligus.
+
 ## Cacat terbuka
 
-**3. Rel pipa belum punya sambungan bernomor 1–5.**
+**8. Rel pipa belum punya sambungan bernomor 1–5.**
 Saat ini hanya progres scroll dan navigasi sepuluh section. Penomoran komponen menunggu S5,
 sesuai §3.4b.
 
-**4. Klik sitasi melompat ke section kosong.**
+**9. Klik sitasi melompat ke section kosong.**
 `#s10-referensi` belum berisi apa pun sampai sesi S10.
+
+**10. Reduced-motion S2 belum diverifikasi lewat pengamatan runtime.**
+Guard `kurangiGerak()` ada di kode (loop gambar panel, pembuatan pin ScrollTrigger), tapi
+lingkungan otomasi sesi ini tidak punya cara mengemulasi `prefers-reduced-motion` di level
+OS untuk mengonfirmasinya secara langsung — beda dari S1 yang sempat diverifikasi dengan
+override `matchMedia`. Perlu dicek manual di peramban biasa (DevTools → Rendering →
+Emulate CSS media feature).
 
 ---
 
