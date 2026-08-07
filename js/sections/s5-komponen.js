@@ -6,6 +6,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { el, kosongkan, paragraf, kurangiGerak } from '../dom.js';
 import { pengelolaScene } from '../scene.js';
 import { bangunPanggungKomponen } from '../models/panggung-komponen.js';
+import { buatWidgetPengkondisi } from '../widgets/pengkondisi.js';
+
+/** Widget simulasi per komponen. Diisi satu per satu; yang belum ada dilewati. */
+const WIDGET = {
+  c1: buatWidgetPengkondisi,
+};
 
 export function rakitS5(CONTENT) {
   const section = document.getElementById('s5-komponen');
@@ -46,6 +52,8 @@ export function rakitS5(CONTENT) {
       blok(s5.labelBlok.bagaimana, k.bagaimana),
       blok(s5.labelBlok.ilmu, k.ilmu)
     );
+    const buat = WIDGET[k.id];
+    if (buat) wadah.append(buat(k).el);
   };
 
   for (const k of s5.komponen) {

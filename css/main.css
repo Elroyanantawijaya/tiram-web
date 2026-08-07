@@ -1042,6 +1042,93 @@ p {
   padding-left: 0.9rem;
 }
 
+/* ===== Widget simulasi komponen ===== */
+.widget {
+  margin-top: 2rem;
+  padding: clamp(0.9rem, 2.5vw, 1.4rem);
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  border-radius: 4px;
+}
+
+.widget__kendali { margin-bottom: 1rem; }
+
+.widget__label {
+  display: block;
+  font-size: var(--step-13);
+  color: var(--kabut);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.widget__baris { display: flex; align-items: center; gap: 0.9rem; }
+
+.widget__slider {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--gamma);
+  cursor: pointer;
+}
+
+.widget__nilai {
+  flex: 0 0 3.2rem;
+  text-align: right;
+  font-size: var(--step-15);
+  color: var(--gamma);
+  font-variant-numeric: tabular-nums;
+}
+
+.widget__kanvas { width: 100%; display: block; }
+
+.widget__bacaan {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--garis);
+}
+
+.widget__bacaan > div { display: flex; align-items: baseline; gap: 0.6rem; }
+
+.widget__kunci {
+  font-family: var(--font-mono);
+  font-size: var(--step-13);
+  color: var(--kabut);
+}
+
+.widget__angka {
+  font-size: var(--step-17);
+  color: var(--baja);
+  font-variant-numeric: tabular-nums;
+}
+
+.widget__status {
+  margin: 0.8rem 0 0;
+  font-size: var(--step-13);
+  color: var(--magnet);
+}
+
+.widget__status--awas { color: var(--gamma); }
+
+.widget__ilmu {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.widget__ilmu li {
+  font-size: var(--step-13);
+  color: var(--kabut);
+  border: 1px solid var(--garis);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+}
+
 /* Panel 3D: satu jari harus tetap bisa menggulir halaman (§6). */
 .scrolly__panel { touch-action: pan-y; }
 

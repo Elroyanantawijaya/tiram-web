@@ -355,6 +355,22 @@ export const CONTENT = {
           tampilan: 'Grafik kiri menunjukkan masukan berdenyut, grafik kanan menunjukkan keluaran yang dihaluskan.',
           perilaku: 'Naikkan denyut → keluaran tetap tenang sampai kapasitas penyangga terlampaui. Gelembung naik dan keluar lewat vent.',
           labelIlmu: ['kontinuitas', 'asas Archimedes', 'kapasitansi hidraulik', 'reologi bubur'],
+
+          // Label antarmuka widget. Seluruhnya diturunkan dari rumusan §S5 di
+          // atas, bukan istilah baru.
+          ui: {
+            slider: 'Keberdenyutan keluaran jig',
+            grafikMasuk: 'masukan (berdenyut)',
+            grafikKeluar: 'keluaran (dihaluskan)',
+            bacaanRiak: 'riak keluaran',
+            bacaanTinggi: 'tinggi muka bubur',
+            labelVent: 'vent udara',
+            status: {
+              tenang: 'Penyangga menahan lonjakan',
+              terlampaui: 'Kapasitas penyangga terlampaui',
+            },
+            padananTeks: 'Simulasi pengkondisi umpan: grafik masukan yang berdenyut dari jig di satu sisi, tangki penyangga dengan gelembung yang naik ke vent di tengah, dan grafik keluaran yang sudah dihaluskan di sisi lain.',
+          },
         },
       },
       {
