@@ -45,6 +45,7 @@ export const CONTENT = {
     navLabel: 'Navigasi bagian',
     padananTeks: {
       heroScene: 'Latar beranimasi: siluet Kapal Isap Produksi di garis cakrawala senja, dengan laut gelap beriak di bawahnya.',
+      panggungKomponen: 'Model tiga dimensi komponen SI-RETAM yang sedang dibaca, dapat diputar dan diperbesar. Seluruh keterangan komponen tersedia sebagai teks di samping model ini.',
     },
   },
 
@@ -324,7 +325,16 @@ export const CONTENT = {
   // ===== S5 — Komponen: lima alat, satu per satu =====
   // apa/bagaimana/ilmu disalin utuh dari Justifikasi_Prinsip_SI-RETAM.docx Bagian B.
   s5: {
+    eyebrow: 'Komponen',
+    judul: 'Lima alat, satu per satu',
     intro: 'Modul tersusun atas lima komponen inti dengan aliran material satu arah dari jig sampai keluaran.',
+
+    // Tiga blok tetap yang wajib ada di setiap komponen (§5).
+    labelBlok: {
+      apa: 'Apa yang dilakukan',
+      bagaimana: 'Bagaimana caranya',
+      ilmu: 'Ilmu yang melandasi',
+    },
     komponen: [
       {
         id: 'c1',
@@ -334,6 +344,14 @@ export const CONTENT = {
         apa: 'Menerima tailing yang keluar berdenyut dari jig, meredam lonjakan aliran, membuang gelembung udara yang terperangkap, menyeragamkan kandungan padatan, lalu mengalirkannya dengan laju dan kekentalan yang stabil.',
         bagaimana: 'Tangki ini berfungsi sebagai penampung penyangga (buffer) dengan keluaran terkontrol; ia bekerja seperti kapasitor hidraulik yang menghaluskan fluktuasi laju alir. Gelembung udara naik dan dibuang karena gaya apung, sebab udara yang terperangkap mengubah densitas semu dan mengganggu baik penangkapan magnetik maupun pembacaan gamma. Sebuah pengukur densitas menjaga persen padatan tetap konstan.',
         ilmu: 'Mekanika fluida — asas kekekalan massa (kontinuitas) untuk aliran mantap, asas Archimedes (gaya apung) untuk de-aerasi, konsep kapasitansi hidraulik dan waktu tinggal untuk meredam lonjakan, serta reologi bubur (ada kecepatan minimum agar padatan tetap melayang dan tidak mengendap). Intinya: gaya magnet pada partikel dan laju cacah gamma sama-sama bergantung pada aliran yang stabil, sehingga menstabilkan umpan sama dengan membuat pengukuran menjadi sahih.',
+        // Teks label pada model 3D, disalin dari pemanggilan label() di
+        // spec/SI-RETAM_3D.html beserta titik jangkarnya dalam koordinat model.
+        anotasi: [
+          { teks: 'vent udara', pos: [0.9, 3.5, 0] },
+          { teks: 'motor pengaduk', pos: [0, 3.95, 0] },
+          { teks: 'masuk (dari jig)', pos: [-1.7, 0.1, 0] },
+          { teks: 'keluar', pos: [1.8, 0.1, 0] },
+        ],
         widget: {
           jenis: 'slider tunggal — keberdenyutan keluaran jig',
           tampilan: 'Grafik kiri menunjukkan masukan berdenyut, grafik kanan menunjukkan keluaran yang dihaluskan.',
@@ -349,6 +367,13 @@ export const CONTENT = {
         apa: 'Melewatkan bubur melalui daerah bermedan magnet kuat yang diisi matriks baja (misalnya wol baja atau pelat beralur). Partikel magnetik (monasit yang paramagnetik dan ilmenit yang magnetik kuat) tertangkap dan tertahan pada matriks, sementara partikel non-magnetik (kuarsa, zirkon, kasiterit) mengalir lolos. Setelah itu medan dimatikan dan fraksi magnetik dibilas keluar sebagai aliran tersendiri.',
         bagaimana: 'Gaya magnet pada partikel sebanding dengan volume partikel dikali kerentanan magnetiknya dikali kuat medan dikali gradien medan. Matriks baja menciptakan gradien medan lokal yang sangat tajam pada tepi-tepinya, dan gradien inilah yang melipatgandakan gaya; itu sebabnya disebut gradien tinggi. Mineral paramagnetik seperti monasit hanya punya kerentanan kecil, sehingga butuh medan tinggi (1–2 Tesla) agar tertangkap; itu sebabnya disebut intensitas tinggi. Pemisahan terjadi karena keseimbangan gaya: bagi partikel magnetik, gaya magnet mengalahkan gaya seret aliran dan gravitasi; bagi non-magnetik, tidak.',
         ilmu: 'Kemagnetan bahan (paramagnetik vs diamagnetik), persamaan gaya magnet pada partikel, dan keseimbangan gaya (magnet vs seret fluida vs gravitasi). Ini benar-benar berbeda dari jig, yang memakai densitas dan denyut air (stratifikasi berdasarkan kecepatan mengendap), tanpa kemagnetan sama sekali. Batas jujurnya: gaya magnet sebanding dengan diameter pangkat tiga sedangkan gaya seret hanya sebanding dengan diameter, sehingga pada butir sangat halus gaya magnet mengecil lebih cepat daripada seret dan partikel halus lolos — inilah dasar keterbatasan fraksi ultrahalus.',
+        anotasi: [
+          { teks: 'umpan (bubur)', pos: [0, 3.6, 0.5] },
+          { teks: 'kumparan magnet', pos: [-2.0, 1.4, 0] },
+          { teks: 'cincin + matriks baja', pos: [0, 2.35, 1.4] },
+          { teks: 'fraksi magnetik', pos: [-0.7, -0.75, 0.4] },
+          { teks: 'non-magnetik → laut', pos: [1.1, -0.75, 0.4] },
+        ],
         widget: {
           jenis: 'dua slider — kuat medan (0–2 T) dan ukuran butir (5–500 µm)',
           tampilan: 'Partikel mengalir melalui matriks baja; yang tertangkap menempel di tepi matriks. Pembaca mono: efisiensi tangkap.',
@@ -364,6 +389,11 @@ export const CONTENT = {
         apa: 'Detektor kilau yang dipasang di luar pipa mencacah foton gamma dari material yang lewat, memilahnya menurut energi untuk mengenali sidik deret Th/U, mengubah laju cacah menjadi aktivitas, lalu lewat kurva kalibrasi menjadi kadar monasit; PLC membandingkannya dengan ambang dan menggerakkan katup.',
         bagaimana: 'Deret luruh Th-232 dan U-238 memancarkan gamma pada energi khas (misalnya Pb-212 pada 239 keV dan Tl-208 pada 2,61 MeV untuk deret torium) yang berfungsi sebagai sidik jari. Foton gamma menumbuk kristal NaI(Tl) dan memicu kilau cahaya yang sebanding dengan energinya; tabung pengganda foto (PMT) mengubah kilau itu menjadi pulsa listrik dan memperkuatnya melalui efek fotolistrik dan penggandaan elektron; penganalisis salur ganda (MCA) memilah pulsa menurut tingginya, yaitu menurut energi, membentuk spektrum tempat puncak Th/U dibaca dan latar dikurangi. Ketelitian mengikuti statistik Poisson: ketidakpastian relatif kira-kira satu dibagi akar jumlah cacah, sehingga makin banyak cacah makin teliti.',
         ilmu: 'Fisika inti (peluruhan radioaktif dan pancaran gamma), efek fotolistrik dan pendaran (skintilasi), statistik cacah Poisson, dan kalibrasi. Kuncinya: gamma menembus materi (tidak seperti alfa atau beta), sehingga dapat dibaca menembus dinding pipa dan mewakili keseluruhan material, bukan hanya permukaan — ideal untuk sensor inline non-kontak. Dan karena di antara mineral ini hanya monasit yang memancarkan gamma tersebut, pembacaan gamma pada dasarnya adalah pembacaan kadar monasit.',
+        anotasi: [
+          { teks: 'detektor NaI(Tl) + PMT', pos: [-1.3, 1.95, 0] },
+          { teks: 'kabinet MCA / PLC', pos: [1.6, 1.6, 0] },
+          { teks: 'fraksi magnetik masuk', pos: [0, 4.1, 0] },
+        ],
         widget: {
           jenis: 'spektrum langsung di canvas + slider waktu cacah',
           tampilan: 'Sumbu energi dengan puncak Pb-212 pada 239 keV dan Tl-208 pada 2,61 MeV, latar yang dikurangi.',
@@ -379,6 +409,13 @@ export const CONTENT = {
         apa: 'Pembelok dua arah yang mengarahkan aliran bubur ke salah satu dari dua keluaran berdasarkan sinyal PLC.',
         bagaimana: 'Katup jepit memiliki selongsong karet lentur yang dijepit atau dibuka oleh aktuator pneumatik; menjepit satu cabang memaksa aliran ke cabang lain. Ia dipilih karena bubur bersifat abrasif, sedangkan katup jepit berlubang penuh dan mulus tanpa celah atau dudukan logam yang mudah tergerus atau tersumbat — satu-satunya bagian yang terkena bubur adalah selongsong karet yang bisa diganti. Katup gerbang atau bola akan cepat aus dan macet oleh pasir.',
         ilmu: 'Mekanika aktuasi pneumatik dan deformasi elastis selongsong, serta pertimbangan ketahanan aus terhadap bubur abrasif. Satu hal penting: ada jeda tempuh antara sensor dan katup, sehingga PLC harus menunda perintah persis selama waktu tempuh itu agar katup membelokkan bongkahan aliran yang sama dengan yang tadi diukur. Katup tidak memisahkan apa pun — ia hanya membelokkan seluruh segmen aliran.',
+        anotasi: [
+          { teks: 'aktuator pneumatik', pos: [0, 1.65, 0] },
+          { teks: 'selongsong karet', pos: [-0.2, -0.95, 0] },
+          { teks: 'ke bunker', pos: [1.85, 0.95, 0] },
+          { teks: 'ke laut', pos: [1.85, -0.95, 0] },
+          { teks: 'masuk', pos: [-1.8, 0, 0] },
+        ],
         widget: {
           jenis: 'demo waktu tunda PLC',
           tampilan: 'Segmen bubur bergerak di pipa dari sensor ke katup. Selongsong karet terlihat terjepit oleh aktuator pneumatik.',
@@ -394,6 +431,10 @@ export const CONTENT = {
         apa: 'Menyimpan konsentrat kaya monasit (yang sudah ditiriskan) sampai diangkut ke darat.',
         bagaimana: 'Monasit yang terpekatkan adalah pemancar gamma kuat, dan perisai menahan gamma. Peredaman gamma mengikuti hukum eksponensial, yaitu intensitas menurun sebagai fungsi eksponen dari tebal dan koefisien serap bahan; bahan padat bernomor atom tinggi seperti timbal, atau baja dan beton tebal, menyerap lebih banyak per sentimeter. Dengan dinding berperisai, laju dosis di luar bunker ditekan ke tingkat aman.',
         ilmu: 'Peredaman gamma (serapan eksponensial dan koefisien atenuasi), serta asas proteksi radiasi (dosis dikurangi dengan menambah jarak, mengurangi waktu, dan menambah perisai). Ketebalan perisai adalah hasil perhitungan berdasarkan aktivitas nyata, sehingga rancangan menyebut "perisai sesuai kajian keselamatan", bukan memaku tebal timbal tertentu.',
+        anotasi: [
+          { teks: 'masuk: konsentrat kaya monasit', pos: [0, 2.35, 0] },
+          { teks: 'dinding berperisai (timbal)', pos: [-1.7, 0.96, 0] },
+        ],
         widget: {
           jenis: 'slider — tebal perisai timbal',
           tampilan: 'Laju dosis di luar dinding turun mengikuti peluruhan eksponensial I = I₀e^(−µx), dibaca pada panel mono.',

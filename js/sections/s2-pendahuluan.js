@@ -162,6 +162,11 @@ export function rakitS2(CONTENT) {
         pin: true,
         scrub: 0.6,
         invalidateOnRefresh: true,
+        // Pin ini menyisipkan spacer yang menggeser seluruh isi di bawahnya.
+        // Karena ia dibuat belakangan (saat ambang lebar terlampaui), tanpa
+        // prioritas ini pemicu S5 menghitung posisinya lebih dulu — sebelum
+        // spacer ada — dan meleset sejauh tinggi spacer itu.
+        refreshPriority: 1,
         // Progres dijepit: scrub boleh melampaui 0..1 sesaat, dan tanpa jepitan
         // rel ikut tergeser melewati kartu terakhir.
         onUpdate: (self) => {

@@ -1000,6 +1000,59 @@ p {
 
 .s2-celah__dukung { color: var(--kabut); }
 
+/* ===== S5 Komponen ===== */
+.s5__intro {
+  color: var(--kabut);
+  margin-top: 1rem;
+}
+
+.komponen__nomor {
+  font-size: var(--step-13);
+  color: var(--gamma);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.5rem;
+}
+
+.komponen__nama {
+  font-size: var(--step-40);
+  margin-bottom: 0.25em;
+}
+
+.komponen__subjudul {
+  color: var(--kabut);
+  font-size: var(--step-15);
+  margin: 0 0 1.75rem;
+}
+
+.komponen__blok + .komponen__blok { margin-top: 1.5rem; }
+
+.komponen__label {
+  color: var(--kabut);
+  margin-bottom: 0.4rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--garis);
+}
+
+.kartu-opsional {
+  border: 1px dashed var(--garis);
+  border-radius: 4px;
+  padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+.kartu-opsional__badge { color: var(--gamma); margin-bottom: 0.75rem; }
+
+.kartu-opsional__guna {
+  margin-top: 1.25rem;
+  color: var(--kabut);
+  border-left: 2px solid var(--garis);
+  padding-left: 0.9rem;
+}
+
+/* Panel 3D: satu jari harus tetap bisa menggulir halaman (§6). */
+.scrolly__panel { touch-action: pan-y; }
+
+.scrolly__panel--fallback { display: flex; align-items: flex-start; }
+
 /* ===== Gerak terhormat ===== */
 @media (prefers-reduced-motion: reduce) {
   *,

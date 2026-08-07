@@ -73,7 +73,9 @@ class PengelolaScene {
     }
     if (!entri.isi) {
       try {
-        entri.isi = entri.bangun({ mutuRendah: mutuRendah() });
+        // Renderer ikut diserahkan: OrbitControls butuh domElement-nya, dan
+        // envMap butuh PMREMGenerator yang terikat ke renderer yang sama.
+        entri.isi = entri.bangun({ mutuRendah: mutuRendah(), renderer: this.renderer });
       } catch (e) {
         console.warn(`Scene "${entri.id}" gagal dibangun:`, e);
         entri.gagal = true;
@@ -83,12 +85,20 @@ class PengelolaScene {
     }
     entri.wadah.append(this.renderer.domElement);
     this.aktif = entri;
+    // Setelan renderer bersifat per scene. Kalau disetel global, tampilan hero
+    // yang sudah diverifikasi ikut bergeser begitu scene lain menyetelnya.
+    this.renderer.toneMapping = entri.isi.toneMapping ?? THREE.NoToneMapping;
+    this.renderer.toneMappingExposure = entri.isi.toneMappingExposure ?? 1;
+    entri.isi.aktifkan?.();
     this._ukurUlang();
     this._mulai();
   }
 
   _nonaktifkan() {
     this._berhenti();
+    // Kontrol scene yang tidak aktif harus dimatikan: canvas dipakai bergantian,
+    // jadi kalau tidak, ia ikut menanggapi gestur milik scene lain.
+    this.aktif?.isi?.nonaktifkan?.();
     if (this.renderer?.domElement.parentNode) this.renderer.domElement.remove();
     this.aktif = null;
   }
