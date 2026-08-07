@@ -8,6 +8,7 @@ import Lenis from 'lenis';
 import { CONTENT } from '../data/content.js';
 import { el, kosongkan, kurangiGerak, formatAngka } from './dom.js';
 import { rakitS1 } from './sections/s1-hero.js';
+import { rakitS2 } from './sections/s2-pendahuluan.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -254,6 +255,7 @@ function mulai() {
   siapkanTooltipSitasi();
 
   const s1 = rakitS1(CONTENT);
+  rakitS2(CONTENT);
 
   siapkanRelPipa();
   ScrollTrigger.refresh();

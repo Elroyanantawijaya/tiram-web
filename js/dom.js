@@ -121,7 +121,18 @@ export function tautkanSitasi(teks, pustaka, petunjuk) {
 
   while ((m = pola.exec(teks)) !== null) {
     if (m.index > akhir) frag.append(document.createTextNode(teks.slice(akhir, m.index)));
-    frag.append(buatSitasi(m[0], cariPustaka(m[1], pustaka), petunjuk));
+
+    // Satu kurung bisa memuat lebih dari satu sitasi, dipisah titik koma —
+    // mis. "(Zglinicki dkk., 2021; Widana dkk., 2024)". Masing-masing harus jadi
+    // elemen sendiri, kalau tidak sitasi kedua hilang dan tooltipnya salah sumber.
+    const bagian = m[1].split(';').map((s) => s.trim()).filter(Boolean);
+    frag.append(document.createTextNode('('));
+    bagian.forEach((b, i) => {
+      if (i > 0) frag.append(document.createTextNode('; '));
+      frag.append(buatSitasi(b, cariPustaka(b, pustaka), petunjuk));
+    });
+    frag.append(document.createTextNode(')'));
+
     akhir = m.index + m[0].length;
   }
   if (akhir < teks.length) frag.append(document.createTextNode(teks.slice(akhir)));
@@ -143,17 +154,29 @@ export function idPustaka(p) {
 
 export const cariPustakaId = (id, pustaka) => pustaka.find((p) => idPustaka(p) === id) || null;
 
-/** Elemen sitasi yang bisa di-hover dan difokus keyboard. */
+/**
+ * Elemen sitasi yang bisa di-hover dan difokus keyboard.
+ *
+ * Sengaja <span role="button">, bukan <button>: Chrome memaksa elemen button
+ * menjadi inline-block sehingga ia jadi kotak atomik yang tidak bisa pecah antar
+ * baris — akibatnya kurung pembuka tertinggal sendirian di ujung baris. Span
+ * mengikuti aliran teks biasa, jadi sitasi panjang membungkus dengan wajar.
+ */
 export function buatSitasi(teks, entri, petunjuk) {
   if (!entri) return document.createTextNode(teks);
-  return el('button', {
+  const buka = () => { location.hash = '#s10-referensi'; };
+  return el('span', {
     class: 'sitasi',
-    type: 'button',
+    role: 'button',
+    tabindex: '0',
     title: entriLengkap(entri),
     'aria-label': `${petunjuk}: ${entriLengkap(entri)}`,
     'data-kursor': 'buka',
     text: teks,
-    onclick: () => { location.hash = '#s10-referensi'; },
+    onclick: buka,
+    onkeydown: (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); buka(); }
+    },
   });
 }
 

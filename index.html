@@ -79,16 +79,24 @@
     </section>
 
     <!-- S2 — Pendahuluan (scrollytelling, kolom teks + panel sticky) -->
-    <section id="s2-pendahuluan" class="section section--scrolly" data-section="s2" aria-label="Pendahuluan">
-      <div class="section__scroll">
-        <div class="subsection" data-subsection="a"></div>
-        <div class="subsection" data-subsection="b"></div>
-        <div class="subsection" data-subsection="c"></div>
-        <div class="subsection" data-subsection="d"></div>
-        <div class="subsection" data-subsection="e"></div>
-        <div class="subsection" data-subsection="f"></div>
+    <!-- S2a-S2d scrollytelling dengan panel sticky; S2e linimasa mendatar
+         selebar layar; S2f teks besar tanpa hiasan. Tiga perlakuan berbeda,
+         jadi tidak diseragamkan jadi satu grid. -->
+    <section id="s2-pendahuluan" class="section" data-section="s2" aria-label="Pendahuluan">
+      <div class="section__content s2__kepala"></div>
+
+      <div class="scrolly">
+        <div class="scrolly__panel" data-panel="s2" aria-hidden="true"></div>
+        <div class="scrolly__teks">
+          <div class="subsection" data-subsection="a"></div>
+          <div class="subsection" data-subsection="b"></div>
+          <div class="subsection" data-subsection="c"></div>
+          <div class="subsection" data-subsection="d"></div>
+        </div>
       </div>
-      <div class="section__sticky" aria-hidden="true"></div>
+
+      <div class="s2-linimasa" data-subsection="e"></div>
+      <div class="s2-celah" data-subsection="f"></div>
     </section>
 
     <!-- S3 — Argumen: simulator "Empat Sifat" (signature) -->
@@ -105,15 +113,17 @@
     </section>
 
     <!-- S5 — Komponen: canvas 3D sticky + panel teks bergulir -->
-    <section id="s5-komponen" class="section section--scrolly" data-section="s5" aria-label="Komponen">
-      <div class="section__sticky" data-component="canvas-3d" aria-hidden="true"></div>
-      <div class="section__scroll">
-        <div class="subsection" data-component-id="c1"></div>
-        <div class="subsection" data-component-id="c2"></div>
-        <div class="subsection" data-component-id="c3"></div>
-        <div class="subsection" data-component-id="c4"></div>
-        <div class="subsection" data-component-id="c5"></div>
-        <div class="subsection" data-component-id="hidrosiklon"></div>
+    <section id="s5-komponen" class="section" data-section="s5" aria-label="Komponen">
+      <div class="scrolly">
+        <div class="scrolly__panel" data-component="canvas-3d" aria-hidden="true"></div>
+        <div class="scrolly__teks">
+          <div class="subsection" data-component-id="c1"></div>
+          <div class="subsection" data-component-id="c2"></div>
+          <div class="subsection" data-component-id="c3"></div>
+          <div class="subsection" data-component-id="c4"></div>
+          <div class="subsection" data-component-id="c5"></div>
+          <div class="subsection" data-component-id="hidrosiklon"></div>
+        </div>
       </div>
     </section>
 
