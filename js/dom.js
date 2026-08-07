@@ -121,24 +121,40 @@ export function tautkanSitasi(teks, pustaka, petunjuk) {
 
   while ((m = pola.exec(teks)) !== null) {
     if (m.index > akhir) frag.append(document.createTextNode(teks.slice(akhir, m.index)));
-    const entri = cariPustaka(m[1], pustaka);
-    if (entri) {
-      frag.append(el('button', {
-        class: 'sitasi',
-        type: 'button',
-        title: entriLengkap(entri),
-        'aria-label': `${petunjuk}: ${entriLengkap(entri)}`,
-        'data-kursor': 'buka',
-        text: m[0],
-        onclick: () => { location.hash = '#s10-referensi'; },
-      }));
-    } else {
-      frag.append(document.createTextNode(m[0]));
-    }
+    frag.append(buatSitasi(m[0], cariPustaka(m[1], pustaka), petunjuk));
     akhir = m.index + m[0].length;
   }
   if (akhir < teks.length) frag.append(document.createTextNode(teks.slice(akhir)));
   return frag;
+}
+
+/**
+ * Id stabil untuk satu entri pustaka: nama keluarga penulis pertama + tahun.
+ * Diturunkan, bukan disimpan, supaya daftar pustaka tetap apa adanya seperti di esai.
+ */
+export function idPustaka(p) {
+  const nama = p.penulis
+    .split(/\s*(?:,|&|dkk\.)/)[0]
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  return `${nama}-${(p.tahun.match(/\d{4}/) || [''])[0]}`;
+}
+
+export const cariPustakaId = (id, pustaka) => pustaka.find((p) => idPustaka(p) === id) || null;
+
+/** Elemen sitasi yang bisa di-hover dan difokus keyboard. */
+export function buatSitasi(teks, entri, petunjuk) {
+  if (!entri) return document.createTextNode(teks);
+  return el('button', {
+    class: 'sitasi',
+    type: 'button',
+    title: entriLengkap(entri),
+    'aria-label': `${petunjuk}: ${entriLengkap(entri)}`,
+    'data-kursor': 'buka',
+    text: teks,
+    onclick: () => { location.hash = '#s10-referensi'; },
+  });
 }
 
 function cariPustaka(kunci, pustaka) {
@@ -149,7 +165,12 @@ function cariPustaka(kunci, pustaka) {
 }
 
 export function entriLengkap(p) {
-  return [p.penulis, `(${p.tahun})`, p.judul, p.sumber, p.url].filter(Boolean).join('. ');
+  // Sebagian ruas di daftar pustaka sudah berakhir dengan titik (mis. inisial
+  // penulis "Manawan, M."); titiknya dilepas dulu agar tidak jadi titik ganda.
+  return [p.penulis, `(${p.tahun})`, p.judul, p.sumber, p.url]
+    .filter(Boolean)
+    .map((s) => String(s).replace(/\.\s*$/, ''))
+    .join('. ');
 }
 
 /** Paragraf dengan sitasi yang sudah tertaut. */

@@ -60,10 +60,11 @@ export const CONTENT = {
     judul: 'SI-RETAM',
     subjudul: 'Pemisahan Magnetik Terpandu Sensor Gamma untuk Memulihkan Monasit dari Tailing Timah Lepas Pantai di Hilir Jig Kapal Isap Produksi',
     kalimatKunci: 'Sistem Rekaveri Tailing Aman Monasit',
+    // sumberId menunjuk entri di s10.pustaka (lihat idPustaka() di js/dom.js)
     statistik: [
-      { nilai: '>3,5 juta m³/bulan', label: 'kapasitas gali satu unit KIP', sumber: 'Bisnis.com, 2025' },
-      { nilai: '10–20%', label: 'monasit dalam fraksi mineral berat tailing Bangka', sumber: 'Widana dkk., 2024' },
-      { nilai: '1 Bq/g', label: 'tingkat klierens deret Th-232 & U-238', sumber: 'Perka BAPETEN No. 16 Tahun 2012' },
+      { nilai: '>3,5 juta m³/bulan', label: 'kapasitas gali satu unit KIP', sumber: 'Bisnis.com, 2025', sumberId: 'bisnis-com-2025' },
+      { nilai: '10–20%', label: 'monasit dalam fraksi mineral berat tailing Bangka', sumber: 'Widana dkk., 2024', sumberId: 'widana-2024' },
+      { nilai: '1 Bq/g', label: 'tingkat klierens deret Th-232 & U-238', sumber: 'Perka BAPETEN No. 16 Tahun 2012', sumberId: 'peraturan-kepala-bapeten-2012' },
     ],
     petunjukScroll: 'gulir untuk mulai',
   },

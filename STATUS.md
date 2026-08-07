@@ -3,7 +3,7 @@
 Daftar periksa penerimaan ada di `spec/PROMPT_Website_SI-RETAM.md` Lampiran B. Berkas ini
 mencatat posisi terkini terhadap daftar itu, diperbarui di akhir tiap sesi.
 
-**Posisi:** setelah sesi S1 (commit `ee42a06`).
+**Posisi:** setelah sesi S1 dan dua perbaikan lanjutannya.
 **Cakupan yang sudah dikerjakan:** S0 preloader, S1 hero, infrastruktur bersama.
 **Belum disentuh:** S2–S10.
 
@@ -21,14 +21,14 @@ memang belum gilirannya.
 | Tidak ada klaim "membersihkan laut dari radioaktivitas" | Rumusan yang benar tersimpan di `s8.pernyataanKalibrasi` (verifikasi + pemusatan fraksi pekat, dan tidak ada bukti publik soal persoalan radiologis). Belum dirender, tetapi juga tidak ada klaim terlarang di mana pun. |
 | Tidak ada foto/logo pihak ketiga | Seluruh visual prosedural (three.js, canvas, SVG). `#slot-foto-kip` ada dan sengaja kosong. |
 | Tidak ada angka di luar Lampiran A atau berkas esai | Seluruh angka bersumber dari `data/content.js`, yang disalin dari ketiga berkas sumber. Dua lubang data ditandai `TODO` alih-alih dikarang — lihat bagian bawah. |
+| Preloader kalibrasi detektor tampil dan keluar mulus (< 2,2 detik) | Diukur dengan `performance.measure('preloader')` di peramban, empat kali muat berturut-turut: **1027, 1027, 1028, 1030 ms**. Hero tampil ~1,11 detik sejak navigasi. Aturan §S0 "kalau aset sudah siap lebih cepat, percepat" kini diterapkan: kemajuan hanya merayap sampai font terpasang dan `load` selesai, lalu diselesaikan cepat. |
 
 ## Butir yang baru terpenuhi sebagian
 
 | Butir Lampiran B | Yang sudah | Yang belum |
 |---|---|---|
 | Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | Terverifikasi untuk S1: tanpa overflow horizontal di 360px, hero tepat 1,00× viewport di 360×800 dan 1440×900. Reduced-motion: lenis, kursor retikel, parallax, dan derau count-up mati; count-up langsung mengunci. Fallback WebGL: siluet SVG statis + bilah pesan yang tidak menimpa teks. | Hanya bisa diuji sejauh S1 ada. S2–S10 belum bisa dinilai. |
-| Preloader kalibrasi detektor tampil dan keluar mulus (< 2,2 detik) | Tampil dan keluar mulus: pencacah dengan derau Poisson, spektrum dua puncak terbentuk kiri→kanan, garis progres, keluar seperti permukaan air tersibak. | **Waktunya belum memenuhi.** Lihat cacat terbuka di bawah. |
-| Daftar pustaka lengkap, tertaut, dapat dicari | 18 entri lengkap dengan DOI/URL di `s10.pustaka`. Mesin tooltip sitasi sudah ditulis (`tautkanSitasi`, `paragraf`, `siapkanTooltipSitasi`). | S10 belum dirender, jadi tidak ada yang tampil dan belum ada pencarian. Mesin tooltip itu **belum pernah terpakai sekali pun saat berjalan** — lihat cacat terbuka. |
+| Daftar pustaka lengkap, tertaut, dapat dicari | 18 entri lengkap dengan DOI/URL di `s10.pustaka`. Mesin tooltip sitasi kini **aktif dan terverifikasi**: tiga sumber statistik di S1 dirender sebagai elemen `.sitasi`, tooltip muncul pada hover tetikus sungguhan maupun fokus keyboard, dan entri lengkap tampil benar. | S10 sendiri belum dirender, jadi belum ada daftar yang tampil dan belum ada pencarian. Klik sitasi melompat ke `#s10-referensi` yang masih kosong. |
 
 ## Butir yang belum dikerjakan — di luar cakupan sesi ini
 
@@ -52,30 +52,46 @@ Naskah dan angkanya sudah lengkap di `data/content.js`; yang belum ada adalah ta
 
 ---
 
-## Cacat terbuka yang ditemukan saat audit
+## Cacat yang sudah ditutup
 
-**1. Waktu preloader melampaui 2,2 detik.**
-Rancangannya 2.200 ms kalibrasi **ditambah** 1.000 ms animasi keluar = 3.200 ms sebelum hero
-tampil. Butir Lampiran B menyebut `< 2,2 detik`, jadi bila animasi keluar ikut dihitung,
-butir ini tidak terpenuhi. Selain itu §S0 meminta *"kalau aset sudah siap lebih cepat,
-percepat"* — ini **belum diterapkan sama sekali**: kalibrasi selalu berjalan penuh 2.200 ms
-tanpa memandang kesiapan aset.
+**1. Waktu preloader melampaui 2,2 detik — selesai.**
+Sebelumnya 2.200 ms kalibrasi ditambah 1.000 ms animasi keluar = 3.200 ms, dan aturan §S0
+*"kalau aset sudah siap lebih cepat, percepat"* tidak diterapkan sama sekali.
 
-Pengukuran ujung-ke-ujung di lingkungan otomasi tidak dapat dipercaya: satu probe mendapati
-preloader masih ada pada ~7,2 detik, sementara pengamatan lewat screenshot konsisten dengan
-~3,2 detik. `requestAnimationFrame` terukur normal (145 fps), jadi throttling bukan
-penyebabnya, dan probe saya selalu mulai terlambat. **Angka sebenarnya perlu diukur di
-peramban biasa.**
+Sekarang kemajuan hanya merayap sampai batas 82% selama aset belum siap, lalu diselesaikan
+cepat begitu font terpasang dan `load` selesai. Ada ambang bawah 600 ms agar tidak sekadar
+berkedip, dan batas keras: paling lambat mulai keluar pada 1.720 ms sehingga kasus terburuk
+tetap ~2.140 ms. Animasi keluar dipendekkan ke 420 ms (`--durasi-transisi`).
 
-**2. Mesin tooltip sitasi belum pernah aktif.**
-`tautkanSitasi`, `paragraf`, `siapkanTooltipSitasi`, serta gaya `.sitasi` dan
-`.tooltip-sitasi` sudah ditulis, tetapi jumlah elemen `.sitasi` di halaman terukur **nol**:
-S1 merender sumber statistik sebagai teks biasa, dan belum ada paragraf yang melewati
-`paragraf()`. Jadi kode itu belum teruji saat berjalan. Ia baru benar-benar terpakai di S2.
+Terukur di peramban lewat `performance.measure('preloader')`, empat kali muat:
+**1027, 1027, 1028, 1030 ms**. Batas keras kasus terburuk belum diukur langsung — itu
+disimpulkan dari konstanta, bukan dari pengamatan.
+
+Sebagai catatan metode: pengukuran lama yang sempat menunjukkan ~7,2 detik ternyata salah.
+Probe yang disuntikkan lewat otomasi selalu mulai beberapa detik setelah navigasi, sehingga
+yang terukur adalah latensi probe itu sendiri. `performance.mark`/`measure` menyelesaikan ini
+karena hasilnya mengendap di linimasa dan bisa dibaca kapan pun setelahnya.
+
+**2. Mesin tooltip sitasi belum pernah aktif — selesai.**
+Tiga sumber statistik S1 kini dirender sebagai elemen `.sitasi` melalui `buatSitasi()`.
+Penautan memakai id yang diturunkan dari nama penulis pertama dan tahun (`idPustaka()`),
+bukan pencocokan pola teks — cara ini juga menangkap entri Perka BAPETEN yang tidak
+tertangkap oleh pola sitasi dalam kurung.
+
+Terverifikasi di peramban: hover tetikus sungguhan memunculkan tooltip berisi entri lengkap
+(`.sitasi:hover` mengonfirmasi sasarannya benar), fokus keyboard juga memunculkannya, dan
+outline fokus `--gamma` 2px offset 3px tampil. Satu cacat ikutan ditemukan dan diperbaiki di
+sini: `entriLengkap()` menghasilkan titik ganda pada penulis yang berakhir dengan inisial
+(`"Manawan, M.. (2024)"`).
+
+## Cacat terbuka
 
 **3. Rel pipa belum punya sambungan bernomor 1–5.**
 Saat ini hanya progres scroll dan navigasi sepuluh section. Penomoran komponen menunggu S5,
 sesuai §3.4b.
+
+**4. Klik sitasi melompat ke section kosong.**
+`#s10-referensi` belum berisi apa pun sampai sesi S10.
 
 ---
 

@@ -1,7 +1,7 @@
 // js/sections/s1-hero.js — S1 Hero. Seluruh teks dari CONTENT.s1.
 
 import { gsap } from 'gsap';
-import { el, kosongkan, pecahBaris, hitungNaik, kurangiGerak } from '../dom.js';
+import { el, kosongkan, pecahBaris, hitungNaik, kurangiGerak, buatSitasi, cariPustakaId } from '../dom.js';
 import { pengelolaScene } from '../scene.js';
 import { bangunHeroKip, fallbackHeroSvg } from '../models/kip-hero.js';
 
@@ -21,7 +21,11 @@ export function rakitS1(CONTENT) {
     s1.statistik.map((s) => el('li', { class: 'stat' }, [
       el('span', { class: 'stat__nilai mono', 'data-nilai': s.nilai }),
       el('span', { class: 'stat__label', text: s.label }),
-      el('span', { class: 'stat__sumber mono', text: s.sumber }),
+      // Sumber statistik adalah sitasi sungguhan: hover/fokus memunculkan entri
+      // lengkap dari daftar pustaka, klik melompat ke S10.
+      el('span', { class: 'stat__sumber mono' },
+        buatSitasi(s.sumber, cariPustakaId(s.sumberId, CONTENT.s10.pustaka), CONTENT.ui.sitasi.petunjuk)
+      ),
     ]))
   );
 

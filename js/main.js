@@ -48,9 +48,27 @@ function jalankanPreloader(saatSelesai) {
   const ctx = kanvas.getContext('2d');
   ctx.scale(dpr, dpr);
 
-  const DURASI = 2200;
+  // §S0: maksimum 2,2 detik — dan kalau aset sudah siap lebih cepat, percepat.
+  // Anggaran di bawah ini mencakup animasi keluar, sehingga total selalu < 2200 ms.
+  const MS_MIN = 600;                              // agar tidak sekadar berkedip
+  const MS_MAKS = 2200;                            // batas keras, termasuk keluar
+  const MS_KELUAR = 420;                           // --durasi-transisi
+  // Saat paling lambat mulai keluar. Margin 60 ms menjaga kasus terburuk
+  // (aset tak kunjung siap) tetap di bawah MS_MAKS, bukan pas di angkanya.
+  const MS_KELUAR_TERAKHIR = MS_MAKS - MS_KELUAR - 60;
+
   const mulai = performance.now();
+  performance.mark('preloader-mulai');
   const diam = kurangiGerak();
+
+  // "Aset siap" = font terpasang dan seluruh sumber daya halaman selesai dimuat.
+  let asetSiap = false;
+  Promise.all([
+    document.fonts ? document.fonts.ready : Promise.resolve(),
+    document.readyState === 'complete'
+      ? Promise.resolve()
+      : new Promise((r) => window.addEventListener('load', r, { once: true })),
+  ]).then(() => { asetSiap = true; });
 
   const gambarSpektrum = (kemajuan) => {
     ctx.clearRect(0, 0, lebar, tinggi);
@@ -71,34 +89,49 @@ function jalankanPreloader(saatSelesai) {
     ctx.stroke();
   };
 
+  const tutup = () => {
+    pre.remove();
+    performance.mark('preloader-selesai');
+    performance.measure('preloader', 'preloader-mulai', 'preloader-selesai');
+    saatSelesai();
+  };
+
   const selesai = () => {
-    if (diam) {
-      pre.remove();
-      saatSelesai();
-      return;
-    }
+    if (diam) { tutup(); return; }
     // Keluar: layar terangkat seperti permukaan air yang tersibak.
     gsap.to(pre, {
       yPercent: -100,
-      duration: 1.0,
+      duration: MS_KELUAR / 1000,
       ease: 'power4.inOut',
-      onComplete: () => { pre.remove(); saatSelesai(); },
+      onComplete: tutup,
     });
   };
 
+  let kemajuan = 0;
+  let sebelumnya = mulai;
+
   const langkah = (kini) => {
-    const t = Math.min(1, (kini - mulai) / DURASI);
-    const eased = 1 - Math.pow(1 - t, 2);
-    bar.style.width = `${(eased * 100).toFixed(1)}%`;
+    const dt = Math.min(64, kini - sebelumnya);
+    sebelumnya = kini;
+    const t = kini - mulai;
+
+    // Sebelum aset siap kemajuan hanya merayap dan tidak pernah menyentuh penuh;
+    // begitu siap ia diselesaikan cepat, lalu preloader keluar.
+    const atap = asetSiap ? 1 : 0.82;
+    const laju = asetSiap ? 0.0055 : 0.00045; // bagian per milidetik
+    kemajuan = Math.min(atap, kemajuan + laju * dt);
+
+    bar.style.width = `${(kemajuan * 100).toFixed(1)}%`;
 
     // Cacah berdetak dengan derau Poisson yang terlihat.
-    const dasar = eased * 8400;
+    const dasar = kemajuan * 8400;
     const nilai = diam ? dasar : dasar + (Math.random() - 0.5) * Math.sqrt(Math.max(dasar, 1)) * 2.4;
     cacah.textContent = formatAngka(Math.max(0, Math.round(nilai)), 0);
-    gambarSpektrum(eased);
+    gambarSpektrum(kemajuan);
 
-    if (t < 1) requestAnimationFrame(langkah);
-    else selesai();
+    const rampung = asetSiap && kemajuan >= 1 && t >= MS_MIN;
+    if (rampung || t >= MS_KELUAR_TERAKHIR) selesai();
+    else requestAnimationFrame(langkah);
   };
   requestAnimationFrame(langkah);
 }
