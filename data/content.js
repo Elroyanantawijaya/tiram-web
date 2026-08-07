@@ -14,6 +14,40 @@ export const CONTENT = {
     kompetisi: 'PCMC — Perhimpunan Ahli Pertambangan Indonesia Student Chapter, subtopik Ekstraksi Tambang Mineral',
   },
 
+  // ===== String antarmuka =====
+  // Bukan isi esai, tetapi tetap ditaruh di sini supaya tidak ada teks yang
+  // ter-hardcode di HTML atau JS lain.
+  ui: {
+    kursor: {
+      putar: 'putar',
+      buka: 'buka',
+      mainkan: 'mainkan',
+    },
+    fallbackWebgl: {
+      judul: 'Grafik 3D tidak tersedia',
+      narasi: 'Peramban ini tidak dapat menampilkan WebGL, sehingga latar tiga dimensi diganti gambar diam. Seluruh isi dan penjelasan di halaman ini tetap lengkap dan dapat dibaca.',
+    },
+    sitasi: {
+      petunjuk: 'Buka entri lengkap di daftar pustaka',
+    },
+    nav: [
+      { id: 's1-hero', label: 'Hero' },
+      { id: 's2-pendahuluan', label: 'Pendahuluan' },
+      { id: 's3-argumen', label: 'Argumen' },
+      { id: 's4-solusi', label: 'Solusi' },
+      { id: 's5-komponen', label: 'Komponen' },
+      { id: 's6-integrasi', label: 'Integrasi' },
+      { id: 's7-sinema', label: 'Sinema' },
+      { id: 's8-kelayakan', label: 'Kelayakan' },
+      { id: 's9-peta-jalan', label: 'Peta jalan' },
+      { id: 's10-referensi', label: 'Daftar pustaka' },
+    ],
+    navLabel: 'Navigasi bagian',
+    padananTeks: {
+      heroScene: 'Latar beranimasi: siluet Kapal Isap Produksi di garis cakrawala senja, dengan laut gelap beriak di bawahnya.',
+    },
+  },
+
   // ===== S0 — Preloader =====
   s0: {
     label: 'KALIBRASI DETEKTOR · 0–100%',
@@ -36,6 +70,8 @@ export const CONTENT = {
 
   // ===== S2 — Pendahuluan =====
   s2: {
+    eyebrow: 'Pendahuluan',
+    judul: 'Dari mana masalahnya',
 
     // S2a · Bagaimana KIP bekerja
     a: {
@@ -157,6 +193,7 @@ export const CONTENT = {
 
   // ===== S3 — Argumen: mengapa jig tidak cukup (signature) =====
   s3: {
+    eyebrow: 'Argumen',
     judul: 'Mengapa jig tidak cukup',
     intro: 'Persoalan inti bukan memisahkan monasit dari kuarsa (itu mudah karena kuarsa ringan), melainkan memisahkan monasit dari sesama mineral berat: zirkon, ilmenit, dan kasiterit.',
 
@@ -195,6 +232,22 @@ export const CONTENT = {
     // Simulator "Empat Sifat" — ±400 partikel: monasit, zirkon, ilmenit, kasiterit, kuarsa
     simulator: {
       partikel: ['monasit', 'zirkon', 'ilmenit', 'kasiterit', 'kuarsa'],
+
+      // Bentuk terstruktur dari tabelSifat di atas, supaya simulator membaca data
+      // dan bukan mem-parse kalimat. Nilai `null` berarti sumber tidak menyebutkannya —
+      // jangan diisi angka karangan.
+      mineral: [
+        { id: 'monasit', nama: 'Monasit', densitas: '~5,0', densitasNilai: 5.0, magnetik: 'paramagnetik', tertahanMagnet: true, konduktor: false, radioaktif: true },
+        { id: 'ilmenit', nama: 'Ilmenit', densitas: '~4,7', densitasNilai: 4.7, magnetik: 'magnetik kuat', tertahanMagnet: true, konduktor: true, radioaktif: false },
+        { id: 'zirkon', nama: 'Zirkon', densitas: '~4,6', densitasNilai: 4.6, magnetik: 'non-magnetik', tertahanMagnet: false, konduktor: false, radioaktif: false },
+        { id: 'kasiterit', nama: 'Kasiterit', densitas: null, densitasNilai: null, magnetik: 'non-magnetik', tertahanMagnet: false, konduktor: true, radioaktif: false },
+        { id: 'kuarsa', nama: 'Kuarsa', densitas: null, densitasNilai: null, magnetik: 'non-magnetik', tertahanMagnet: false, konduktor: null, radioaktif: false },
+      ],
+
+      catatanDensitas: 'Angka densitas hanya ditampilkan untuk mineral yang disebut di sumber (monasit ~5,0; ilmenit ~4,7; zirkon ~4,6; rutil ~4,3). Kuarsa ditempatkan pada lapisan ringan mengikuti keterangan "kuarsa ringan" pada dokumen justifikasi. TODO: butuh konfirmasi penulis — densitas kasiterit tidak disebut di ketiga sumber, sehingga ditampilkan tanpa angka.',
+      catatanKonduktivitas: 'TODO: butuh konfirmasi penulis — konduktivitas kuarsa tidak disebut di ketiga sumber; pada mode ini kuarsa dibiarkan netral, tidak dibelokkan ke sisi mana pun.',
+      catatanProporsi: 'Jumlah partikel tiap jenis diatur agar terbaca di layar, bukan proporsi sebenarnya. Esai menyebut mineral berat hanya sebagian kecil dari tailing yang didominasi kuarsa.',
+
       mode: {
         densitas: {
           label: 'Densitas',
@@ -247,6 +300,8 @@ export const CONTENT = {
 
   // ===== S4 — Solusi: gagasan SI-RETAM =====
   s4: {
+    eyebrow: 'Solusi',
+    judul: 'Gagasan SI-RETAM',
     akronim: [
       { suku: 'SI', kata: 'stem' },
       { suku: 'RE', kata: 'kaveri' },

@@ -147,7 +147,8 @@ p {
   min-height: 100svh;
   display: flex;
   align-items: flex-end;
-  padding-bottom: clamp(2rem, 6vw, 5rem);
+  padding-top: clamp(3.5rem, 9vh, 6rem);
+  padding-bottom: clamp(1.5rem, 4vh, 3rem);
 }
 
 .section__bg {
@@ -281,6 +282,371 @@ p {
   color: var(--kabut);
 }
 
+/* ===== Utilitas ===== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Pesan bila dibuka dari file:// */
+.pesan-protokol {
+  max-width: 44rem;
+  margin: 12vh auto;
+  padding: 0 1.5rem;
+}
+
+.pesan-protokol__judul {
+  font-family: var(--font-display);
+  font-size: var(--step-28);
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.pesan-protokol pre {
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--step-15);
+}
+
+.pesan-protokol code { font-family: var(--font-mono); }
+
+/* ===== Preloader (S0) ===== */
+.preloader__kanvas {
+  width: 100%;
+  height: 100%;
+}
+
+.preloader__wordmark {
+  font-family: var(--font-display);
+  font-stretch: 118%;
+  font-weight: 800;
+  font-size: var(--step-21);
+  letter-spacing: 0.02em;
+  color: var(--baja);
+}
+
+/* ===== Reveal baris bermask ===== */
+.baris {
+  display: block;
+  overflow: hidden;
+}
+
+.baris__dalam {
+  display: block;
+  will-change: transform;
+}
+
+/* ===== Latar 3D ===== */
+.section__bg {
+  overflow: hidden;
+}
+
+.scene-canvas,
+.section__bg > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.section__bg::after {
+  /* Kabut gelap di bawah agar teks hero tetap kontras di atas latar. */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--abisal) 2%, rgba(7, 16, 22, 0.82) 30%, rgba(7, 16, 22, 0.34) 52%, rgba(7, 16, 22, 0) 82%);
+  pointer-events: none;
+}
+
+/* Bilah di tepi atas, bukan kotak mengambang: teks hero rata bawah, sehingga
+   pesan ini tidak pernah menimpanya. */
+.fallback-pesan {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 2;
+  padding: 0.85rem clamp(1.25rem, 5vw, 4rem);
+  background: var(--lambung);
+  border-bottom: 1px solid var(--garis);
+  font-size: var(--step-13);
+  line-height: 1.5;
+  color: var(--kabut);
+}
+
+.fallback-pesan p { max-width: 62ch; }
+
+/* Beri ruang agar bilah fallback tidak menimpa awal teks hero. */
+.section__bg--fallback ~ .section__content { padding-top: clamp(7rem, 22vh, 11rem); }
+
+.fallback-pesan__judul {
+  color: var(--baja);
+  font-size: var(--step-13);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+/* ===== S1 Hero ===== */
+.hero__inner {
+  max-width: 76rem;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.hero__eyebrow { margin-bottom: clamp(1rem, 3vw, 2rem); }
+
+.hero__judul {
+  font-size: var(--step-hero);
+  font-stretch: 125%;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.35em;
+}
+
+.hero__subjudul {
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 700;
+  font-size: clamp(1.25rem, 0.95rem + 1.3vw, 2rem);
+  line-height: 1.16;
+  max-width: 26ch;
+  color: var(--baja);
+  margin: 0 0 clamp(0.75rem, 2vw, 1.75rem);
+}
+
+.hero__kunci {
+  font-size: var(--step-15);
+  color: var(--kabut);
+  margin: 0 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+.hero__statistik {
+  list-style: none;
+  margin: 0 0 clamp(1rem, 3vw, 2rem);
+  padding: 0;
+  display: grid;
+  gap: clamp(0.6rem, 2vw, 2.5rem);
+  border-top: 1px solid var(--garis);
+  padding-top: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+@media (min-width: 700px) {
+  .hero__statistik { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.stat { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.stat__nilai {
+  font-size: clamp(1rem, 0.85rem + 0.6vw, 1.5rem);
+  color: var(--gamma);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__label {
+  font-size: var(--step-13);
+  color: var(--baja);
+  line-height: 1.4;
+}
+
+.stat__sumber {
+  font-size: var(--step-13);
+  color: var(--kabut);
+}
+
+.hero__petunjuk {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--step-13);
+  color: var(--kabut);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero__petunjuk-rel {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 2.5rem;
+  background: var(--garis);
+  overflow: hidden;
+}
+
+.hero__petunjuk-rel::after {
+  content: '';
+  position: absolute;
+  left: -1px;
+  width: 3px;
+  height: 0.75rem;
+  background: var(--gamma);
+  animation: turun 2.4s var(--easing) infinite;
+}
+
+@keyframes turun {
+  0% { top: -0.75rem; opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { top: 2.5rem; opacity: 0; }
+}
+
+/* ===== Kursor retikel ===== */
+.retikel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 900;
+  pointer-events: none;
+  transform: translate3d(-100px, -100px, 0);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.retikel__cincin {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border: 1px solid var(--kabut);
+  border-radius: 50%;
+  transition: width var(--durasi-mikro) var(--easing), height var(--durasi-mikro) var(--easing),
+              border-color var(--durasi-mikro) var(--easing), margin var(--durasi-mikro) var(--easing);
+}
+
+.retikel__cincin::before,
+.retikel__cincin::after {
+  content: '';
+  position: absolute;
+  background: var(--kabut);
+}
+
+.retikel__cincin::before { left: 50%; top: -6px; width: 1px; height: calc(100% + 12px); }
+.retikel__cincin::after { top: 50%; left: -6px; height: 1px; width: calc(100% + 12px); }
+
+.retikel--aktif .retikel__cincin {
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-color: var(--gamma);
+}
+
+.retikel__label {
+  font-size: var(--step-13);
+  color: var(--gamma);
+  white-space: nowrap;
+  margin-top: -1px;
+}
+
+/* ===== Rel pipa ===== */
+.rel-pipa {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  .rel-pipa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.rel__pipa {
+  position: absolute;
+  left: 50%;
+  top: 12vh;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 76vh;
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.rel__bubur {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--sedimen), var(--magnet));
+  opacity: 0.55;
+  transform-origin: bottom;
+  transform: scaleY(0);
+}
+
+.rel__daftar {
+  position: absolute;
+  left: 50%;
+  top: 12vh;
+  transform: translateX(-50%);
+  height: 76vh;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: auto;
+}
+
+.rel__titik {
+  display: block;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 1px solid var(--garis);
+  border-radius: 50%;
+  background: var(--abisal);
+  cursor: pointer;
+  transition: background var(--durasi-mikro) var(--easing), border-color var(--durasi-mikro) var(--easing),
+              transform var(--durasi-mikro) var(--easing);
+}
+
+.rel__titik:hover { border-color: var(--kabut); }
+
+.rel__titik--aktif {
+  background: var(--gamma);
+  border-color: var(--gamma);
+  transform: scale(1.3);
+}
+
+/* ===== Sitasi & tooltip ===== */
+.sitasi {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--kabut);
+  border-bottom: 1px dotted var(--kabut);
+  cursor: pointer;
+}
+
+.sitasi:hover { color: var(--baja); border-bottom-color: var(--baja); }
+
+.tooltip-sitasi {
+  position: fixed;
+  z-index: 950;
+  max-width: min(34rem, calc(100vw - 2rem));
+  padding: 0.7rem 0.9rem;
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  color: var(--baja);
+  font-size: var(--step-13);
+  line-height: 1.5;
+  font-family: var(--font-mono);
+  pointer-events: none;
+}
+
+.tooltip-sitasi[hidden] { display: none; }
+
 /* ===== Gerak terhormat ===== */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -291,4 +657,8 @@ p {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+
+  /* Parallax, auto-rotate, dan partikel dimatikan di JS; sisanya di sini. */
+  .hero__petunjuk-rel::after { animation: none; top: 0.9rem; }
+  .retikel { display: none; }
 }

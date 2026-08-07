@@ -14,8 +14,44 @@
   />
 
   <link rel="stylesheet" href="css/main.css" />
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/",
+      "gsap": "https://unpkg.com/gsap@3.12.5/index.js",
+      "gsap/ScrollTrigger": "https://unpkg.com/gsap@3.12.5/ScrollTrigger.js",
+      "lenis": "https://unpkg.com/lenis@1.1.18/dist/lenis.mjs"
+    }
+  }
+  </script>
 </head>
 <body>
+  <!-- Dibuka dari file://? Peramban memblokir ES module dari protokol itu (CORS),
+       sehingga situs tidak akan terisi. Skrip klasik ini mendeteksinya lebih dulu
+       dan menjelaskan apa yang harus dilakukan — bukan membiarkan layar kosong.
+       Ini satu-satunya teks yang sengaja ditulis di HTML: data/content.js sendiri
+       adalah ES module, jadi ia justru tidak bisa dimuat dalam keadaan ini. -->
+  <script>
+    if (location.protocol === 'file:') {
+      document.addEventListener('DOMContentLoaded', function () {
+        document.body.innerHTML =
+          '<div class="pesan-protokol">' +
+          '<p class="pesan-protokol__judul">Situs ini perlu dijalankan lewat server lokal</p>' +
+          '<p>Peramban memblokir modul JavaScript ketika berkas dibuka langsung dari cakram (<code>file://</code>), ' +
+          'sehingga isi halaman tidak dapat dimuat. Jalankan salah satu perintah berikut di folder proyek, ' +
+          'lalu buka <code>http://localhost:8000</code>.</p>' +
+          '<pre><code>python3 -m http.server 8000</code></pre>' +
+          '<pre><code>npx serve -l 8000</code></pre>' +
+          '<p>Bila situs di-unggah ke Netlify atau GitHub Pages, semuanya berjalan normal tanpa langkah ini.</p>' +
+          '</div>';
+      });
+    }
+  </script>
+
+  <!-- Teks tautan lewati ini sengaja tetap di HTML: ia harus berfungsi sebelum
+       modul JavaScript selesai dimuat. -->
   <a class="skip-link" href="#main">Lompat ke konten utama</a>
 
   <!-- S0 — Preloader: overlay, di luar alur scroll utama -->
@@ -117,5 +153,7 @@
     </section>
 
   </main>
+
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

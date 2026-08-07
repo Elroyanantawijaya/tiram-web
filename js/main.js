@@ -1,0 +1,235 @@
+// js/main.js — orkestrasi: preloader, smooth scroll, ScrollTrigger, rel pipa,
+// kursor retikel, tooltip sitasi. Tidak memuat teks isi; semuanya dari content.js.
+
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
+
+import { CONTENT } from '../data/content.js';
+import { el, kosongkan, kurangiGerak, formatAngka } from './dom.js';
+import { rakitS1 } from './sections/s1-hero.js';
+
+gsap.registerPlugin(ScrollTrigger);
+
+/* ---------------------------------------------------------------- smooth scroll */
+
+function siapkanScroll() {
+  if (kurangiGerak()) return null;
+  const lenis = new Lenis({ duration: 1.05, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((t) => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+  return lenis;
+}
+
+/* ------------------------------------------------------------------- preloader */
+
+function jalankanPreloader(saatSelesai) {
+  const pre = document.getElementById('preloader');
+  if (!pre) { saatSelesai(); return; }
+
+  const cacah = pre.querySelector('.preloader__cacah');
+  const bar = pre.querySelector('.preloader__progres-bar');
+  const label = pre.querySelector('.preloader__label');
+  const wordmark = pre.querySelector('.preloader__wordmark');
+  const wadahSpektrum = pre.querySelector('.preloader__spektrum');
+
+  label.textContent = CONTENT.s0.label;
+  wordmark.textContent = CONTENT.s0.wordmark;
+
+  // Spektrum kecil yang terbentuk dari kiri ke kanan.
+  const kanvas = el('canvas', { class: 'preloader__kanvas', 'aria-hidden': 'true' });
+  wadahSpektrum.append(kanvas);
+  const dpr = Math.min(window.devicePixelRatio, 2);
+  const lebar = wadahSpektrum.clientWidth || 320;
+  const tinggi = wadahSpektrum.clientHeight || 64;
+  kanvas.width = lebar * dpr;
+  kanvas.height = tinggi * dpr;
+  const ctx = kanvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const DURASI = 2200;
+  const mulai = performance.now();
+  const diam = kurangiGerak();
+
+  const gambarSpektrum = (kemajuan) => {
+    ctx.clearRect(0, 0, lebar, tinggi);
+    ctx.strokeStyle = '#E9B93A';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    const sampai = Math.floor(lebar * kemajuan);
+    for (let x = 0; x <= sampai; x++) {
+      const t = x / lebar;
+      // Dua puncak — sekadar bentuk spektrum, bukan data terukur.
+      const puncak = Math.exp(-Math.pow((t - 0.22) / 0.05, 2)) * 0.85
+                   + Math.exp(-Math.pow((t - 0.68) / 0.035, 2)) * 0.5;
+      const latar = 0.16 * Math.exp(-t * 1.7);
+      const derau = diam ? 0 : (Math.random() - 0.5) * 0.07;
+      const y = tinggi - (puncak + latar + derau) * tinggi * 0.9;
+      if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  };
+
+  const selesai = () => {
+    if (diam) {
+      pre.remove();
+      saatSelesai();
+      return;
+    }
+    // Keluar: layar terangkat seperti permukaan air yang tersibak.
+    gsap.to(pre, {
+      yPercent: -100,
+      duration: 1.0,
+      ease: 'power4.inOut',
+      onComplete: () => { pre.remove(); saatSelesai(); },
+    });
+  };
+
+  const langkah = (kini) => {
+    const t = Math.min(1, (kini - mulai) / DURASI);
+    const eased = 1 - Math.pow(1 - t, 2);
+    bar.style.width = `${(eased * 100).toFixed(1)}%`;
+
+    // Cacah berdetak dengan derau Poisson yang terlihat.
+    const dasar = eased * 8400;
+    const nilai = diam ? dasar : dasar + (Math.random() - 0.5) * Math.sqrt(Math.max(dasar, 1)) * 2.4;
+    cacah.textContent = formatAngka(Math.max(0, Math.round(nilai)), 0);
+    gambarSpektrum(eased);
+
+    if (t < 1) requestAnimationFrame(langkah);
+    else selesai();
+  };
+  requestAnimationFrame(langkah);
+}
+
+/* --------------------------------------------------------------- kursor retikel */
+
+function siapkanKursor() {
+  if (!window.matchMedia('(pointer: fine)').matches || kurangiGerak()) return;
+
+  const retikel = el('div', { class: 'retikel', 'aria-hidden': 'true' }, [
+    el('span', { class: 'retikel__cincin' }),
+    el('span', { class: 'retikel__label mono' }),
+  ]);
+  document.body.append(retikel);
+  const labelNode = retikel.querySelector('.retikel__label');
+
+  let x = window.innerWidth / 2, y = window.innerHeight / 2;
+  let tx = x, ty = y;
+
+  window.addEventListener('pointermove', (e) => {
+    tx = e.clientX; ty = e.clientY;
+    const atas = e.target.closest('[data-kursor]');
+    retikel.classList.toggle('retikel--aktif', !!atas);
+    labelNode.textContent = atas ? (CONTENT.ui.kursor[atas.dataset.kursor] ?? '') : '';
+  }, { passive: true });
+
+  const gerak = () => {
+    x += (tx - x) * 0.22;
+    y += (ty - y) * 0.22;
+    retikel.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    requestAnimationFrame(gerak);
+  };
+  requestAnimationFrame(gerak);
+}
+
+/* ------------------------------------------------------------------- rel pipa */
+
+function siapkanRelPipa() {
+  const rel = document.getElementById('rel-pipa');
+  if (!rel) return;
+  kosongkan(rel);
+  rel.setAttribute('aria-label', CONTENT.ui.navLabel);
+
+  const pipa = el('div', { class: 'rel__pipa', 'aria-hidden': 'true' }, [
+    el('div', { class: 'rel__bubur' }),
+  ]);
+  const bubur = pipa.querySelector('.rel__bubur');
+
+  const daftar = el('ul', { class: 'rel__daftar' });
+  const titik = [];
+  for (const n of CONTENT.ui.nav) {
+    const tombol = el('button', {
+      class: 'rel__titik',
+      type: 'button',
+      'aria-label': n.label,
+      title: n.label,
+      'data-kursor': 'buka',
+      onclick: () => document.getElementById(n.id)?.scrollIntoView({ behavior: kurangiGerak() ? 'auto' : 'smooth' }),
+    });
+    daftar.append(el('li', {}, tombol));
+    titik.push({ tombol, id: n.id });
+  }
+
+  rel.append(pipa, daftar);
+
+  ScrollTrigger.create({
+    trigger: document.body,
+    start: 'top top',
+    end: 'bottom bottom',
+    onUpdate: (self) => { bubur.style.transform = `scaleY(${self.progress})`; },
+  });
+
+  for (const t of titik) {
+    const section = document.getElementById(t.id);
+    if (!section) continue;
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top center',
+      end: 'bottom center',
+      onToggle: (self) => t.tombol.classList.toggle('rel__titik--aktif', self.isActive),
+    });
+  }
+}
+
+/* --------------------------------------------------------------- tooltip sitasi */
+
+function siapkanTooltipSitasi() {
+  const tip = el('div', { class: 'tooltip-sitasi', role: 'tooltip', hidden: 'hidden' });
+  document.body.append(tip);
+
+  const tampil = (t) => {
+    const teks = t.getAttribute('title') || t.dataset.entri;
+    if (!teks) return;
+    if (t.hasAttribute('title')) { t.dataset.entri = teks; t.removeAttribute('title'); }
+    tip.textContent = teks;
+    tip.hidden = false;
+    const r = t.getBoundingClientRect();
+    tip.style.left = `${Math.min(Math.max(12, r.left), window.innerWidth - tip.offsetWidth - 12)}px`;
+    tip.style.top = `${r.bottom + 10}px`;
+  };
+  const sembunyi = () => { tip.hidden = true; };
+
+  document.addEventListener('pointerover', (e) => {
+    const t = e.target.closest('.sitasi');
+    if (t) tampil(t); else if (!e.target.closest('.tooltip-sitasi')) sembunyi();
+  });
+  document.addEventListener('focusin', (e) => {
+    const t = e.target.closest('.sitasi');
+    if (t) tampil(t); else sembunyi();
+  });
+  window.addEventListener('scroll', sembunyi, { passive: true });
+}
+
+/* ------------------------------------------------------------------ bootstrap */
+
+function mulai() {
+  document.documentElement.classList.add('js-siap');
+  siapkanScroll();
+  siapkanKursor();
+  siapkanTooltipSitasi();
+
+  const s1 = rakitS1(CONTENT);
+
+  siapkanRelPipa();
+  ScrollTrigger.refresh();
+
+  jalankanPreloader(() => {
+    s1?.animasikan();
+    ScrollTrigger.refresh();
+  });
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mulai);
+else mulai();
