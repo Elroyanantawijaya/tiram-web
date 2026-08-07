@@ -1,6 +1,6 @@
 # Status terhadap Lampiran B
 
-Daftar periksa penerimaan ada di `spec/PROMPT_Website_SI-RETAM.md` Lampiran B. Berkas ini
+Daftar periksa penerimaan ada di `spec/PROMPT_Website_TIRAM.md` Lampiran B. Berkas ini
 mencatat posisi terkini terhadap daftar itu, diperbarui di akhir tiap sesi.
 
 **Posisi:** setelah sesi port model 3D S5.
@@ -34,7 +34,7 @@ memang belum gilirannya.
 | Butir Lampiran B | Yang sudah | Yang belum |
 |---|---|---|
 | Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | S1 **dan** S2 kini terverifikasi tanpa overflow horizontal di 360px dan 1440px. Di S2, panel sticky pindah ke atas kolom teks di layar sempit (bukan menumpuk di akhir) dan pin linimasa dilepas jadi daftar vertikal. Guard `kurangiGerak()` ada di titik yang benar dalam kode (loop gambar panel, pembuatan pin ScrollTrigger) dengan pola yang sama seperti S1 yang sudah terverifikasi jalan. | **Tidak bisa diverifikasi langsung**: lingkungan otomasi ini tidak punya cara mengemulasi `prefers-reduced-motion` di level OS, jadi perilaku reduced-motion S2 dijamin lewat pembacaan kode, bukan pengamatan runtime langsung — beda dengan S1 yang sempat diverifikasi dengan override `matchMedia`. S3–S10 belum bisa dinilai sama sekali. |
-| Kelima komponen punya model 3D yang dapat diputar, di-zoom, diurai, dan dipotong | Kelima geometri diport ke `js/models/komponen.js` dan **terbukti identik** dengan sumber: jumlah mesh dan kotak batas sama persis sampai 4 desimal, dibandingkan terhadap kode asli yang diambil langsung dari `spec/SI-RETAM_3D.html`, bukan diketik ulang. Model tampil, dapat **diputar** (diuji lewat seret pointer sungguhan: kamera berpindah dari `-6.260,5.816,-2.653` ke `0.089,8.577,3.914`) dan **di-zoom** lewat OrbitControls. | **Tampilan urai dan potongan melintang belum ada** — dua dari empat kemampuan yang diminta butir ini. Anotasi label juga belum dirender (teks dan titik jangkarnya sudah tersimpan di `s5.komponen[].anotasi`, menunggu lapisan anotasi HTML + leader line SVG). |
+| Kelima komponen punya model 3D yang dapat diputar, di-zoom, diurai, dan dipotong | Kelima geometri diport ke `js/models/komponen.js` dan **terbukti identik** dengan sumber: jumlah mesh dan kotak batas sama persis sampai 4 desimal, dibandingkan terhadap kode asli yang diambil langsung dari `spec/TIRAM_3D.html`, bukan diketik ulang. Model tampil, dapat **diputar** (diuji lewat seret pointer sungguhan: kamera berpindah dari `-6.260,5.816,-2.653` ke `0.089,8.577,3.914`) dan **di-zoom** lewat OrbitControls. | **Tampilan urai dan potongan melintang belum ada** — dua dari empat kemampuan yang diminta butir ini. Anotasi label juga belum dirender (teks dan titik jangkarnya sudah tersimpan di `s5.komponen[].anotasi`, menunggu lapisan anotasi HTML + leader line SVG). |
 | Kelima komponen punya blok `APA · BAGAIMANA · ILMU` dan satu widget simulasi | Ketiga blok tetap terpasang untuk kelima komponen plus hidrosiklon opsional — 18 blok, teksnya disalin utuh dari dokumen justifikasi lewat `content.js`. | **Widget simulasi belum ada satu pun.** Kelimanya menunggu sesi tersendiri. |
 | Daftar pustaka lengkap, tertaut, dapat dicari | 18 entri lengkap dengan DOI/URL di `s10.pustaka`. Mesin tooltip sitasi makin teruji: kini menangani sitasi ganda dalam satu kurung (dipecah per titik koma, tiap sub-sitasi resolve sendiri) dan dibangun ulang sebagai `<span role="button">` karena Chrome memaksa `<button>` jadi `inline-block` sehingga sitasi tak bisa pecah antar baris. 12 elemen `.sitasi` di S1+S2, semuanya resolve ke entri benar. | S10 sendiri belum dirender, jadi belum ada daftar yang tampil dan belum ada pencarian. Klik sitasi melompat ke `#s10-referensi` yang masih kosong. |
 
@@ -46,7 +46,7 @@ Naskah dan angkanya sudah lengkap di `data/content.js`; yang belum ada adalah ta
 |---|---|
 | Simulator "Empat Sifat" berfungsi untuk keempat mode dengan verdict yang benar | `s3.simulator` (termasuk data mineral terstruktur) |
 | Argumen "mengapa bukan sekadar menyetel ulang jig" lengkap dengan angka Rosita (2017) | `s3.b` |
-| Diagram batas sistem (hulu / SI-RETAM / hilir) jelas | `s4.diagramBatas` |
+| Diagram batas sistem (hulu / TIRAM / hilir) jelas | `s4.diagramBatas` |
 | Pernyataan batas kebaruan muncul dan tidak dilunakkan | `s4.batasKebaruan` |
 | Widget WHIMS menunjukkan jatuhnya efisiensi pada butir halus | `s5.komponen[1].widget` |
 | Widget katup menunjukkan konsekuensi tunda PLC yang salah | `s5.komponen[3].widget` |

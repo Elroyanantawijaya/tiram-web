@@ -1,4 +1,4 @@
-/* css/main.css — sistem desain SI-RETAM: token, tipografi, kerangka section.
+/* css/main.css — sistem desain TIRAM: token, tipografi, kerangka section.
    Kosong secara isi (lihat data/content.js) — berkas ini hanya mengatur rupa. */
 
 /* ===== Reset dasar ===== */
@@ -421,12 +421,6 @@ p {
   max-width: 26ch;
   color: var(--baja);
   margin: 0 0 clamp(0.75rem, 2vw, 1.75rem);
-}
-
-.hero__kunci {
-  font-size: var(--step-15);
-  color: var(--kabut);
-  margin: 0 0 clamp(1rem, 3vw, 2.5rem);
 }
 
 .hero__statistik {

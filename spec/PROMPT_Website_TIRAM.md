@@ -1,6 +1,6 @@
-# PROMPT PEMBUATAN WEBSITE INTERAKTIF — SI-RETAM
+# PROMPT PEMBUATAN WEBSITE INTERAKTIF — TIRAM
 
-> **Cara pakai:** salin seluruh isi dokumen ini sebagai prompt ke model/agen pembangun web (Claude Code, Cowork, atau chat biasa). **Lampirkan juga tiga berkas sumber:** `Draf_Esai_SI-RETAM_TANDAI.docx`, `Justifikasi_Prinsip_SI-RETAM.docx`, dan `SI-RETAM_3D.html`. Dokumen ini adalah spesifikasi; berkas-berkas itu adalah sumber kebenaran isinya.
+> **Cara pakai:** salin seluruh isi dokumen ini sebagai prompt ke model/agen pembangun web (Claude Code, Cowork, atau chat biasa). **Lampirkan juga tiga berkas sumber:** `Draf_Esai_TIRAM_TANDAI.docx`, `Justifikasi_Prinsip_TIRAM.docx`, dan `TIRAM_3D.html`. Dokumen ini adalah spesifikasi; berkas-berkas itu adalah sumber kebenaran isinya.
 
 ---
 
@@ -37,7 +37,7 @@ Standar mutu yang dituju: setara *award-winning scrollytelling* (Awwwards / Webb
 /css/main.css
 /js/main.js          → orkestrasi scroll, nav, state
 /js/scene.js         → renderer three.js tunggal, manajemen scene
-/js/models/*.js      → geometri 5 komponen + rakitan (port dari SI-RETAM_3D.html)
+/js/models/*.js      → geometri 5 komponen + rakitan (port dari TIRAM_3D.html)
 /js/widgets/*.js     → simulasi kecil per komponen (canvas 2D)
 /js/cinema.js        → sekuens animasi akhir
 /data/content.js     → SELURUH teks & angka terpusat di satu berkas
@@ -113,7 +113,7 @@ Dua, dan hanya dua:
 
 ### S0 — Preloader: "Kalibrasi detektor"
 
-Bukan spinner. Layar gelap, di tengah ada **pencacah gamma yang sedang dikalibrasi**: angka cacah mono berdetak dengan derau acak (statistik Poisson yang terlihat), sebuah spektrum kecil terbentuk dari kiri ke kanan, dan garis progres berlabel `KALIBRASI DETEKTOR · 0–100%`. Di bawahnya: `SI-RETAM`.
+Bukan spinner. Layar gelap, di tengah ada **pencacah gamma yang sedang dikalibrasi**: angka cacah mono berdetak dengan derau acak (statistik Poisson yang terlihat), sebuah spektrum kecil terbentuk dari kiri ke kanan, dan garis progres berlabel `KALIBRASI DETEKTOR · 0–100%`. Di bawahnya: `TIRAM`.
 
 Keluar: seluruh layar terangkat seperti permukaan air yang tersibak, memperlihatkan hero. Maksimum 2,2 detik; kalau aset sudah siap lebih cepat, percepat.
 
@@ -126,8 +126,7 @@ Satu viewport penuh.
 **Foreground:**
 - Eyebrow mono: `PCMC · INOVASI TEKNOLOGI · EKSTRAKSI TAMBANG MINERAL`
 - Judul (display, reveal per baris dengan *mask* naik, stagger 80ms):
-  **SI-RETAM** — lalu subjudul lengkap esai (Lampiran A.1)
-- Satu baris kunci: *Sistem Rekaveri Tailing Aman Monasit*
+  **TIRAM** — lalu subjudul lengkap esai (Lampiran A.1)
 - Tiga statistik mono kecil di baris bawah, muncul dengan count-up: `>3,5 juta m³/bulan` · `10–20% monasit dalam fraksi berat` · `1 Bq/g tingkat klierens`
 - Petunjuk scroll: garis vertikal tipis dengan titik yang turun berulang.
 
@@ -137,7 +136,7 @@ Satu viewport penuh.
 
 Scrollytelling: kolom teks bergulir di kiri, **panel visual sticky** di kanan yang berubah mengikuti sub-bagian.
 
-**S2a · Bagaimana KIP bekerja.** Diagram potongan melintang (SVG yang tergambar mengikuti scroll, `stroke-dashoffset`): material dasar laut disedot → jig primer & sekunder → kasiterit ke penampungan → sisanya keluar sebagai tailing → dibuang kembali ke laut. Titik keluar tailing berkedip pelan dengan label: **"di sinilah SI-RETAM menyisip."**
+**S2a · Bagaimana KIP bekerja.** Diagram potongan melintang (SVG yang tergambar mengikuti scroll, `stroke-dashoffset`): material dasar laut disedot → jig primer & sekunder → kasiterit ke penampungan → sisanya keluar sebagai tailing → dibuang kembali ke laut. Titik keluar tailing berkedip pelan dengan label: **"di sinilah TIRAM menyisip."**
 
 **S2b · Isi tailing itu apa.** Panel berubah jadi ladang partikel: mayoritas kuarsa (`--sedimen`), dengan minoritas berwarna berbeda. Muncul empat kartu mineral yang bisa di-hover — **monasit, zirkon, ilmenit, xenotim** — masing-masing menampilkan densitas, sifat magnetik, konduktivitas, dan radioaktivitas (Lampiran A.3). Saat kartu di-hover, partikel jenis itu menyala dan sisanya meredup.
 
@@ -165,12 +164,12 @@ Di samping kanvas, tabel dari Lampiran A.3 ikut menyoroti baris yang sedang akti
 
 **S3b · "Mengapa bukan sekadar menyetel ulang jig".** Sub-bagian teks + grafik kecil. Sampaikan temuan Rosita (2017) pada KIP 11 secara jujur: fraksi monasit & kasiterit pada konsentrat dapat naik hingga rata-rata di atas 35%, losses pada tailing ditekan ke 0–0,17% — **tetapi** itu hasil terbaik dari kondisi eksperimen terkendali pada satu kapal, bukan operasional rutin, dan penyetelan itu tetap bekerja pada densitas. Lanjutkan dengan argumen terak: konsentrat umpan peleburan tetap membawa sekitar 30% pengotor; terak peleburan mengandung thorium dan uranium yang sulit dibersihkan dari fase silika dan titania. Visual: dua jalur bercabang — "monasit ke jalur timah" (menumpuk beban di terak) vs "monasit ke jalur tailing" (ditangani terpisah).
 
-### S4 — Solusi: gagasan SI-RETAM
+### S4 — Solusi: gagasan TIRAM
 
 Momen pengungkapan. Layar menggelap sesaat, lalu modul muncul dari kegelapan dengan pencahayaan rim-light.
 
 - Akronim dieja dengan animasi: **SI**stem **RE**kaveri **TA**iling Aman **M**onasit.
-- **Diagram batas sistem** yang penting sekali dan sering dilupakan: tiga zona berdampingan — *(hulu, di luar sistem)* jig PT Timah · **(SI-RETAM)** · *(hilir, di luar sistem)* pemisahan elektrostatik & proses kimia di darat. Zona luar digambar dengan garis putus-putus dan opasitas rendah.
+- **Diagram batas sistem** yang penting sekali dan sering dilupakan: tiga zona berdampingan — *(hulu, di luar sistem)* jig PT Timah · **(TIRAM)** · *(hilir, di luar sistem)* pemisahan elektrostatik & proses kimia di darat. Zona luar digambar dengan garis putus-putus dan opasitas rendah.
 - Kalimat penutup section, diberi bobot tipografi besar: **"Magnet menjadi tangan yang memisah; gamma menjadi mata yang memilih."**
 - Kotak "Batas kebaruan" — sengaja ditampilkan di sini, bukan disembunyikan: komponennya lama, susunannya yang baru.
 
@@ -178,13 +177,13 @@ Momen pengungkapan. Layar menggelap sesaat, lalu modul muncul dari kegelapan den
 
 Struktur: **canvas 3D sticky memenuhi 60% layar**, panel teks bergulir di sisi lain. Saat scroll melewati batas sub-bagian, model **bertransisi** (bukan potong keras): komponen lama menyusut & memudar, kamera bergerak, komponen baru terbentuk.
 
-**Sumber geometri:** port dari `SI-RETAM_3D.html` yang dilampirkan — fungsi `bConditioner`, `bWHIMS`, `bSensor`, `bValve`, `bBunker`, `bAssembly` sudah menyediakan bentuk dasar yang benar. **Tingkatkan:** material PBR yang lebih baik (`envMap` dari `RoomEnvironment`), bevel pada tepi, sambungan flensa & baut pada pipa, bayangan kontak, dan sedikit *ambient occlusion*. Ganti label sprite dengan **anotasi HTML** ber-*leader line* SVG yang mengikuti proyeksi titik 3D ke layar (lebih tajam dan bisa diakses keyboard).
+**Sumber geometri:** port dari `TIRAM_3D.html` yang dilampirkan — fungsi `bConditioner`, `bWHIMS`, `bSensor`, `bValve`, `bBunker`, `bAssembly` sudah menyediakan bentuk dasar yang benar. **Tingkatkan:** material PBR yang lebih baik (`envMap` dari `RoomEnvironment`), bevel pada tepi, sambungan flensa & baut pada pipa, bayangan kontak, dan sedikit *ambient occlusion*. Ganti label sprite dengan **anotasi HTML** ber-*leader line* SVG yang mengikuti proyeksi titik 3D ke layar (lebih tajam dan bisa diakses keyboard).
 
 **Kontrol pada setiap model:** OrbitControls (batasi `minDistance`/`maxDistance`/`maxPolarAngle`), tombol **Tampilan urai** (exploded view — bagian terpisah sepanjang sumbu dengan `gsap`), **Potongan melintang** (clipping plane yang bisa digeser), **Sembunyikan label**, dan **Reset**. Auto-rotate lembut yang berhenti begitu pengguna menyentuh.
 
 Untuk **tiap** komponen, panel teks memuat tiga blok tetap dengan gaya konsisten:
 `APA YANG DILAKUKAN` · `BAGAIMANA CARANYA` · `ILMU YANG MELANDASI`
-(isi persis mengikuti `Justifikasi_Prinsip_SI-RETAM.docx` Bagian B — jangan diringkas sampai hilang isinya, jangan ditambahi.)
+(isi persis mengikuti `Justifikasi_Prinsip_TIRAM.docx` Bagian B — jangan diringkas sampai hilang isinya, jangan ditambahi.)
 
 Dan **tiap** komponen mendapat **satu widget simulasi kecil** (canvas 2D di bawah teks) — ini yang membuat situs terasa hidup, bukan sekadar model diam:
 
@@ -237,7 +236,7 @@ Pergeseran ke latar terang. Bagian ini harus terbaca sebagai bagian yang paling 
 - **Neraca laju alir**, divisualkan proporsional dan jujur: satu modul ≈ 280 m³/jam bubur ≈ 180–200 ton padatan/jam, sementara satu KIP menghasilkan tailing pada orde ~7.000 ton padatan/jam. Tampilkan sebagai batang perbandingan yang benar skalanya, dengan label eksplisit: **modul dipasang pada satu aliran cabang dan berperan sebagai unit uji, bukan penanganan seluruh kapal.** Jangan diperhalus.
 - **Tiga sudut manfaat** sebagai kartu: ekonomi (beban → calon aset), tata kelola (verifikasi melekat pada proses, bukan sampling sesekali), lingkungan (muatan radiologis sisa lebih ringan, besarnya masih perlu dibuktikan).
 - **Enam keterbatasan** sebagai daftar bernomor yang berbobot penuh (Lampiran A.6): fraksi ultrahalus, keluaran masih bercampur ilmenit, kepekaan bacaan gamma terhadap kadar air & densitas, kadar monasit pada tailing KIP yang belum terverifikasi untuk umum, tambahan biaya & kompleksitas, dan status yang masih konseptual.
-- **Pernyataan kalibrasi klaim** dalam kotak khusus: nilai radiologis SI-RETAM bukan klaim membersihkan laut, melainkan verifikasi + pemusatan fraksi pekat.
+- **Pernyataan kalibrasi klaim** dalam kotak khusus: nilai radiologis TIRAM bukan klaim membersihkan laut, melainkan verifikasi + pemusatan fraksi pekat.
 
 ### S9 — Peta jalan menuju penerapan
 
@@ -291,8 +290,8 @@ Pakai yang mendukung isi, buang sisanya:
 Gunakan angka-angka ini persis. Jangan tambah, jangan bulatkan.
 
 ### A.1 Identitas
-- **Judul esai:** SI-RETAM: Pemisahan Magnetik Terpandu Sensor Gamma untuk Memulihkan Monasit dari Tailing Timah Lepas Pantai di Hilir Jig Kapal Isap Produksi
-- **Kepanjangan:** Sistem Rekaveri Tailing Aman Monasit
+- **Judul esai:** TIRAM: Rangkaian Pengolahan Tailing Timah Lepas Pantai untuk Memulihkan Monasit Berbasis Pemisahan Magnetik Terpandu Sensor Gamma
+- **Nama:** TIRAM bukan akronim dan tidak punya kepanjangan. Namanya dipinjam dari tiram laut yang menyaring air.
 - **Konteks:** Kepulauan Bangka Belitung; modul retrofit di hilir jig Kapal Isap Produksi (KIP)
 
 ### A.2 Angka latar belakang
@@ -343,7 +342,7 @@ Gunakan angka-angka ini persis. Jangan tambah, jangan bulatkan.
 6. **Seluruh rancangan masih konseptual** — komponennya terbukti secara terpisah, integrasi khusus ini belum diuji di lapangan.
 
 ### A.7 Daftar pustaka
-Salin lengkap dari bagian DAFTAR PUSTAKA pada `Draf_Esai_SI-RETAM_TANDAI.docx` (17 entri: Andini & Sari 2020; Awang Kechik & Ku Ishak 2025; Bisnis.com 2025; Bisnis.com 2026; Dieye dkk. 2021; Ishigaki dkk. 2026; Ngadenin dkk. 2023; Perka BAPETEN 9/2009; Perka BAPETEN 16/2012; Prasetyo dkk. 2020; PT Timah 2025; Robben & Wotruba 2019; Rosita 2017; USACE-ERDC 2005; Wang dkk. 2026; Widana dkk. 2024; Widaputra dkk. 2014; Zglinicki dkk. 2021), lengkap dengan DOI/URL.
+Salin lengkap dari bagian DAFTAR PUSTAKA pada `Draf_Esai_TIRAM_TANDAI.docx` (17 entri: Andini & Sari 2020; Awang Kechik & Ku Ishak 2025; Bisnis.com 2025; Bisnis.com 2026; Dieye dkk. 2021; Ishigaki dkk. 2026; Ngadenin dkk. 2023; Perka BAPETEN 9/2009; Perka BAPETEN 16/2012; Prasetyo dkk. 2020; PT Timah 2025; Robben & Wotruba 2019; Rosita 2017; USACE-ERDC 2005; Wang dkk. 2026; Widana dkk. 2024; Widaputra dkk. 2014; Zglinicki dkk. 2021), lengkap dengan DOI/URL.
 
 ---
 
@@ -356,7 +355,7 @@ Situs dianggap selesai bila **semua** terpenuhi:
 - [ ] Enam sub-bagian pendahuluan (S2a–S2f) lengkap dan terhubung ke visual sticky
 - [ ] Simulator "Empat Sifat" berfungsi untuk keempat mode dan menghasilkan verdict yang benar
 - [ ] Argumen "mengapa bukan sekadar menyetel ulang jig" tersaji lengkap dengan angka Rosita (2017)
-- [ ] Diagram batas sistem (hulu / SI-RETAM / hilir) jelas
+- [ ] Diagram batas sistem (hulu / TIRAM / hilir) jelas
 - [ ] Kelima komponen punya model 3D yang dapat diputar, di-zoom, diurai, dan dipotong
 - [ ] Kelima komponen punya blok `APA · BAGAIMANA · ILMU` dan satu widget simulasi masing-masing
 - [ ] Widget WHIMS menunjukkan jatuhnya efisiensi pada butir halus

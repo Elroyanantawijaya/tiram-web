@@ -34,7 +34,6 @@ export function rakitS1(CONTENT) {
       el('p', { class: 'eyebrow hero__eyebrow', text: s1.eyebrow }),
       judul,
       subjudul,
-      el('p', { class: 'hero__kunci', text: s1.kalimatKunci }),
       statistik,
       el('div', { class: 'hero__petunjuk' }, [
         el('span', { class: 'hero__petunjuk-teks mono', text: s1.petunjukScroll }),
@@ -82,7 +81,7 @@ export function rakitS1(CONTENT) {
 
       if (kurangiGerak()) {
         gsap.set(semuaBaris, { yPercent: 0, opacity: 1 });
-        gsap.set(['.hero__eyebrow', '.hero__kunci', '.hero__statistik', '.hero__petunjuk'], { opacity: 1, y: 0 });
+        gsap.set(['.hero__eyebrow', '.hero__statistik', '.hero__petunjuk'], { opacity: 1, y: 0 });
         tampilkanStat();
         return;
       }
@@ -90,7 +89,6 @@ export function rakitS1(CONTENT) {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
       tl.fromTo('.hero__eyebrow', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6 })
         .fromTo(semuaBaris, { yPercent: 115 }, { yPercent: 0, duration: 0.95, stagger: 0.08 }, '-=0.25')
-        .fromTo('.hero__kunci', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.5')
         .fromTo('.stat', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.1, onStart: tampilkanStat }, '-=0.35')
         .fromTo('.hero__petunjuk', { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2');
     },

@@ -1,7 +1,7 @@
-// js/models/komponen.js — geometri lima komponen inti SI-RETAM.
+// js/models/komponen.js — geometri lima komponen inti TIRAM.
 //
 // Diport dari bConditioner/bWHIMS/bSensor/bValve/bBunker di
-// spec/SI-RETAM_3D.html. Setiap posisi, ukuran, rotasi, dan urutan penambahan
+// spec/TIRAM_3D.html. Setiap posisi, ukuran, rotasi, dan urutan penambahan
 // disalin persis — bentuk dan susunan alat sudah benar secara teknis dan tidak
 // boleh diubah. Hanya tiga penyesuaian mekanis yang dilakukan:
 //

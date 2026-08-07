@@ -1,15 +1,17 @@
 // data/content.js
-// SELURUH teks & angka situs SI-RETAM. Satu-satunya tempat string isi hidup.
-// Sumber: spec/Draf_Esai_SI-RETAM_TANDAI.docx, spec/Justifikasi_Prinsip_SI-RETAM.docx,
-// spec/PROMPT_Website_SI-RETAM.md (Lampiran A). Jangan menambah angka atau mengarang
+// SELURUH teks & angka situs TIRAM. Satu-satunya tempat string isi hidup.
+// Sumber: spec/Draf_Esai_TIRAM_TANDAI.docx, spec/Justifikasi_Prinsip_TIRAM.docx,
+// spec/PROMPT_Website_TIRAM.md (Lampiran A). Jangan menambah angka atau mengarang
 // isi di luar tiga sumber ini — tandai `todo` bila sumber tidak memberi jawaban.
+//
+// Catatan penamaan: TIRAM bukan akronim. Ia tidak punya kepanjangan, dan tidak
+// boleh dieja sebagai singkatan di mana pun.
 
 export const CONTENT = {
 
   // ===== A.1 Identitas =====
   meta: {
-    judulEsai: 'SI-RETAM: Pemisahan Magnetik Terpandu Sensor Gamma untuk Memulihkan Monasit dari Tailing Timah Lepas Pantai di Hilir Jig Kapal Isap Produksi',
-    kepanjangan: 'Sistem Rekaveri Tailing Aman Monasit',
+    judulEsai: 'TIRAM: Rangkaian Pengolahan Tailing Timah Lepas Pantai untuk Memulihkan Monasit Berbasis Pemisahan Magnetik Terpandu Sensor Gamma',
     konteks: 'Kepulauan Bangka Belitung; modul retrofit di hilir jig Kapal Isap Produksi (KIP)',
     kompetisi: 'PCMC — Perhimpunan Ahli Pertambangan Indonesia Student Chapter, subtopik Ekstraksi Tambang Mineral',
   },
@@ -45,22 +47,21 @@ export const CONTENT = {
     navLabel: 'Navigasi bagian',
     padananTeks: {
       heroScene: 'Latar beranimasi: siluet Kapal Isap Produksi di garis cakrawala senja, dengan laut gelap beriak di bawahnya.',
-      panggungKomponen: 'Model tiga dimensi komponen SI-RETAM yang sedang dibaca, dapat diputar dan diperbesar. Seluruh keterangan komponen tersedia sebagai teks di samping model ini.',
+      panggungKomponen: 'Model tiga dimensi komponen TIRAM yang sedang dibaca, dapat diputar dan diperbesar. Seluruh keterangan komponen tersedia sebagai teks di samping model ini.',
     },
   },
 
   // ===== S0 — Preloader =====
   s0: {
     label: 'KALIBRASI DETEKTOR · 0–100%',
-    wordmark: 'SI-RETAM',
+    wordmark: 'TIRAM',
   },
 
   // ===== S1 — Hero =====
   s1: {
     eyebrow: 'PCMC · INOVASI TEKNOLOGI · EKSTRAKSI TAMBANG MINERAL',
-    judul: 'SI-RETAM',
-    subjudul: 'Pemisahan Magnetik Terpandu Sensor Gamma untuk Memulihkan Monasit dari Tailing Timah Lepas Pantai di Hilir Jig Kapal Isap Produksi',
-    kalimatKunci: 'Sistem Rekaveri Tailing Aman Monasit',
+    judul: 'TIRAM',
+    subjudul: 'Rangkaian Pengolahan Tailing Timah Lepas Pantai untuk Memulihkan Monasit Berbasis Pemisahan Magnetik Terpandu Sensor Gamma',
     // sumberId menunjuk entri di s10.pustaka (lihat idPustaka() di js/dom.js)
     statistik: [
       { nilai: '>3,5 juta m³/bulan', label: 'kapasitas gali satu unit KIP', sumber: 'Bisnis.com, 2025', sumberId: 'bisnis-com-2025' },
@@ -85,8 +86,8 @@ export const CONTENT = {
         'Sisanya dialirkan keluar sebagai tailing',
         'Tailing dibuang kembali ke laut',
       ],
-      labelTitikKeluar: 'di sinilah SI-RETAM menyisip',
-      narasi: 'KIP pada dasarnya adalah kapal keruk sekaligus pengolah terapung. Material dari dasar laut disedot naik, lalu dilewatkan ke jig primer dan sekunder yang memanfaatkan perbedaan berat jenis untuk menangkap kasiterit (Widaputra dkk., 2014). Yang tertangkap dibawa ke penampungan, sementara sisanya dialirkan keluar sebagai tailing. Pada titik keluar inilah gagasan SI-RETAM menyisip.',
+      labelTitikKeluar: 'di sinilah TIRAM menyisip',
+      narasi: 'KIP pada dasarnya adalah kapal keruk sekaligus pengolah terapung. Material dari dasar laut disedot naik, lalu dilewatkan ke jig primer dan sekunder yang memanfaatkan perbedaan berat jenis untuk menangkap kasiterit (Widaputra dkk., 2014). Yang tertangkap dibawa ke penampungan, sementara sisanya dialirkan keluar sebagai tailing. Pada titik keluar inilah gagasan TIRAM menyisip.',
     },
 
     // S2b · Isi tailing itu apa — empat kartu mineral (Lampiran A.3 + esai)
@@ -300,19 +301,16 @@ export const CONTENT = {
     },
   },
 
-  // ===== S4 — Solusi: gagasan SI-RETAM =====
+  // ===== S4 — Solusi: gagasan TIRAM =====
+  // TIRAM bukan akronim: tidak ada blok pengejaan suku kata di sini, dan
+  // namanya tidak boleh diperlakukan sebagai singkatan.
   s4: {
     eyebrow: 'Solusi',
-    judul: 'Gagasan SI-RETAM',
-    akronim: [
-      { suku: 'SI', kata: 'stem' },
-      { suku: 'RE', kata: 'kaveri' },
-      { suku: 'TA', kata: 'iling Aman' },
-      { suku: 'M', kata: 'onasit' },
-    ],
+    judul: 'Gagasan TIRAM',
+    pembuka: 'TIRAM bukan kapal baru dan bukan pengganti jig, melainkan rangkaian tambahan yang disambungkan ke saluran keluar tailing. Namanya dipinjam dari tiram laut yang menyaring air untuk menahan yang bernilai lalu mengembalikan sisanya dalam keadaan lebih bersih, sekaligus mengubah butiran asing yang semula mengganggu menjadi sesuatu yang berharga, persis peran sistem ini.',
     diagramBatas: {
       hulu: { label: 'hulu, di luar sistem', isi: 'Jig milik PT Timah.' },
-      siretam: { label: 'SI-RETAM', isi: 'Rangkaian di antara jig dan pengolahan darat: pengkondisi umpan, pemisah magnetik, sensor gamma + PLC, katup pengarah, bunker berperisai.' },
+      tiram: { label: 'TIRAM', isi: 'Rangkaian di antara jig dan pengolahan darat: pengkondisi umpan, pemisah magnetik, sensor gamma + PLC, katup pengarah, bunker berperisai.' },
       hilir: { label: 'hilir, di luar sistem', isi: 'Pemisahan akhir monasit dari ilmenit secara elektrostatik dan penarikan logam tanah jarang lewat proses kimia di darat, sejalan dengan pabrik yang disiapkan PT Timah bersama Perminas (Bisnis.com, 2026).' },
     },
     kalimatPenutup: 'Magnet menjadi tangan yang memisah; gamma menjadi mata yang memilih.',
@@ -323,7 +321,7 @@ export const CONTENT = {
   },
 
   // ===== S5 — Komponen: lima alat, satu per satu =====
-  // apa/bagaimana/ilmu disalin utuh dari Justifikasi_Prinsip_SI-RETAM.docx Bagian B.
+  // apa/bagaimana/ilmu disalin utuh dari Justifikasi_Prinsip_TIRAM.docx Bagian B.
   s5: {
     eyebrow: 'Komponen',
     judul: 'Lima alat, satu per satu',
@@ -345,7 +343,7 @@ export const CONTENT = {
         bagaimana: 'Tangki ini berfungsi sebagai penampung penyangga (buffer) dengan keluaran terkontrol; ia bekerja seperti kapasitor hidraulik yang menghaluskan fluktuasi laju alir. Gelembung udara naik dan dibuang karena gaya apung, sebab udara yang terperangkap mengubah densitas semu dan mengganggu baik penangkapan magnetik maupun pembacaan gamma. Sebuah pengukur densitas menjaga persen padatan tetap konstan.',
         ilmu: 'Mekanika fluida — asas kekekalan massa (kontinuitas) untuk aliran mantap, asas Archimedes (gaya apung) untuk de-aerasi, konsep kapasitansi hidraulik dan waktu tinggal untuk meredam lonjakan, serta reologi bubur (ada kecepatan minimum agar padatan tetap melayang dan tidak mengendap). Intinya: gaya magnet pada partikel dan laju cacah gamma sama-sama bergantung pada aliran yang stabil, sehingga menstabilkan umpan sama dengan membuat pengukuran menjadi sahih.',
         // Teks label pada model 3D, disalin dari pemanggilan label() di
-        // spec/SI-RETAM_3D.html beserta titik jangkarnya dalam koordinat model.
+        // spec/TIRAM_3D.html beserta titik jangkarnya dalam koordinat model.
         anotasi: [
           { teks: 'vent udara', pos: [0.9, 3.5, 0] },
           { teks: 'motor pengaduk', pos: [0, 3.95, 0] },
@@ -557,7 +555,7 @@ export const CONTENT = {
         narasi: 'Komponennya terbukti secara terpisah, integrasi khusus ini belum diuji di lapangan.',
       },
     ],
-    pernyataanKalibrasi: 'Karena monasit hanya pecahan kecil dari tailing yang didominasi kuarsa, aktivitas rata-rata aliran yang dilepas kemungkinan besar memang sudah rendah, dan tidak ada bukti publik bahwa pembuangan tailing KIP selama ini menimbulkan persoalan radiologis. Karena itu, nilai radiologis SI-RETAM bukanlah klaim membersihkan laut dari radioaktivitas, melainkan dua hal yang lebih terukur. Pertama, gerbang memberi verifikasi pada setiap pelepasan sekaligus jaring pengaman terhadap segmen aliran yang sewaktu-waktu terbaca jauh di atas ambang, sesuatu yang tidak akan terpantau bila hanya kekeruhan yang diawasi. Kedua, dan lebih penting, justru fraksi pekat yang diangkatlah yang benar-benar bersifat radiologis, sebab begitu monasit terkonsentrasi ia menjadi TENORM yang panas dan wajib ditangani terkendali, sebagaimana PT Timah pun menyimpan mineral ikutan yang terkumpul alih-alih membuangnya. Dengan mengangkat monasit di jalur tailing yang terpisah, ia tidak ikut mencemari aliran konsentrat timah menuju peleburan.',
+    pernyataanKalibrasi: 'Karena monasit hanya pecahan kecil dari tailing yang didominasi kuarsa, aktivitas rata-rata aliran yang dilepas kemungkinan besar memang sudah rendah, dan tidak ada bukti publik bahwa pembuangan tailing KIP selama ini menimbulkan persoalan radiologis. Karena itu, nilai radiologis TIRAM bukanlah klaim membersihkan laut dari radioaktivitas, melainkan dua hal yang lebih terukur. Pertama, gerbang memberi verifikasi pada setiap pelepasan sekaligus jaring pengaman terhadap segmen aliran yang sewaktu-waktu terbaca jauh di atas ambang, sesuatu yang tidak akan terpantau bila hanya kekeruhan yang diawasi. Kedua, dan lebih penting, justru fraksi pekat yang diangkatlah yang benar-benar bersifat radiologis, sebab begitu monasit terkonsentrasi ia menjadi TENORM yang panas dan wajib ditangani terkendali, sebagaimana PT Timah pun menyimpan mineral ikutan yang terkumpul alih-alih membuangnya. Dengan mengangkat monasit di jalur tailing yang terpisah, ia tidak ikut mencemari aliran konsentrat timah menuju peleburan.',
   },
 
   // ===== S9 — Peta jalan menuju penerapan =====
@@ -575,7 +573,7 @@ export const CONTENT = {
 
   // ===== S10 — Daftar pustaka & kredit =====
   // Catatan: naskah spesifikasi (Lampiran A.7) menyebut "17 entri", tetapi Daftar Pustaka
-  // pada Draf_Esai_SI-RETAM_TANDAI.docx memuat 18 entri berbeda (Perka BAPETEN 9/2009 dan
+  // pada Draf_Esai_TIRAM_TANDAI.docx memuat 18 entri berbeda (Perka BAPETEN 9/2009 dan
   // 16/2012 masing-masing satu entri tersendiri). Seluruh 18 disalin apa adanya dari sumber;
   // tidak ada yang ditambah atau dihilangkan supaya cocok dengan angka "17".
   s10: {

@@ -1,16 +1,16 @@
-# Proyek: Website Interaktif SI-RETAM
+# Proyek: Website Interaktif TIRAM
 
 Microsite ilmiah-interaktif untuk esai kompetisi PCMC (Perhimpunan Ahli Pertambangan Indonesia Student Chapter), subtopik Ekstraksi Tambang Mineral. Isinya gagasan rekayasa: modul retrofit di hilir jig Kapal Isap Produksi untuk memulihkan monasit dari tailing timah lepas pantai Bangka.
 
-Spesifikasi lengkap ada di `spec/PROMPT_Website_SI-RETAM.md`. Baca bagian yang relevan sebelum mengerjakan setiap sesi.
+Spesifikasi lengkap ada di `spec/PROMPT_Website_TIRAM.md`. Baca bagian yang relevan sebelum mengerjakan setiap sesi.
 
 ## Sumber kebenaran isi
 
 Hanya tiga berkas ini, tidak ada yang lain:
 
-- `spec/Draf_Esai_SI-RETAM_TANDAI.docx` — naskah esai
-- `spec/Justifikasi_Prinsip_SI-RETAM.docx` — justifikasi pemilihan & prinsip kerja komponen
-- `spec/SI-RETAM_3D.html` — geometri 3D yang sudah ada, untuk di-port
+- `spec/Draf_Esai_TIRAM_TANDAI.docx` — naskah esai
+- `spec/Justifikasi_Prinsip_TIRAM.docx` — justifikasi pemilihan & prinsip kerja komponen
+- `spec/TIRAM_3D.html` — geometri 3D yang sudah ada, untuk di-port
 
 Angka yang mengikat direkap di Lampiran A pada berkas spesifikasi.
 
@@ -46,7 +46,7 @@ Aturan yang mengikat:
 - **Seluruh teks dan angka hidup di `data/content.js`.** Tidak ada string isi yang di-hardcode di HTML atau JS lain. Ini supaya penulis bisa mengoreksi naskah tanpa menyentuh kode.
 - **Satu instance `WebGLRenderer` untuk seluruh halaman**, di-mount ulang ke section aktif. Bukan lima canvas hidup bersamaan.
 - Scene 3D di-init malas lewat `IntersectionObserver`; render loop berhenti saat section keluar viewport.
-- `three` r160+ via importmap CDN, `OrbitControls` dari `three/addons/`. Jangan pakai r128 — versi itu tidak punya OrbitControls (itu sebabnya `spec/SI-RETAM_3D.html` menulis kontrol orbitnya manual).
+- `three` r160+ via importmap CDN, `OrbitControls` dari `three/addons/`. Jangan pakai r128 — versi itu tidak punya OrbitControls (itu sebabnya `spec/TIRAM_3D.html` menulis kontrol orbitnya manual).
 - `gsap` + `ScrollTrigger` untuk semua animasi berbasis scroll. `lenis` untuk smooth scroll.
 - Tanpa React, tanpa Tailwind. CSS ditulis tangan dengan custom properties.
 

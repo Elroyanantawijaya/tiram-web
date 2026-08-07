@@ -1,6 +1,6 @@
 // js/models/bahan.js — primitif dan material bersama untuk model komponen.
 //
-// Diport dari helper di spec/SI-RETAM_3D.html. Tanda tangan dan perhitungannya
+// Diport dari helper di spec/TIRAM_3D.html. Tanda tangan dan perhitungannya
 // dipertahankan persis; yang berubah hanya `S.` menjadi `THREE.` dan bentuk modul.
 // Warna serta nilai metalness/roughness kedelapan material juga tidak diubah —
 // peningkatan §5 datang dari lingkungan render (envMap RoomEnvironment, tone
