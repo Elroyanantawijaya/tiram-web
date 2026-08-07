@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SI-RETAM</title>
+  <meta name="description" content="SI-RETAM — microsite ilmiah-interaktif kompetisi PCMC" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400..900;1,400..900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Lompat ke konten utama</a>
+
+  <!-- S0 — Preloader: overlay, di luar alur scroll utama -->
+  <div id="preloader" class="preloader" role="status" aria-live="polite">
+    <div class="preloader__inner">
+      <div class="preloader__spektrum" aria-hidden="true"></div>
+      <p class="preloader__cacah mono" aria-hidden="true">000000</p>
+      <div class="preloader__progres">
+        <div class="preloader__progres-bar"></div>
+      </div>
+      <p class="preloader__label mono"></p>
+      <p class="preloader__wordmark"></p>
+    </div>
+  </div>
+
+  <!-- Rel pipa: navigasi + indikator progres scroll (§3.4b) -->
+  <nav id="rel-pipa" class="rel-pipa" aria-label="Navigasi komponen SI-RETAM"></nav>
+
+  <main id="main">
+
+    <!-- S1 — Hero -->
+    <section id="s1-hero" class="section section--hero" data-section="s1" aria-label="Hero">
+      <div class="section__bg" aria-hidden="true"></div>
+      <div class="section__content"></div>
+    </section>
+
+    <!-- S2 — Pendahuluan (scrollytelling, kolom teks + panel sticky) -->
+    <section id="s2-pendahuluan" class="section section--scrolly" data-section="s2" aria-label="Pendahuluan">
+      <div class="section__scroll">
+        <div class="subsection" data-subsection="a"></div>
+        <div class="subsection" data-subsection="b"></div>
+        <div class="subsection" data-subsection="c"></div>
+        <div class="subsection" data-subsection="d"></div>
+        <div class="subsection" data-subsection="e"></div>
+        <div class="subsection" data-subsection="f"></div>
+      </div>
+      <div class="section__sticky" aria-hidden="true"></div>
+    </section>
+
+    <!-- S3 — Argumen: simulator "Empat Sifat" (signature) -->
+    <section id="s3-argumen" class="section" data-section="s3" aria-label="Argumen">
+      <div class="section__content">
+        <div class="simulator" data-component="simulator-empat-sifat"></div>
+        <div class="subsection" data-subsection="b"></div>
+      </div>
+    </section>
+
+    <!-- S4 — Solusi: gagasan SI-RETAM -->
+    <section id="s4-solusi" class="section" data-section="s4" aria-label="Solusi">
+      <div class="section__content"></div>
+    </section>
+
+    <!-- S5 — Komponen: canvas 3D sticky + panel teks bergulir -->
+    <section id="s5-komponen" class="section section--scrolly" data-section="s5" aria-label="Komponen">
+      <div class="section__sticky" data-component="canvas-3d" aria-hidden="true"></div>
+      <div class="section__scroll">
+        <div class="subsection" data-component-id="c1"></div>
+        <div class="subsection" data-component-id="c2"></div>
+        <div class="subsection" data-component-id="c3"></div>
+        <div class="subsection" data-component-id="c4"></div>
+        <div class="subsection" data-component-id="c5"></div>
+        <div class="subsection" data-component-id="hidrosiklon"></div>
+      </div>
+    </section>
+
+    <!-- S6 — Integrasi: rakitan di atas dek KIP -->
+    <section id="s6-integrasi" class="section" data-section="s6" aria-label="Integrasi">
+      <div class="section__sticky" data-component="canvas-3d-rakitan" aria-hidden="true"></div>
+      <div class="section__content"></div>
+    </section>
+
+    <!-- S7 — Sinema: alat itu bekerja -->
+    <section id="s7-sinema" class="section" data-section="s7" aria-label="Sinema">
+      <div class="section__sticky" data-component="canvas-sinema" aria-hidden="true"></div>
+      <div class="section__content" data-component="kontrol-pemutar"></div>
+    </section>
+
+    <!-- S8 — Kelayakan, dampak, dan keterbatasan (latar terang) -->
+    <section id="s8-kelayakan" class="section section--terang" data-section="s8" aria-label="Kelayakan dan keterbatasan">
+      <div class="section__content">
+        <div class="subsection" data-subsection="neraca"></div>
+        <div class="subsection" data-subsection="tiga-sudut"></div>
+        <div class="subsection" data-subsection="enam-keterbatasan"></div>
+        <div class="subsection" data-subsection="kalibrasi-klaim"></div>
+      </div>
+    </section>
+
+    <!-- S9 — Peta jalan menuju penerapan -->
+    <section id="s9-peta-jalan" class="section" data-section="s9" aria-label="Peta jalan"></section>
+
+    <!-- S10 — Daftar pustaka & kredit -->
+    <section id="s10-referensi" class="section" data-section="s10" aria-label="Daftar pustaka">
+      <div class="section__content">
+        <div class="subsection" data-subsection="pustaka"></div>
+        <div class="subsection" data-subsection="kredit">
+          <div id="slot-foto-kip" aria-label="Slot foto KIP, kosong sengaja"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

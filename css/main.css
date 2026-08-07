@@ -1,0 +1,294 @@
+/* css/main.css — sistem desain SI-RETAM: token, tipografi, kerangka section.
+   Kosong secara isi (lihat data/content.js) — berkas ini hanya mengatur rupa. */
+
+/* ===== Reset dasar ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+/* ===== Token desain ===== */
+:root {
+  /* Warna — §3.1 */
+  --abisal: #071016;
+  --lambung: #0F1D26;
+  --garis: #1E3340;
+  --baja: #C9D6DD;
+  --kabut: #7C93A1;
+  --gamma: #E9B93A;
+  --magnet: #3FB8C4;
+  --monasit: #8C4A2F;
+  --sedimen: #9A8F7E;
+
+  /* Latar terang untuk S8 — §3.1 */
+  --terang-latar: #E8E6E1;
+  --terang-tinta: #0F1D26;
+
+  /* Tipografi — §3.2 */
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-isi: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --step-13: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-15: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+  --step-17: clamp(1.0625rem, 1.02rem + 0.2vw, 1.1875rem);
+  --step-21: clamp(1.3125rem, 1.25rem + 0.3vw, 1.5rem);
+  --step-28: clamp(1.75rem, 1.6rem + 0.6vw, 2rem);
+  --step-40: clamp(2.25rem, 1.9rem + 1.4vw, 2.75rem);
+  --step-64: clamp(3rem, 2.2rem + 3.2vw, 4.5rem);
+  --step-96: clamp(4rem, 2.5rem + 6vw, 6.5rem);
+  --step-hero: clamp(2.5rem, 1.2rem + 8vw, 7rem);
+
+  /* Gerak — §3.3 */
+  --easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --durasi-mikro: 180ms;
+  --durasi-transisi: 420ms;
+  --durasi-sinematik: 900ms;
+
+  color-scheme: dark;
+}
+
+/* ===== Fondasi tipografi & latar ===== */
+body {
+  background: var(--abisal);
+  color: var(--baja);
+  font-family: var(--font-isi);
+  font-size: var(--step-17);
+  line-height: 1.7;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-stretch: 118%;
+  font-weight: 800;
+  line-height: 1.05;
+  margin: 0;
+}
+
+h1 { font-size: var(--step-hero); }
+h2 { font-size: var(--step-64); }
+h3 { font-size: var(--step-40); }
+h4 { font-size: var(--step-28); }
+
+p {
+  max-width: 68ch;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--step-13);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--kabut);
+}
+
+.mono,
+[data-instrumen] {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Aksesibilitas ===== */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  z-index: 1000;
+  background: var(--lambung);
+  color: var(--baja);
+  padding: 0.75em 1.25em;
+  border: 1px solid var(--garis);
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gamma);
+  outline-offset: 3px;
+}
+
+/* ===== Kerangka section ===== */
+.section {
+  position: relative;
+  padding: clamp(3rem, 8vw, 8rem) clamp(1.25rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--garis);
+}
+
+.section--hero {
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: clamp(2rem, 6vw, 5rem);
+}
+
+.section__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.section__content {
+  position: relative;
+  z-index: 1;
+  max-width: 76rem;
+  margin-inline: auto;
+}
+
+/* Layout dua kolom untuk section scrollytelling (S2, S5) */
+.section--scrolly {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+@media (min-width: 900px) {
+  .section--scrolly {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.section__scroll {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 10vw, 8rem);
+}
+
+.section__sticky {
+  position: relative;
+  min-height: 60vh;
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  border-radius: 4px;
+}
+
+@media (min-width: 900px) {
+  .section__sticky {
+    position: sticky;
+    top: 10vh;
+    height: 60vh;
+  }
+}
+
+.subsection {
+  min-height: 40vh;
+}
+
+/* S8 — pergeseran ke latar terang, §3.1 */
+.section--terang {
+  background: var(--terang-latar);
+  color: var(--terang-tinta);
+  border-bottom-color: #C7C3BA;
+}
+
+.section--terang .eyebrow {
+  color: #5B6A72;
+}
+
+/* Simulator "Empat Sifat" — wadah kosong, siap diisi canvas 2D */
+.simulator {
+  min-height: 50vh;
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  border-radius: 4px;
+}
+
+/* Rel pipa — indikator progres + navigasi (§3.4b) */
+.rel-pipa {
+  position: fixed;
+  right: clamp(0.5rem, 2vw, 2rem);
+  top: 0;
+  height: 100vh;
+  width: 2rem;
+  z-index: 500;
+  pointer-events: none;
+}
+
+/* Preloader (S0) */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--abisal);
+}
+
+.preloader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.preloader__spektrum {
+  width: min(60vw, 20rem);
+  height: 4rem;
+  border-bottom: 1px solid var(--garis);
+}
+
+.preloader__cacah {
+  font-size: var(--step-40);
+  color: var(--gamma);
+}
+
+.preloader__progres {
+  width: min(60vw, 20rem);
+  height: 2px;
+  background: var(--garis);
+}
+
+.preloader__progres-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--gamma);
+}
+
+.preloader__label,
+.preloader__wordmark {
+  font-size: var(--step-13);
+  letter-spacing: 0.08em;
+  color: var(--kabut);
+}
+
+/* ===== Gerak terhormat ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
