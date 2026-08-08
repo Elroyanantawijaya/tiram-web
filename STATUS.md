@@ -3,15 +3,18 @@
 Daftar periksa penerimaan ada di `spec/PROMPT_Website_TIRAM.md` Lampiran B. Berkas ini
 mencatat posisi terkini terhadap daftar itu, diperbarui di akhir tiap sesi.
 
-**Posisi:** setelah sesi S3 (simulator "Empat Sifat").
+**Posisi:** setelah sesi S4 (gagasan TIRAM).
 **Cakupan yang sudah dikerjakan:** S0 preloader, S1 hero, S2 pendahuluan (a–f), S3 argumen +
-simulator empat mode, S5 model komponen (tampil + dapat diputar, widget komponen 1 dari 5),
-S6 rakitan di atas dek KIP, S7 sekuens sinema 8 bab, infrastruktur bersama.
-**Belum disentuh:** S4, S8, S9, S10.
+simulator empat mode, S4 gagasan (diagram batas sistem + batas kebaruan), S5 model komponen
+(tampil + dapat diputar, widget komponen 1 dari 5), S6 rakitan di atas dek KIP, S7 sekuens
+sinema 8 bab, infrastruktur bersama.
+**Belum disentuh:** S8, S9, S10.
 
-> **Catatan urutan.** S4 masih dilompati — naskahnya (`s4.diagramBatas`, `s4.batasKebaruan`,
-> `s4.kalimatPenutup`) sudah lengkap di content.js, section-nya tinggal dibangun. Ini yang
-> paling mendesak untuk sesi berikutnya, lalu S8/S9/S10.
+> **Catatan urutan.** S1–S7 kini lengkap. S8 (kelayakan & enam keterbatasan) paling mendesak
+> untuk sesi berikutnya — enam keterbatasan itu adalah aturan mengikat CLAUDE.md sendiri
+> ("wajib tampil dengan bobot visual penuh, tidak boleh dikecilkan atau dipindah ke footer"),
+> lalu S9 (peta jalan) dan S10 (daftar pustaka, sudah menampung 12 sitasi yang menunggu tempat
+> tujuannya).
 
 > **Catatan proses.** Berkas ini sempat tidak diperbarui selama dua sesi (widget komponen 1
 > dan S6) meski rencana S6 sendiri menjanjikannya. Sesi ini menutup celah itu sekaligus —
@@ -35,6 +38,8 @@ memang belum gilirannya.
 | Enam sub-bagian pendahuluan (S2a–S2f) lengkap dan terhubung ke visual sticky | Diverifikasi lewat scroll terprogram melalui keempat sub-bagian a–d: panel sticky berganti tepat mengikuti posisi baca (`panel--a` aktif saat di S2a, dst., tanpa satu pun yang salah). S2e (linimasa lima regulasi) dan S2f (kalimat celah) tampil dengan naskah lengkap dari `content.js`. |
 | Rakitan 3D lengkap dengan referensi skala, penanda bernomor, sorot jalur aliran, dan mode X-ray | Kelima fitur wajib §S6 ada dan terverifikasi lewat interaksi sungguhan, bukan hanya lewat kode: kelima penanda memindahkan kamera dan memunculkan kartu ringkas yang benar; ketiga tombol sorot jalur menghasilkan opasitas pipa yang tepat (1 vs 0,12); X-ray mengubah 6 mesh selubung dari opasitas 1 ke 0,18 dan memulihkannya; kedua bidikan (dekat & "posisi di kapal") menjaga modul tetap dalam bingkai. Proporsi modul terhadap kapal diukur 20,0% (target ~19%), dan modul hasil port punya 65 mesh dengan kotak batas identik terhadap `bAssembly` asli. |
 | Sekuens sinema 8 bab dengan kontrol putar/jeda/scrub/kecepatan dan takarir Indonesia | Diverifikasi menyeluruh: menggeser garis waktu ke enam titik berbeda memindahkan kamera dan mengganti takarir tepat pada batas bab; kecepatan 2× membuat waktu maju dua kali lebih cepat dari waktu nyata (terukur langsung); jeda benar-benar membekukan waktu; lompat bab langsung menuju waktu yang tepat. Efek visual per bab (medan WHIMS menyala/padam, selongsong katup terjepit, bunker menyala, gerbang gamma berkedip saat verifikasi) semuanya murni fungsi dari waktu — aman di-scrub ke titik mana pun tanpa kehilangan keadaan. Ringkasan tiga angka muncul tepat di bab penutup dan hilang saat digeser mundur. Rekam ke `.webm` menghasilkan berkas video valid (240 KB untuk ~2 detik rekaman, `video/webm`) yang berhenti dan bisa diunduh baik otomatis di akhir maupun dihentikan manual. Bukan berkas video statis — seluruhnya animasi di dalam scene sesuai §S7. |
+| Diagram batas sistem (hulu / TIRAM / hilir) jelas | Tiga zona berdampingan: hulu dan hilir bergaris putus-putus beropasitas 0,7 ("di luar sistem"), zona TIRAM bergaris tegas `--gamma` beropasitas penuh — kontras visualnya langsung terbaca, bukan cuma lewat label teks. Sitasi (Bisnis.com, 2026) di teks zona hilir tertaut dan resolve. Diagram menumpuk vertikal di 360px (panah ikut berotasi 90°), sejajar horizontal di 1440px — keduanya diverifikasi tanpa overflow. |
+| Pernyataan batas kebaruan muncul dan tidak dilunakkan | Kotak `s4.batasKebaruan` tampil penuh di badan section (bukan footer), memakai pola visual "catatan penting" yang sama dengan `.s3-sim__kesimpulan` — border kiri `--gamma`, bukan dikecilkan atau diberi warna redup. |
 | Simulator "Empat Sifat" berfungsi untuk keempat mode dan menghasilkan verdict yang benar | **Diverifikasi bukan lewat kode, melainkan lewat piksel yang benar-benar dirender** — sebuah penyadap dipasang pada `ctx.arc()` khusus kanvas simulator untuk membaca posisi x/y dan warna fill setiap partikel pada frame final tiap mode. Hasilnya cocok persis dengan §S3: mode Magnetik — monasit & ilmenit di x≈0,13–0,14 (tertahan kiri), zirkon/kasiterit/kuarsa di x≈0,77–0,79 (lolos kanan); mode Konduktivitas — monasit & zirkon kiri (x≈0,19–0,21), ilmenit & kasiterit kanan (x≈0,75–0,79), **kuarsa persis di tengah x=0,50** (netral, tidak dibelokkan, sesuai `catatanKonduktivitas`); mode Radioaktivitas — monasit alpha≈0,99 (berpendar gamma), keempat mineral lain alpha≈0,14 (redup). Kesimpulan diuji tidak muncul sebelum 4 mode dicoba (urutan acak: magnetik→radioaktivitas→densitas→konduktivitas), muncul tepat di klik ke-4, dan tetap terlihat setelah mode diganti lagi. Tabel Lampiran A.3 menyala mengikuti mode aktif. Reduced-motion diuji lewat pembacaan piksel yang sama: posisi sudah final dalam 31 ms (bukan menunggu 900 ms), tepat 120 panggilan `arc()` per mode ganti (satu frame, tanpa loop animasi berjalan). |
 
 ## Butir yang baru terpenuhi sebagian
@@ -52,8 +57,6 @@ Naskah dan angkanya sudah lengkap di `data/content.js`; yang belum ada adalah ta
 
 | Butir Lampiran B | Naskah siap di |
 |---|---|
-| Diagram batas sistem (hulu / TIRAM / hilir) jelas | `s4.diagramBatas` |
-| Pernyataan batas kebaruan muncul dan tidak dilunakkan | `s4.batasKebaruan` |
 | Widget WHIMS menunjukkan jatuhnya efisiensi pada butir halus | `s5.komponen[1].widget` |
 | Widget katup menunjukkan konsekuensi tunda PLC yang salah | `s5.komponen[3].widget` |
 | Neraca 280 m³/jam vs ~7.000 ton/jam dengan skala yang jujur | `s8.neraca` |

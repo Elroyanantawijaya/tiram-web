@@ -10,6 +10,7 @@ import { el, kosongkan, kurangiGerak, formatAngka } from './dom.js';
 import { rakitS1 } from './sections/s1-hero.js';
 import { rakitS2 } from './sections/s2-pendahuluan.js';
 import { rakitS3 } from './sections/s3-argumen.js';
+import { rakitS4 } from './sections/s4-solusi.js';
 import { rakitS5 } from './sections/s5-komponen.js';
 import { rakitS6 } from './sections/s6-integrasi.js';
 import { rakitS7 } from './sections/s7-sinema.js';
@@ -261,6 +262,7 @@ function mulai() {
   const s1 = rakitS1(CONTENT);
   rakitS2(CONTENT);
   rakitS3(CONTENT);
+  rakitS4(CONTENT);
   rakitS5(CONTENT);
   rakitS6(CONTENT);
   rakitS7(CONTENT);

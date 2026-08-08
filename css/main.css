@@ -1549,6 +1549,90 @@ p {
 .s3b__jalur-label { font-weight: 700; margin: 0 0 0.4rem; color: var(--baja); }
 .s3b__jalur-konsekuensi { color: var(--kabut); margin: 0; font-size: var(--step-15); }
 
+/* ===== S4 Solusi ===== */
+.s4__pembuka {
+  font-size: var(--step-21);
+  color: var(--baja);
+  max-width: 62ch;
+  margin-top: 1.25rem;
+}
+
+.s4__diagram {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.75rem;
+  margin: clamp(2rem, 5vw, 3.5rem) 0;
+}
+
+.s4__zona {
+  flex: 1 1 14rem;
+  min-width: 0;
+  padding: 1.1rem 1.25rem;
+  border-radius: 4px;
+}
+
+/* Zona hulu/hilir: di luar sistem — garis putus-putus, opasitas rendah. */
+.s4__zona--luar {
+  border: 1px dashed var(--garis);
+  opacity: 0.7;
+}
+
+/* Zona TIRAM: di dalam sistem — batas tegas, opasitas penuh. */
+.s4__zona--tiram {
+  border: 1px solid var(--gamma);
+  background: var(--lambung);
+}
+
+.s4__zona--tiram .s4__zona-label { color: var(--gamma); }
+
+.s4__zona-label {
+  font-size: var(--step-13);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--kabut);
+  margin: 0 0 0.5rem;
+}
+
+.s4__zona-isi { margin: 0; font-size: var(--step-15); color: var(--baja); }
+
+.s4__panah {
+  align-self: center;
+  flex: 0 0 auto;
+  color: var(--kabut);
+  font-size: var(--step-21);
+}
+
+.s4__panah::before { content: '→'; }
+
+@media (max-width: 640px) {
+  .s4__diagram { flex-direction: column; }
+  .s4__panah { transform: rotate(90deg); align-self: flex-start; margin-left: 1.25rem; }
+}
+
+.s4__penutup {
+  font-family: var(--font-display);
+  font-stretch: 118%;
+  font-weight: 700;
+  font-size: var(--step-40);
+  line-height: 1.2;
+  max-width: 22ch;
+  color: var(--baja);
+  margin: clamp(2rem, 5vw, 3.5rem) 0;
+}
+
+/* Batas kebaruan: sengaja ditampilkan penuh di sini, bukan footer, bukan
+   dilunakkan — sama pola visual "catatan penting" seperti .s3-sim__kesimpulan
+   dan .penyeimbang (border-left --gamma). */
+.s4__batas-kebaruan {
+  border-left: 2px solid var(--gamma);
+  background: var(--lambung);
+  padding: 1.25rem 1.5rem;
+  max-width: 62ch;
+}
+
+.s4__batas-kebaruan-teks { margin: 0.75rem 0 0; color: var(--baja); }
+
 /* ===== Gerak terhormat ===== */
 @media (prefers-reduced-motion: reduce) {
   *,
