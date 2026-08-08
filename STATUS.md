@@ -3,14 +3,20 @@
 Daftar periksa penerimaan ada di `spec/PROMPT_Website_TIRAM.md` Lampiran B. Berkas ini
 mencatat posisi terkini terhadap daftar itu, diperbarui di akhir tiap sesi.
 
-**Posisi:** setelah sesi port model 3D S5.
+**Posisi:** setelah sesi S7 (sekuens sinema).
 **Cakupan yang sudah dikerjakan:** S0 preloader, S1 hero, S2 pendahuluan (a–f), S5 model
-komponen (tampil + dapat diputar), infrastruktur bersama.
-**Belum disentuh:** S3, S4, S6–S10.
+komponen (tampil + dapat diputar, widget komponen 1 dari 5), S6 rakitan di atas dek KIP,
+S7 sekuens sinema 8 bab, infrastruktur bersama.
+**Belum disentuh:** S3, S4, S8, S9, S10.
 
 > **Catatan urutan.** S3 (simulator "Empat Sifat") dan S4 dilompati atas permintaan penulis
-> demi mengerjakan port geometri 3D lebih dulu. Keduanya masih kosong. S3 khususnya penting
-> karena ia adalah inti argumen esai yang dibuat bisa dimainkan.
+> demi mengerjakan port geometri 3D (S5), rakitan (S6), dan sinema (S7) lebih dulu. Keduanya
+> masih kosong. S3 khususnya penting karena ia adalah inti argumen esai yang dibuat bisa
+> dimainkan — ini yang paling mendesak untuk sesi berikutnya.
+
+> **Catatan proses.** Berkas ini sempat tidak diperbarui selama dua sesi (widget komponen 1
+> dan S6) meski rencana S6 sendiri menjanjikannya. Sesi ini menutup celah itu sekaligus —
+> beberapa entri di bawah berasal dari sesi-sesi yang telat dicatat, bukan sesi ini saja.
 
 Lampiran B adalah daftar penerimaan untuk **situs jadi**, bukan per sesi. Karena itu
 mayoritas butir di bawah wajar berstatus belum — bukan karena terlewat, melainkan karena
@@ -28,14 +34,16 @@ memang belum gilirannya.
 | Tidak ada angka di luar Lampiran A atau berkas esai | Seluruh angka bersumber dari `data/content.js`, yang disalin dari ketiga berkas sumber. Dua lubang data ditandai `TODO` alih-alih dikarang — lihat bagian bawah. |
 | Preloader kalibrasi detektor tampil dan keluar mulus (< 2,2 detik) | Diukur dengan `performance.measure('preloader')` di peramban, empat kali muat berturut-turut: **1027, 1027, 1028, 1030 ms**. Hero tampil ~1,11 detik sejak navigasi. Aturan §S0 "kalau aset sudah siap lebih cepat, percepat" kini diterapkan: kemajuan hanya merayap sampai font terpasang dan `load` selesai, lalu diselesaikan cepat. |
 | Enam sub-bagian pendahuluan (S2a–S2f) lengkap dan terhubung ke visual sticky | Diverifikasi lewat scroll terprogram melalui keempat sub-bagian a–d: panel sticky berganti tepat mengikuti posisi baca (`panel--a` aktif saat di S2a, dst., tanpa satu pun yang salah). S2e (linimasa lima regulasi) dan S2f (kalimat celah) tampil dengan naskah lengkap dari `content.js`. |
+| Rakitan 3D lengkap dengan referensi skala, penanda bernomor, sorot jalur aliran, dan mode X-ray | Kelima fitur wajib §S6 ada dan terverifikasi lewat interaksi sungguhan, bukan hanya lewat kode: kelima penanda memindahkan kamera dan memunculkan kartu ringkas yang benar; ketiga tombol sorot jalur menghasilkan opasitas pipa yang tepat (1 vs 0,12); X-ray mengubah 6 mesh selubung dari opasitas 1 ke 0,18 dan memulihkannya; kedua bidikan (dekat & "posisi di kapal") menjaga modul tetap dalam bingkai. Proporsi modul terhadap kapal diukur 20,0% (target ~19%), dan modul hasil port punya 65 mesh dengan kotak batas identik terhadap `bAssembly` asli. |
+| Sekuens sinema 8 bab dengan kontrol putar/jeda/scrub/kecepatan dan takarir Indonesia | Diverifikasi menyeluruh: menggeser garis waktu ke enam titik berbeda memindahkan kamera dan mengganti takarir tepat pada batas bab; kecepatan 2× membuat waktu maju dua kali lebih cepat dari waktu nyata (terukur langsung); jeda benar-benar membekukan waktu; lompat bab langsung menuju waktu yang tepat. Efek visual per bab (medan WHIMS menyala/padam, selongsong katup terjepit, bunker menyala, gerbang gamma berkedip saat verifikasi) semuanya murni fungsi dari waktu — aman di-scrub ke titik mana pun tanpa kehilangan keadaan. Ringkasan tiga angka muncul tepat di bab penutup dan hilang saat digeser mundur. Rekam ke `.webm` menghasilkan berkas video valid (240 KB untuk ~2 detik rekaman, `video/webm`) yang berhenti dan bisa diunduh baik otomatis di akhir maupun dihentikan manual. Bukan berkas video statis — seluruhnya animasi di dalam scene sesuai §S7. |
 
 ## Butir yang baru terpenuhi sebagian
 
 | Butir Lampiran B | Yang sudah | Yang belum |
 |---|---|---|
 | Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | S1 **dan** S2 kini terverifikasi tanpa overflow horizontal di 360px dan 1440px. Di S2, panel sticky pindah ke atas kolom teks di layar sempit (bukan menumpuk di akhir) dan pin linimasa dilepas jadi daftar vertikal. Guard `kurangiGerak()` ada di titik yang benar dalam kode (loop gambar panel, pembuatan pin ScrollTrigger) dengan pola yang sama seperti S1 yang sudah terverifikasi jalan. | **Tidak bisa diverifikasi langsung**: lingkungan otomasi ini tidak punya cara mengemulasi `prefers-reduced-motion` di level OS, jadi perilaku reduced-motion S2 dijamin lewat pembacaan kode, bukan pengamatan runtime langsung — beda dengan S1 yang sempat diverifikasi dengan override `matchMedia`. S3–S10 belum bisa dinilai sama sekali. |
-| Kelima komponen punya model 3D yang dapat diputar, di-zoom, diurai, dan dipotong | Kelima geometri diport ke `js/models/komponen.js` dan **terbukti identik** dengan sumber: jumlah mesh dan kotak batas sama persis sampai 4 desimal, dibandingkan terhadap kode asli yang diambil langsung dari `spec/TIRAM_3D.html`, bukan diketik ulang. Model tampil, dapat **diputar** (diuji lewat seret pointer sungguhan: kamera berpindah dari `-6.260,5.816,-2.653` ke `0.089,8.577,3.914`) dan **di-zoom** lewat OrbitControls. | **Tampilan urai dan potongan melintang belum ada** — dua dari empat kemampuan yang diminta butir ini. Anotasi label juga belum dirender (teks dan titik jangkarnya sudah tersimpan di `s5.komponen[].anotasi`, menunggu lapisan anotasi HTML + leader line SVG). |
-| Kelima komponen punya blok `APA · BAGAIMANA · ILMU` dan satu widget simulasi | Ketiga blok tetap terpasang untuk kelima komponen plus hidrosiklon opsional — 18 blok, teksnya disalin utuh dari dokumen justifikasi lewat `content.js`. | **Widget simulasi belum ada satu pun.** Kelimanya menunggu sesi tersendiri. |
+| Kelima komponen punya model 3D yang dapat diputar, di-zoom, diurai, dan dipotong | Kelima geometri diport ke `js/models/komponen.js` dan **terbukti identik** dengan sumber: jumlah mesh dan kotak batas sama persis sampai 4 desimal, dibandingkan terhadap kode asli yang diambil langsung dari `spec/TIRAM_3D.html`, bukan diketik ulang. Model tampil, dapat **diputar** (diuji lewat seret pointer sungguhan: kamera berpindah dari `-6.260,5.816,-2.653` ke `0.089,8.577,3.914`) dan **di-zoom** lewat OrbitControls. Anotasi label sudah punya mekanisme umum yang terpakai nyata di S6 (`js/widgets/anotasi.js`, lihat baris rakitan di atas). | **Tampilan urai dan potongan melintang di S5 sendiri belum ada** — dua dari empat kemampuan yang diminta butir ini, spesifik untuk komponen satu-per-satu (bukan rakitan). Anotasi label komponen S5 (`s5.komponen[].anotasi`) belum disambungkan ke `js/widgets/anotasi.js` walau mekanismenya sudah ada dan terbukti jalan di S6. |
+| Kelima komponen punya blok `APA · BAGAIMANA · ILMU` dan satu widget simulasi | Ketiga blok tetap terpasang untuk kelima komponen plus hidrosiklon opsional — 18 blok, teksnya disalin utuh dari dokumen justifikasi lewat `content.js`. **Satu dari lima widget selesai**: Pengkondisi umpan (komponen 1) — simulasi kapasitor hidraulik, terverifikasi tenang sampai ~60% slider lalu jebol tajam ke 476% riak pada 88%, persis pola yang diminta §S5. | **Empat widget belum ada**: WHIMS (2), sensor gamma (3), katup (4), bunker (5). Widget WHIMS dan katup masing-masing adalah butir Lampiran B tersendiri (lihat tabel di bawah). |
 | Daftar pustaka lengkap, tertaut, dapat dicari | 18 entri lengkap dengan DOI/URL di `s10.pustaka`. Mesin tooltip sitasi makin teruji: kini menangani sitasi ganda dalam satu kurung (dipecah per titik koma, tiap sub-sitasi resolve sendiri) dan dibangun ulang sebagai `<span role="button">` karena Chrome memaksa `<button>` jadi `inline-block` sehingga sitasi tak bisa pecah antar baris. 12 elemen `.sitasi` di S1+S2, semuanya resolve ke entri benar. | S10 sendiri belum dirender, jadi belum ada daftar yang tampil dan belum ada pencarian. Klik sitasi melompat ke `#s10-referensi` yang masih kosong. |
 
 ## Butir yang belum dikerjakan — di luar cakupan sesi ini
@@ -50,10 +58,19 @@ Naskah dan angkanya sudah lengkap di `data/content.js`; yang belum ada adalah ta
 | Pernyataan batas kebaruan muncul dan tidak dilunakkan | `s4.batasKebaruan` |
 | Widget WHIMS menunjukkan jatuhnya efisiensi pada butir halus | `s5.komponen[1].widget` |
 | Widget katup menunjukkan konsekuensi tunda PLC yang salah | `s5.komponen[3].widget` |
-| Rakitan 3D dengan referensi skala, penanda bernomor, sorot jalur, mode X-ray | `s6` |
-| Sekuens sinema 8 bab dengan kontrol putar/jeda/scrub/kecepatan dan takarir | `s7.bab` |
 | Neraca 280 m³/jam vs ~7.000 ton/jam dengan skala yang jujur | `s8.neraca` |
 | Enam keterbatasan tampil dengan bobot visual penuh | `s8.enamKeterbatasan` |
+
+### Dua dari lima "detail meyakinkan" §S7 ditunda, bukan terlewat
+
+Daftar §S7 menyebut lima detail yang membuat sinema meyakinkan. Tiga sudah ada: sistem
+partikel GPU (bukan mesh per butir), gerak kamera dengan easing sinematik per bab, dan
+takarir Indonesia yang sinkron + bisa disalin. Dua sengaja ditunda:
+
+- **Depth of field ringan** — butuh `EffectComposer` + bokeh pass, penambahan kompleksitas
+  yang lebih pas dikerjakan di sesi poles akhir bersama optimasi lain.
+- **Bunyi opsional** — sudah diputuskan penulis di sesi perencanaan S6/S7: ditunda demi
+  memastikan kedelapan bab dan takarirnya benar dulu.
 
 ---
 
@@ -127,11 +144,43 @@ yang salah, bukan nilai yang basi. Diperbaiki dengan `refreshPriority: 1` pada p
 ia selalu dihitung lebih dulu. Terverifikasi: pergeseran kelima pemicu turun dari ~1.131px
 menjadi tepat 0 pada skenario muat-di-360px-lalu-diperbesar-ke-1440px.
 
+**12. (Sesi S6, telat dicatat) Ketiga jalur pipa berbagi satu instance material — selesai.**
+Meredupkan satu jalur aliran (mis. "jalur fraksi magnetik → bunker") ikut meredupkan dua
+jalur lainnya, sebab ketiganya menunjuk objek `Material` yang sama. Sorot jalur tidak
+berfungsi sama sekali sampai diperbaiki. Tiap jalur kini memakai salinan (`clone()`)
+materialnya sendiri.
+
+**13. (Sesi S6, telat dicatat) Lapisan anotasi tertimpa canvas — selesai.**
+`scene.js` memasang ulang elemen `<canvas>` ke wadah setiap kali section diaktifkan, jadi
+canvas selalu jadi saudara DOM yang lebih akhir dan menimpa lapisan penanda bernomor —
+urutan DOM saja tidak cukup, ditambahkan `z-index` pada `.anotasi`.
+
+**14. (Sesi S6, telat dicatat) Kendali yang ditumpangkan di atas scene menutupi model — selesai.**
+Tombol sorot jalur, X-ray, dan bidikan yang semula berupa overlay di atas panggung 3D
+membungkus jadi banyak baris di layar sempit dan menghabiskan hampir seluruh bingkai. Diganti
+jadi blok biasa di bawah scene, pola yang sejak itu dipakai ulang di S7.
+
+**15. (Berasal dari S6, ditemukan & diperbaiki sesi S7) Selubung WHIMS berbagi material dengan motor pengkondisi dan aktuator katup — selesai.**
+Housing WHIMS ditandai `userData.selubung` untuk mode X-ray, tetapi memakai `b.dark`
+langsung — material yang sama juga dipakai motor pengkondisi (k1) dan aktuator katup (k4),
+yang **tidak** ditandai selubung. Akibatnya menyalakan X-ray di S6 diam-diam ikut membuat
+motor dan aktuator transparan/wireframe juga, meski keduanya tidak seharusnya terpengaruh.
+Verifikasi S6 sebelumnya hanya memeriksa opasitas mesh yang tertandai, tidak memeriksa
+apakah mesh lain yang tidak tertandai ikut berubah — itu sebabnya lolos saat itu. Ditemukan
+saat menandai selongsong katup untuk animasi sinema (yang butuh pola serupa) dan menyadari
+`bx` belum diklon. Diperbaiki dengan `b.dark.clone()` khusus untuk `bx`, dan pola yang sama
+diterapkan sejak awal pada selongsong katup baru (`b.rubber.clone()`, sebab `b.rubber` juga
+dipakai pipa kecil sensor). Terverifikasi ulang: `bx.material !== motorK1.material` dan
+`!== aktuatorK4.material`; menyalakan X-ray sekarang hanya mengubah opasitas `bx` dan dinding
+bunker, motor dan aktuator tetap opasitas 1.
+
 ## Cacat terbuka
 
-**8. Rel pipa belum punya sambungan bernomor 1–5.**
-Saat ini hanya progres scroll dan navigasi sepuluh section. Penomoran komponen menunggu S5,
-sesuai §3.4b.
+**8. Rel pipa (nav kiri, `#rel-pipa`) belum punya sambungan bernomor 1–5.**
+Ini elemen berbeda dari penanda bernomor di atas model S6 (yang sudah ada dan berfungsi).
+Rel pipa saat ini hanya progres scroll dan navigasi sepuluh section, belum diberi lima titik
+tambahan yang berdenyut saat komponen terkait aktif, sesuai §3.4b. S5 dan S6 sudah selesai
+tapi penyambungan ini belum dikerjakan di keduanya — masih terbuka.
 
 **9. Klik sitasi melompat ke section kosong.**
 `#s10-referensi` belum berisi apa pun sampai sesi S10.
@@ -140,8 +189,13 @@ sesuai §3.4b.
 Guard `kurangiGerak()` ada di kode (loop gambar panel, pembuatan pin ScrollTrigger), tapi
 lingkungan otomasi sesi ini tidak punya cara mengemulasi `prefers-reduced-motion` di level
 OS untuk mengonfirmasinya secara langsung — beda dari S1 yang sempat diverifikasi dengan
-override `matchMedia`. Perlu dicek manual di peramban biasa (DevTools → Rendering →
-Emulate CSS media feature).
+override `matchMedia`.
+
+*Pembaruan sesi S7:* teknik yang lebih baik ditemukan dan berhasil dipakai — pulihkan markup
+section dari `index.html` mentah, timpa `window.matchMedia` sementara, lalu panggil ulang
+fungsi `rakitSX` section itu secara langsung. Ini terbukti bekerja untuk memverifikasi jalur
+statis S7 (lihat commit sesi ini). Belum diterapkan balik ke S2 — di luar cakupan sesi ini —
+tapi sekarang ada jalan untuk melakukannya tanpa perlu emulasi OS.
 
 ---
 

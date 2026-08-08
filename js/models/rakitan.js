@@ -69,8 +69,14 @@ function bangunModul(b) {
   // ---- 2 WHIMS ----
   const k2 = new THREE.Group();
   (function () {
-    const bx = box(1.3, 1.25, 1.1, b.dark); bx.position.set(Xw, 0.795, 0); bx.userData.selubung = true; k2.add(bx);
-    const cl = cyl(0.28, 0.28, 0.4, b.copper); cl.rotation.z = Math.PI / 2; cl.position.set(Xw - 0.72, 0.795, 0); k2.add(cl);
+    // bx ditandai "selubung" untuk mode X-ray (S6). b.dark juga dipakai motor
+    // pengkondisi (k1) dan aktuator katup (k4) — kalau bx memakainya langsung,
+    // meredupkan bx lewat X-ray diam-diam ikut meredupkan keduanya juga, sebab
+    // mereka menunjuk objek Material yang sama. Klon supaya bx berdiri sendiri.
+    const bx = box(1.3, 1.25, 1.1, b.dark.clone()); bx.position.set(Xw, 0.795, 0); bx.userData.selubung = true; k2.add(bx);
+    // Kumparan ditandai untuk kilau medan magnet di sekuens sinema (S7).
+    // b.copper eksklusif milik kumparan ini, aman dipakai langsung tanpa klon.
+    const cl = cyl(0.28, 0.28, 0.4, b.copper); cl.rotation.z = Math.PI / 2; cl.position.set(Xw - 0.72, 0.795, 0); cl.userData.kumparan = true; k2.add(cl);
     const cr = cl.clone(); cr.position.x = Xw + 0.72; k2.add(cr);
     const rg = torus(0.42, 0.1, b.steel); rg.position.set(Xw, 0.795, 0.56); k2.add(rg);
   })();
@@ -90,7 +96,9 @@ function bangunModul(b) {
   const k4 = new THREE.Group();
   (function () {
     k4.add(pipeBetween([Xv - 0.55, 0.62, 0], [Xv + 0.15, 0.62, 0], 0.16, b.pipe));
-    const bd = cyl(0.22, 0.22, 0.5, b.rubber); bd.rotation.z = Math.PI / 2; bd.position.set(Xv - 0.15, 0.62, 0); k4.add(bd);
+    // Selongsong ditandai untuk animasi terjepit di S7. b.rubber juga dipakai
+    // pipa kecil sensor (k3) — klon dulu, seperti alasan bx di atas.
+    const bd = cyl(0.22, 0.22, 0.5, b.rubber.clone()); bd.rotation.z = Math.PI / 2; bd.position.set(Xv - 0.15, 0.62, 0); bd.userData.selongsong = true; k4.add(bd);
     k4.add(pipeBetween([Xv, 0.62, 0], [Xv + 0.4, 1.05, 0], 0.15, b.pipe));
     k4.add(pipeBetween([Xv, 0.62, 0], [Xv, 0.62, 0.5], 0.15, b.pipe));
     const ac = cyl(0.18, 0.18, 0.4, b.dark); ac.position.set(Xv - 0.15, 0.95, 0); k4.add(ac);
@@ -108,7 +116,8 @@ function bangunModul(b) {
     wl(w, h, t, Xb, yB + h / 2, -d / 2 + t / 2);
     wl(t, h, d, Xb - w / 2 + t / 2, yB + h / 2, 0);
     wl(t, h, d, Xb + w / 2 - t / 2, yB + h / 2, 0);
-    const inr = box(w - 2 * t, h - t, d - 2 * t, b.innerM); inr.position.set(Xb, yB + h / 2 + 0.05, 0); k5.add(inr);
+    // b.innerM eksklusif milik isi bunker — aman ditandai tanpa klon.
+    const inr = box(w - 2 * t, h - t, d - 2 * t, b.innerM); inr.position.set(Xb, yB + h / 2 + 0.05, 0); inr.userData.konsentratDalam = true; k5.add(inr);
     const tre = new THREE.Mesh(new THREE.PlaneGeometry(0.55, 0.55), new THREE.MeshBasicMaterial({ map: trefoilTexture() }));
     tre.position.set(Xb + w / 2 - t / 2 + 0.01, yB + h * 0.55, 0); tre.rotation.y = Math.PI / 2; k5.add(tre);
   })();

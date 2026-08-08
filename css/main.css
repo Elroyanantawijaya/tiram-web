@@ -1149,6 +1149,146 @@ p {
 .kartu-ringkas__sub { color: var(--kabut); font-size: var(--step-13); margin: 0 0 0.75rem; }
 .kartu-ringkas__apa { font-size: var(--step-15); }
 
+/* ===== S7 Sinema ===== */
+.s7__catatan-teknis { color: var(--kabut); margin-top: 1rem; }
+
+.kendali__tombol--utama {
+  color: var(--gamma);
+  border-color: var(--gamma);
+  min-width: 4.5rem;
+}
+
+.kendali__baris {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+}
+
+.s7-scrub {
+  flex: 1;
+  min-width: 6rem;
+  accent-color: var(--gamma);
+  cursor: pointer;
+}
+
+.s7-waktu { color: var(--kabut); font-size: var(--step-13); white-space: nowrap; }
+
+.kendali__tombol:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Ringkasan tiga angka, muncul di bab penutup (§S7). */
+.panggung__ringkasan {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(4.5rem, 14vh, 7rem);
+  transform: translateX(-50%);
+  z-index: 1;
+  padding: 1rem 1.5rem;
+  background: rgba(7, 16, 22, 0.85);
+  border: 1px solid var(--garis);
+  border-radius: 4px;
+  text-align: center;
+  max-width: min(38rem, calc(100% - 2rem));
+}
+
+.panggung__ringkasan[hidden] { display: none; }
+
+.panggung__ringkasan-judul {
+  color: var(--kabut);
+  font-size: var(--step-13);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 0.6rem;
+}
+
+.panggung__ringkasan-daftar {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.75rem;
+}
+
+.panggung__ringkasan-nilai {
+  display: block;
+  color: var(--gamma);
+  font-size: var(--step-21);
+}
+
+.panggung__ringkasan-label {
+  display: block;
+  color: var(--baja);
+  font-size: var(--step-13);
+  max-width: 12rem;
+}
+
+/* Takarir: bilah di bawah panggung, mirip gaya subtitle video. */
+.panggung__takarir {
+  padding: 0.75rem clamp(0.75rem, 2vw, 1.25rem);
+  border-top: 1px solid var(--garis);
+  background: var(--abisal);
+  min-height: 3.6em;
+}
+
+.s7-takarir__bab {
+  display: block;
+  color: var(--gamma);
+  font-size: var(--step-13);
+  margin-bottom: 0.3rem;
+}
+
+.s7-takarir__teks { margin: 0; font-size: var(--step-15); }
+
+/* Transkrip: teks biasa yang bisa dipilih & disalin. */
+.s7-transkrip { margin-top: 1.5rem; }
+
+.s7-transkrip__judul {
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--step-13);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--kabut);
+  padding: 0.5rem 0;
+}
+
+.s7-transkrip__daftar {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.s7-transkrip__label { margin: 0 0 0.25rem; color: var(--baja); }
+.s7-transkrip__label .mono { color: var(--gamma); }
+
+/* Kartu langkah statis (prefers-reduced-motion) */
+.s7-statis__daftar {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+}
+
+.s7-statis__kartu {
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  border-top: 2px solid var(--gamma);
+  border-radius: 4px;
+  padding: 1.1rem 1.25rem;
+}
+
+.s7-statis__waktu { color: var(--gamma); margin: 0 0 0.4rem; }
+.s7-statis__judul { font-size: var(--step-21); margin: 0 0 0.5rem; }
+
 .s6__catatan { margin-top: 1.5rem; }
 .s6__catatan-baris { color: var(--kabut); font-size: var(--step-15); }
 .s6__catatan-baris + .s6__catatan-baris { margin-top: 0.6rem; }

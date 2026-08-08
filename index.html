@@ -140,8 +140,19 @@
 
     <!-- S7 — Sinema: alat itu bekerja -->
     <section id="s7-sinema" class="section" data-section="s7" aria-label="Sinema">
-      <div class="section__sticky" data-component="canvas-sinema" aria-hidden="true"></div>
-      <div class="section__content" data-component="kontrol-pemutar"></div>
+      <div class="section__content s7__kepala"></div>
+
+      <!-- Dibangun hanya salah satu: pemutar interaktif, atau (saat
+           prefers-reduced-motion) kartu langkah statis. -->
+      <div class="panggung" data-s7-pemutar>
+        <div class="panggung__scene" data-component="canvas-sinema"></div>
+        <div class="panggung__ringkasan" data-s7-ringkasan hidden></div>
+        <div class="panggung__takarir" data-s7-takarir aria-live="polite"></div>
+        <div class="panggung__kendali" data-s7-kendali></div>
+      </div>
+      <div class="s7-statis" data-s7-statis hidden></div>
+
+      <div class="section__content s7__transkrip" data-s7-transkrip></div>
     </section>
 
     <!-- S8 — Kelayakan, dampak, dan keterbatasan (latar terang) -->
