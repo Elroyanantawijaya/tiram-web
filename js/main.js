@@ -14,6 +14,7 @@ import { rakitS4 } from './sections/s4-solusi.js';
 import { rakitS5 } from './sections/s5-komponen.js';
 import { rakitS6 } from './sections/s6-integrasi.js';
 import { rakitS7 } from './sections/s7-sinema.js';
+import { rakitS8 } from './sections/s8-kelayakan.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -266,6 +267,7 @@ function mulai() {
   rakitS5(CONTENT);
   rakitS6(CONTENT);
   rakitS7(CONTENT);
+  rakitS8(CONTENT);
 
   siapkanRelPipa();
   ScrollTrigger.refresh();

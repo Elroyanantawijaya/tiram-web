@@ -57,6 +57,17 @@ a {
   --terang-latar: #E8E6E1;
   --terang-tinta: #0F1D26;
 
+  /* Padanan gelap dari token palet untuk dipakai DI ATAS --terang-latar.
+     Warna aslinya tidak bisa dipakai apa adanya di sini: --gamma #E9B93A
+     hanya ~1,6:1 terhadap krem, --kabut ~2,5:1, --magnet ~1,9:1 — jauh di
+     bawah 4.5:1. Hue-nya dipertahankan supaya tetap terbaca sebagai palet
+     yang sama, hanya luminansinya diturunkan. */
+  --terang-redup: #52616A;     /* padanan --kabut,    5,2:1 */
+  --terang-gamma: #7A5C00;     /* padanan --gamma,    5,1:1 */
+  --terang-magnet: #1F6F79;    /* padanan --magnet,   4,7:1 */
+  --terang-sedimen: #6E6455;   /* padanan --sedimen,  4,7:1 */
+  --terang-garis: #C7C3BA;
+
   /* Tipografi — §3.2 */
   --font-display: 'Archivo', system-ui, sans-serif;
   --font-isi: 'IBM Plex Sans', system-ui, sans-serif;
@@ -182,11 +193,28 @@ p {
 .section--terang {
   background: var(--terang-latar);
   color: var(--terang-tinta);
-  border-bottom-color: #C7C3BA;
+  border-bottom-color: var(--terang-garis);
 }
 
 .section--terang .eyebrow {
-  color: #5B6A72;
+  color: var(--terang-redup);
+}
+
+/* Outline fokus tetap 2px offset 3px, hanya warnanya diturunkan: --gamma
+   hanya ~1,6:1 di atas krem, jadi penanda fokusnya praktis hilang di sini. */
+.section--terang :focus-visible {
+  outline-color: var(--terang-gamma);
+}
+
+/* .sitasi diwarnai --kabut, yang hanya ~2,5:1 di atas krem. */
+.section--terang .sitasi {
+  color: var(--terang-redup);
+  border-bottom-color: var(--terang-redup);
+}
+
+.section--terang .sitasi:hover {
+  color: var(--terang-tinta);
+  border-bottom-color: var(--terang-tinta);
 }
 
 /* Simulator "Empat Sifat" — wadah kosong, siap diisi canvas 2D */
@@ -1632,6 +1660,200 @@ p {
 }
 
 .s4__batas-kebaruan-teks { margin: 0.75rem 0 0; color: var(--baja); }
+
+/* ===== S8 Kelayakan, dampak, dan keterbatasan (latar terang) ===== */
+
+/* h2 section dan h3 subsection pertama saling menempel tanpa ini, sebab
+   .section__judul hanya punya margin atas dan .subsection__judul hanya
+   punya margin bawah. */
+.s8__kepala { margin-bottom: clamp(2rem, 6vw, 3.5rem); }
+
+/* Keempat subsection cukup panjang untuk melampaui min-height 40vh, jadi
+   tidak ada jarak alami di antaranya — judul berikutnya menempel ke isi
+   sebelumnya tanpa aturan ini. */
+#s8-kelayakan .subsection + .subsection { margin-top: clamp(2.5rem, 7vw, 4.5rem); }
+
+/* --- Neraca laju alir --- */
+.s8-neraca__grafik {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  margin: clamp(1.5rem, 4vw, 2.5rem) 0;
+}
+
+.s8-neraca__baris-label {
+  margin: 0 0 0.45rem;
+  font-weight: 600;
+  font-size: var(--step-15);
+}
+
+.s8-neraca__jalur {
+  height: clamp(1.5rem, 4vw, 2.25rem);
+  background: rgba(15, 29, 38, 0.07);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Kedua batang berbagi satu jalur selebar sama, jadi skalanya benar menurut
+   konstruksi. Lebar diisi dari JS sebagai persentase terhadap nilai KIP. */
+.s8-neraca__batang {
+  height: 100%;
+  border-radius: 2px;
+  transform-origin: left center;
+}
+
+.s8-neraca__batang--kip { background: var(--terang-sedimen); }
+.s8-neraca__batang--modul { background: var(--terang-magnet); }
+
+.s8-neraca__baris-nilai {
+  margin: 0.45rem 0 0;
+  font-size: var(--step-13);
+  color: var(--terang-redup);
+}
+
+.s8-neraca__catatan {
+  margin: 0;
+  font-size: var(--step-13);
+  color: var(--terang-redup);
+  max-width: 52ch;
+}
+
+.s8-neraca__spek {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.45rem 1.5rem;
+  margin: clamp(1.5rem, 4vw, 2.25rem) 0 0;
+  max-width: 46rem;
+}
+
+.s8-neraca__spek-label {
+  color: var(--terang-redup);
+  font-size: var(--step-15);
+}
+
+.s8-neraca__spek-nilai {
+  margin: 0;
+  font-size: var(--step-15);
+}
+
+@media (max-width: 560px) {
+  .s8-neraca__spek { grid-template-columns: 1fr; gap: 0.15rem; }
+  .s8-neraca__spek-nilai { margin-bottom: 0.7rem; }
+}
+
+.s8-neraca__peringatan {
+  border-left: 3px solid var(--terang-gamma);
+  background: rgba(122, 92, 0, 0.07);
+  padding: 1rem 1.25rem;
+  margin: clamp(1.5rem, 4vw, 2.25rem) 0 0;
+  font-weight: 600;
+  max-width: 62ch;
+}
+
+/* --- Tiga sudut manfaat --- */
+/* Sengaja bukan auto-fit: pada 768px auto-fit hanya muat dua kolom sehingga
+   kartu ketiga tertinggal sendirian di sebelah sel kosong. Tiga kolom penuh
+   atau satu kolom bertumpuk, tidak ada keadaan di antaranya. */
+.s8-sudut {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+@media (min-width: 900px) {
+  .s8-sudut { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.s8-sudut__kartu {
+  border: 1px solid var(--terang-garis);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+  padding: clamp(1.1rem, 2.5vw, 1.5rem);
+}
+
+/* h1–h4 global memakai line-height 1.05, terlalu rapat begitu judul ini
+   pecah jadi dua baris atau lebih di layar sempit. */
+.s8-sudut__nama { font-size: var(--step-21); line-height: 1.2; margin: 0; }
+
+.s8-sudut__label {
+  margin: 0.35rem 0 0.9rem;
+  font-family: var(--font-mono);
+  font-size: var(--step-13);
+  color: var(--terang-redup);
+}
+
+.s8-sudut__narasi { margin: 0; font-size: var(--step-15); }
+
+/* --- Enam keterbatasan ---
+   CLAUDE.md butir 5: wajib tampil dengan bobot visual penuh. Karena itu
+   bagian ini justru paling berat di section: judulnya satu tingkat lebih
+   besar daripada dua subsection di atasnya, narasinya memakai ukuran badan
+   teks penuh (--step-17, bukan --step-15 seperti kartu manfaat), dan seluruh
+   blok dibuka garis --terang-gamma setebal 4px. */
+.s8-batas {
+  border-top: 4px solid var(--terang-gamma);
+  padding-top: clamp(2rem, 5vw, 3rem);
+}
+
+.s8-batas__kepala {
+  font-size: var(--step-40);
+  margin-bottom: 0.4em;
+}
+
+.s8-batas__pengantar {
+  margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
+  font-size: var(--step-17);
+  max-width: 60ch;
+}
+
+.s8-batas__daftar {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.s8-batas__butir {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.5rem 1.25rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem) 0;
+  border-top: 1px solid var(--terang-garis);
+}
+
+.s8-batas__butir:last-child { border-bottom: 1px solid var(--terang-garis); }
+
+.s8-batas__nomor {
+  font-size: var(--step-40);
+  line-height: 1;
+  font-weight: 600;
+  color: var(--terang-gamma);
+}
+
+.s8-batas__judul { font-size: var(--step-21); line-height: 1.2; margin: 0 0 0.6rem; }
+
+.s8-batas__narasi {
+  margin: 0;
+  font-size: var(--step-17);
+  max-width: 62ch;
+}
+
+/* --- Pernyataan kalibrasi klaim --- */
+.s8-kalibrasi {
+  border: 1px solid var(--terang-gamma);
+  border-top-width: 4px;
+  background: rgba(255, 255, 255, 0.55);
+  padding: clamp(1.35rem, 3.5vw, 2rem);
+  max-width: 70ch;
+}
+
+.s8-kalibrasi .eyebrow { color: var(--terang-gamma); }
+
+.s8-kalibrasi__teks {
+  margin: 0.85rem 0 0;
+  font-size: var(--step-17);
+  max-width: none;
+}
 
 /* ===== Gerak terhormat ===== */
 @media (prefers-reduced-motion: reduce) {

@@ -3,22 +3,19 @@
 Daftar periksa penerimaan ada di `spec/PROMPT_Website_TIRAM.md` Lampiran B. Berkas ini
 mencatat posisi terkini terhadap daftar itu, diperbarui di akhir tiap sesi.
 
-**Posisi:** setelah sesi S4 (gagasan TIRAM).
+**Posisi:** setelah sesi S8 (kelayakan, dampak, dan keterbatasan).
 **Cakupan yang sudah dikerjakan:** S0 preloader, S1 hero, S2 pendahuluan (a–f), S3 argumen +
 simulator empat mode, S4 gagasan (diagram batas sistem + batas kebaruan), S5 model komponen
 (tampil + dapat diputar, widget komponen 1 dari 5), S6 rakitan di atas dek KIP, S7 sekuens
-sinema 8 bab, infrastruktur bersama.
-**Belum disentuh:** S8, S9, S10.
+sinema 8 bab, S8 kelayakan (neraca berskala jujur, tiga sudut manfaat, enam keterbatasan,
+pernyataan kalibrasi klaim), infrastruktur bersama.
+**Belum disentuh:** S9, S10.
 
-> **Catatan urutan.** S1–S7 kini lengkap. S8 (kelayakan & enam keterbatasan) paling mendesak
-> untuk sesi berikutnya — enam keterbatasan itu adalah aturan mengikat CLAUDE.md sendiri
-> ("wajib tampil dengan bobot visual penuh, tidak boleh dikecilkan atau dipindah ke footer"),
-> lalu S9 (peta jalan) dan S10 (daftar pustaka, sudah menampung 12 sitasi yang menunggu tempat
-> tujuannya).
-
-> **Catatan proses.** Berkas ini sempat tidak diperbarui selama dua sesi (widget komponen 1
-> dan S6) meski rencana S6 sendiri menjanjikannya. Sesi ini menutup celah itu sekaligus —
-> beberapa entri di bawah berasal dari sesi-sesi yang telat dicatat, bukan sesi ini saja.
+> **Catatan urutan.** S1–S8 kini lengkap. Sisa sesi tampilan: S9 (peta jalan enam langkah,
+> naskahnya sudah siap di `s9`) dan S10 (daftar pustaka 18 entri). S10 sekaligus menutup
+> cacat #9 — sampai sekarang klik sitasi masih melompat ke section kosong. Di luar itu masih
+> menunggu: empat widget komponen S5, tampilan urai & potongan melintang S5, dan cacat #8
+> (rel pipa belum punya sambungan bernomor 1–5).
 
 Lampiran B adalah daftar penerimaan untuk **situs jadi**, bukan per sesi. Karena itu
 mayoritas butir di bawah wajar berstatus belum — bukan karena terlewat, melainkan karena
@@ -31,7 +28,9 @@ memang belum gilirannya.
 | Butir Lampiran B | Bukti |
 |---|---|
 | Hero menampilkan judul lengkap esai dengan latar KIP prosedural yang beranimasi | Judul dan subjudul lengkap dirender dari `s1.subjudul`. Latar three.js: siluet KIP dari primitif, laut shader, langit senja, kabut. Cakrawala konsisten 37% dari atas di 360/768/1440, siluet selalu utuh dalam bingkai. |
-| Tidak ada klaim "membersihkan laut dari radioaktivitas" | Rumusan yang benar tersimpan di `s8.pernyataanKalibrasi` (verifikasi + pemusatan fraksi pekat, dan tidak ada bukti publik soal persoalan radiologis). Belum dirender, tetapi juga tidak ada klaim terlarang di mana pun. |
+| Tidak ada klaim "membersihkan laut dari radioaktivitas" | `s8.pernyataanKalibrasi` kini **dirender** dalam kotak khusus di badan S8. Diperiksa lewat pemindaian `innerText` seluruh section: frasa "membersihkan laut dari radioaktivitas" memang muncul, tetapi hanya sebagai bagian dari kalimat penyangkalannya ("nilai radiologis TIRAM **bukanlah klaim** membersihkan laut dari radioaktivitas") — dikonfirmasi dengan mencocokkan frasa penyangkal utuh, bukan sekadar mencari kata kuncinya. Kalimat "tidak ada bukti publik" juga tampil. |
+| Neraca 280 m³/jam vs ~7.000 ton/jam ditampilkan dengan skala yang jujur | Kedua batang berbagi satu jalur selebar sama dan lebarnya dihitung dari satu pembagi yang sama di kode, jadi skalanya benar menurut konstruksi. **Diukur, bukan disimpulkan dari kode:** rasio lebar terender = 0,02857, cocok persis dengan 200/7.000. Di 360px batang KIP 320px vs batang modul 9,14px; di 1440px 1.216px vs 34,74px. Tidak ada `min-width` yang menyelamatkan batang modul agar "terbaca" — ia memang setipis itu, dan `s8.neraca.catatanSkala` mengatakannya terus terang. Label peringatan "unit uji, bukan penanganan seluruh kapal" tampil dalam kotak sendiri, tidak diperhalus. Tidak ada persentase turunan yang dikarang: perbandingannya disampaikan lewat gambar, bukan lewat angka baru. |
+| Enam keterbatasan tampil dengan bobot visual penuh | **Dibuktikan dengan pengukuran, bukan pernyataan.** Diukur di 360px: blok keterbatasan adalah subsection tertinggi di S8 (1.636px, vs neraca 823, manfaat 1.072, kalibrasi 1.027). Judulnya 36px sementara judul subsection lain 28px. Narasinya 17,04px — **sama persis dengan ukuran badan teks halaman**, dan lebih besar daripada narasi kartu manfaat yang 15px; jadi keterbatasan diset lebih besar daripada manfaat, bukan lebih kecil. Letaknya subsection ketiga dari empat di badan section, bukan footer. Keenam judulnya cocok persis dengan Lampiran A.6. Nomor 01–06 memakai `--terang-gamma` pada 41,6px. |
 | Tidak ada foto/logo pihak ketiga | Seluruh visual prosedural (three.js, canvas, SVG). `#slot-foto-kip` ada dan sengaja kosong. |
 | Tidak ada angka di luar Lampiran A atau berkas esai | Seluruh angka bersumber dari `data/content.js`, yang disalin dari ketiga berkas sumber. Dua lubang data ditandai `TODO` alih-alih dikarang — lihat bagian bawah. |
 | Preloader kalibrasi detektor tampil dan keluar mulus (< 2,2 detik) | Diukur dengan `performance.measure('preloader')` di peramban, empat kali muat berturut-turut: **1027, 1027, 1028, 1030 ms**. Hero tampil ~1,11 detik sejak navigasi. Aturan §S0 "kalau aset sudah siap lebih cepat, percepat" kini diterapkan: kemajuan hanya merayap sampai font terpasang dan `load` selesai, lalu diselesaikan cepat. |
@@ -46,7 +45,7 @@ memang belum gilirannya.
 
 | Butir Lampiran B | Yang sudah | Yang belum |
 |---|---|---|
-| Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | S1, S2, **dan S3** kini terverifikasi tanpa overflow horizontal di 360px dan 1440px (S3 sempat overflow nyata 503px vs 360px akibat tabel — ditemukan dan diperbaiki sesi ini, lihat cacat #17). Reduced-motion S3 diverifikasi lewat teknik matchMedia-override + pembacaan piksel: posisi partikel final dalam 31ms tanpa animasi. Di S2, panel sticky pindah ke atas kolom teks di layar sempit dan pin linimasa dilepas jadi daftar vertikal. | S4, S8–S10 belum bisa dinilai sama sekali (section masih kosong). Reduced-motion S2 masih belum diverifikasi runtime (lihat cacat #10) meski tekniknya sudah ada sejak sesi S7. |
+| Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | S1, S2, S3, **dan S8** terverifikasi tanpa overflow horizontal. S8 diperiksa di 360/768/1440 dengan membandingkan `scrollWidth` vs `clientWidth` **dan** menyisir setiap elemen keturunan S8 yang tepinya melewati tepi viewport — daftar pelanggar kosong di ketiganya. Reduced-motion S8 diverifikasi runtime dengan teknik dari sesi S7: markup dipulihkan dari `index.html` mentah, `matchMedia` ditimpa, `rakitS8` dipanggil ulang. Hasilnya seluruh isi tetap terbangun (6 keterbatasan, 3 kartu, kotak kalibrasi), batang sudah berada di lebar akhirnya dengan `transform: none` (rasio 0,02855) alih-alih menunggu tween, dan tidak ada sisa `opacity`/`transform` inline dari gsap sama sekali. S8 tidak punya scene 3D sehingga butir fallback non-WebGL tidak berlaku untuknya. | S4, S9, S10 belum bisa dinilai (S9/S10 masih kosong; S4 belum diukur ulang di sesi ini). Reduced-motion S2 masih belum diverifikasi runtime (lihat cacat #10) meski tekniknya sudah terbukti dua kali sekarang. |
 | Kelima komponen punya model 3D yang dapat diputar, di-zoom, diurai, dan dipotong | Kelima geometri diport ke `js/models/komponen.js` dan **terbukti identik** dengan sumber: jumlah mesh dan kotak batas sama persis sampai 4 desimal, dibandingkan terhadap kode asli yang diambil langsung dari `spec/TIRAM_3D.html`, bukan diketik ulang. Model tampil, dapat **diputar** (diuji lewat seret pointer sungguhan: kamera berpindah dari `-6.260,5.816,-2.653` ke `0.089,8.577,3.914`) dan **di-zoom** lewat OrbitControls. Anotasi label sudah punya mekanisme umum yang terpakai nyata di S6 (`js/widgets/anotasi.js`, lihat baris rakitan di atas). | **Tampilan urai dan potongan melintang di S5 sendiri belum ada** — dua dari empat kemampuan yang diminta butir ini, spesifik untuk komponen satu-per-satu (bukan rakitan). Anotasi label komponen S5 (`s5.komponen[].anotasi`) belum disambungkan ke `js/widgets/anotasi.js` walau mekanismenya sudah ada dan terbukti jalan di S6. |
 | Kelima komponen punya blok `APA · BAGAIMANA · ILMU` dan satu widget simulasi | Ketiga blok tetap terpasang untuk kelima komponen plus hidrosiklon opsional — 18 blok, teksnya disalin utuh dari dokumen justifikasi lewat `content.js`. **Satu dari lima widget selesai**: Pengkondisi umpan (komponen 1) — simulasi kapasitor hidraulik, terverifikasi tenang sampai ~60% slider lalu jebol tajam ke 476% riak pada 88%, persis pola yang diminta §S5. | **Empat widget belum ada**: WHIMS (2), sensor gamma (3), katup (4), bunker (5). Widget WHIMS dan katup masing-masing adalah butir Lampiran B tersendiri (lihat tabel di bawah). |
 | Daftar pustaka lengkap, tertaut, dapat dicari | 18 entri lengkap dengan DOI/URL di `s10.pustaka`. Mesin tooltip sitasi makin teruji: kini menangani sitasi ganda dalam satu kurung (dipecah per titik koma, tiap sub-sitasi resolve sendiri) dan dibangun ulang sebagai `<span role="button">` karena Chrome memaksa `<button>` jadi `inline-block` sehingga sitasi tak bisa pecah antar baris. 12 elemen `.sitasi` di S1+S2, semuanya resolve ke entri benar. | S10 sendiri belum dirender, jadi belum ada daftar yang tampil dan belum ada pencarian. Klik sitasi melompat ke `#s10-referensi` yang masih kosong. |
@@ -59,8 +58,7 @@ Naskah dan angkanya sudah lengkap di `data/content.js`; yang belum ada adalah ta
 |---|---|
 | Widget WHIMS menunjukkan jatuhnya efisiensi pada butir halus | `s5.komponen[1].widget` |
 | Widget katup menunjukkan konsekuensi tunda PLC yang salah | `s5.komponen[3].widget` |
-| Neraca 280 m³/jam vs ~7.000 ton/jam dengan skala yang jujur | `s8.neraca` |
-| Enam keterbatasan tampil dengan bobot visual penuh | `s8.enamKeterbatasan` |
+| Peta jalan enam langkah (S9) | `s9.langkah` |
 
 ### Dua dari lima "detail meyakinkan" §S7 ditunda, bukan terlewat
 
@@ -203,6 +201,42 @@ mengikat "seluruh teks isi hidup di `data/content.js`". Ditemukan lewat `grep` s
 kedua berkas baru sebelum sesi ditutup, bukan lolos tanpa diperiksa. Dipindah ke
 `s3.b.angkaKunci.*Label` dan `s3.simulator.ui.tabelKolom`.
 
+**21. (Sesi S8) Palet situs tidak bisa dipakai apa adanya di section berlatar terang — selesai.**
+`--gamma`, `--kabut`, `--magnet`, dan `--sedimen` semuanya dirancang untuk latar gelap. Di atas
+`--terang-latar` (#E8E6E1) kontrasnya jatuh jauh di bawah 4.5:1 — `--gamma` hanya ~1,6:1,
+`--magnet` ~1,9:1, `--kabut` ~2,5:1. Sebelum sesi ini S8 masih kosong sehingga masalahnya belum
+pernah muncul. Ditambahkan empat token padanan yang mempertahankan hue tetapi menurunkan
+luminansi: `--terang-redup`, `--terang-gamma`, `--terang-magnet`, `--terang-sedimen`. Seluruh
+20 gaya teks di S8 lalu diukur satu per satu terhadap latarnya: **kontras terendah 5,01:1**
+(nomor keterbatasan dan eyebrow kalibrasi yang memakai `--terang-gamma`), tertinggi 13,76:1.
+Kedua warna batang neraca juga diperiksa sebagai elemen non-teks: 4,65:1 dan 4,67:1.
+
+**22. (Sesi S8) Outline fokus keyboard praktis tak terlihat di section terang — selesai.**
+Aturan global `:focus-visible { outline: 2px solid var(--gamma) }` menghasilkan kuning di atas
+krem, sekitar 1,6:1 — penanda fokusnya ada tetapi tidak terbaca. Ini melanggar butir mutu dasar
+"fokus keyboard terlihat" sekaligus ambang kontras. Ditambahkan
+`.section--terang :focus-visible { outline-color: var(--terang-gamma) }`; tebal 2px dan offset
+3px tidak diubah. **Terverifikasi lewat fokus keyboard sungguhan**, bukan lewat kode: fokus
+programatis saja tidak menyalakan `:focus-visible` di Chrome, jadi tombol Tab ditekan lebih dulu
+supaya heuristik keyboard Chrome aktif, baru fokus dipindahkan. Setelah itu
+`sitasi.matches(':focus-visible')` bernilai true dan `outlineColor` terbaca `rgb(122, 92, 0)`
+dengan kontras 5,01:1. Tooltip sitasi di S8 juga resolve ke entri yang benar (Bisnis.com, 2026).
+
+**23. (Sesi S8) Judul section, subsection, dan judul multi-baris saling menempel — selesai.**
+Tiga cacat tata letak yang hanya kelihatan dari screenshot, bukan dari kode:
+`.section__judul` cuma punya margin atas dan `.subsection__judul` cuma punya margin bawah,
+sehingga h2 S8 menempel ke "Neraca laju alir"; keempat subsection cukup panjang untuk melampaui
+`min-height: 40vh` sehingga tidak ada jarak alami di antaranya dan tiap judul berikutnya
+menempel ke isi sebelumnya; dan `line-height: 1.05` global untuk h1–h4 membuat judul
+keterbatasan yang pecah jadi 2–4 baris (butir 02, 04, 05, 06) terlihat berdesakan. Diperbaiki
+dengan margin bawah pada `.s8__kepala`, aturan `.subsection + .subsection`, dan
+`line-height: 1.2` khusus judul kartu manfaat & butir keterbatasan.
+
+**24. (Sesi S8) Tiga kartu manfaat jatuh 2+1 di 768px — selesai.**
+`repeat(auto-fit, minmax(min(100%, 17rem), 1fr))` hanya muat dua kolom pada 768px, sehingga
+kartu "Lingkungan" berdiri sendirian di samping satu sel kosong. Diganti aturan eksplisit: satu
+kolom bertumpuk di bawah 900px, tiga kolom penuh di atasnya — tidak ada keadaan di antaranya.
+
 ## Cacat terbuka
 
 **8. Rel pipa (nav kiri, `#rel-pipa`) belum punya sambungan bernomor 1–5.**
@@ -236,6 +270,18 @@ type="button">` polos, tidak ada `preventDefault` pada `keydown` di listener man
 kemungkinan besar keterbatasan cara `computer` tool mengirim event keyboard di lingkungan ini,
 bukan bug produk. Dicatat sebagai keterbatasan verifikasi, bukan diklaim "terverifikasi".
 
+**25. (Sesi S8) Screenshot mati total selama Browser pane tidak ditampilkan — dan diam-diam
+melumpuhkan verifikasi animasi.**
+Selama pane tertutup, halaman berhenti meng-compose frame sehingga `requestAnimationFrame`
+ikut mati. Akibatnya bukan cuma screenshot yang gagal: ticker gsap berhenti, ScrollTrigger tidak
+pernah menyala, dan **seluruh** reveal berbasis scroll di situs diam pada keadaan awalnya
+(`opacity: 0`, `scaleX: 0`). Sempat terbaca seperti bug S8 sampai disadari S3 — yang sudah
+terverifikasi di sesi sebelumnya — juga ikut membeku. Pengukuran geometri, kontras, dan overflow
+tetap sahih dalam keadaan ini karena tidak bergantung pada compositing; yang tidak sahih adalah
+apa pun yang menunggu rAF. Sesi ini menyelesaikannya dengan menampilkan pane, lalu animasi batang
+neraca diverifikasi sungguhan (`transform` berpindah dari `matrix(0,…)` ke `matrix(1,…)`).
+Ekstensi Claude in Chrome tidak tersambung di sesi ini, jadi tidak ada jalur cadangan.
+
 **20. `resize_window` macet di lebar 503px untuk permintaan di bawah itu (360px, preset mobile 375px).**
 Muncul pertama kali di sesi S3, setelah enam tab menumpuk dari sesi-sesi sebelumnya. Resize ke
 1440px berhasil normal; resize ke 360/375px konsisten menghasilkan `innerWidth: 503` meski
@@ -246,6 +292,9 @@ membuat pengukuran overflow horizontal pertama salah baca sebelum disadari (liha
 yang overflow-nya sendiri nyata dan sudah dikonfirmasi lewat `scrollWidth` vs `clientWidth`,
 bukan `innerWidth`). Kemungkinan keterbatasan pane setelah sesi otomasi berjalan lama dengan
 banyak tab. Tab baru tidak menyelesaikannya dalam sesi ini.
+
+*Pembaruan sesi S8:* tidak berulang. `resize_window` ke 360px menghasilkan `innerWidth: 360`
+yang benar. Kemungkinan memang gejala sesi otomasi yang sudah panjang, bukan cacat menetap.
 
 ---
 

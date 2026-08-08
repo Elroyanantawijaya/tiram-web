@@ -572,16 +572,44 @@ export const CONTENT = {
 
   // ===== S8 — Kelayakan, dampak, dan keterbatasan =====
   s8: {
+    eyebrow: 'Kelayakan',
+    judul: 'Kelayakan, dampak, dan keterbatasan',
     neraca: {
+      judul: 'Neraca laju alir',
       modul: {
         pipa: 'Ø200 mm',
         kecepatan: '2,5 m/s',
         debit: '0,08 m³/detik ≈ 280 m³/jam',
         padatan: '180–200 ton padatan/jam pada kandungan padatan ±25%',
       },
+      modulLabel: {
+        pipa: 'Diameter pipa',
+        kecepatan: 'Kecepatan aliran',
+        debit: 'Debit bubur',
+        padatan: 'Setara padatan',
+      },
       satuKip: '~7.000 ton padatan/jam (orde besaran)',
       labelPeringatan: 'Modul dipasang pada satu aliran cabang dan berperan sebagai unit uji, bukan penanganan seluruh kapal.',
+      // Nilai numerik untuk menggambar kedua batang pada satu skala yang sama.
+      // Sumbernya persis string di atas (Lampiran A.2); dipisah ke sini supaya
+      // tidak ada angka yang di-parse dari teks di dalam kode.
+      skala: {
+        modulMin: 180,
+        modulMaks: 200,
+        kip: 7000,
+        satuan: 'ton padatan/jam',
+      },
+      batangLabel: {
+        modul: 'Satu modul TIRAM',
+        kip: 'Keluaran tailing satu KIP',
+      },
+      // Batang modul memang nyaris tak terlihat di samping batang KIP. Itu
+      // bukan cacat gambar melainkan isi pernyataannya, jadi dikatakan terus
+      // terang alih-alih dibesarkan supaya "terbaca".
+      catatanSkala: 'Kedua batang digambar pada satu skala yang sama. Batang modul memang setipis itu.',
+      padananTeks: 'Diagram batang perbandingan pada satu skala yang sama: keluaran tailing satu Kapal Isap Produksi berorde ±7.000 ton padatan per jam, digambar sebagai batang penuh; satu modul TIRAM menangani 180–200 ton padatan per jam, digambar sebagai batang yang jauh lebih pendek di skala yang sama. Modul dipasang pada satu aliran cabang sebagai unit uji, bukan untuk menangani seluruh keluaran kapal.',
     },
+    tigaSudutJudul: 'Tiga sudut manfaat',
     tigaSudut: [
       {
         sudut: 'Ekonomi',
@@ -599,6 +627,11 @@ export const CONTENT = {
         narasi: 'Mengangkat monasit membuat sisa yang dikembalikan ke laut lebih ringan muatan radiologisnya, meski besarnya masih perlu dibuktikan.',
       },
     ],
+    enamKeterbatasanJudul: 'Enam keterbatasan',
+    // CLAUDE.md butir 5: keenamnya wajib tampil dengan bobot visual penuh —
+    // tidak dikecilkan, tidak dipindah ke footer. Kalimat pengantar ini ada
+    // supaya bagian ini terbaca sebagai pernyataan sadar, bukan disclaimer.
+    enamKeterbatasanPengantar: 'Keenam hal berikut belum terselesaikan oleh rancangan ini dan ditulis dengan bobot yang sama seperti bagian manfaat di atas.',
     enamKeterbatasan: [
       {
         judul: 'Fraksi ultrahalus',
@@ -625,6 +658,7 @@ export const CONTENT = {
         narasi: 'Komponennya terbukti secara terpisah, integrasi khusus ini belum diuji di lapangan.',
       },
     ],
+    pernyataanKalibrasiJudul: 'Pernyataan kalibrasi klaim',
     pernyataanKalibrasi: 'Karena monasit hanya pecahan kecil dari tailing yang didominasi kuarsa, aktivitas rata-rata aliran yang dilepas kemungkinan besar memang sudah rendah, dan tidak ada bukti publik bahwa pembuangan tailing KIP selama ini menimbulkan persoalan radiologis. Karena itu, nilai radiologis TIRAM bukanlah klaim membersihkan laut dari radioaktivitas, melainkan dua hal yang lebih terukur. Pertama, gerbang memberi verifikasi pada setiap pelepasan sekaligus jaring pengaman terhadap segmen aliran yang sewaktu-waktu terbaca jauh di atas ambang, sesuatu yang tidak akan terpantau bila hanya kekeruhan yang diawasi. Kedua, dan lebih penting, justru fraksi pekat yang diangkatlah yang benar-benar bersifat radiologis, sebab begitu monasit terkonsentrasi ia menjadi TENORM yang panas dan wajib ditangani terkendali, sebagaimana PT Timah pun menyimpan mineral ikutan yang terkumpul alih-alih membuangnya. Dengan mengangkat monasit di jalur tailing yang terpisah, ia tidak ikut mencemari aliran konsentrat timah menuju peleburan.',
   },
 
