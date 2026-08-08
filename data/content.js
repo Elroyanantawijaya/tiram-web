@@ -477,6 +477,23 @@ export const CONTENT = {
 
   // ===== S6 — Integrasi: satu rakitan di atas dek KIP =====
   s6: {
+    eyebrow: 'Integrasi',
+    judul: 'Satu rakitan di atas dek KIP',
+
+    // Label antarmuka. "Dek KIP …" disalin dari label() di spec/TIRAM_3D.html.
+    // Tidak ada satu pun angka dimensi kapal atau modul yang ditampilkan di
+    // sini: ukuran itu perkiraan rekayasa untuk proporsi geometri, bukan data
+    // dari esai. Hanya tinggi siluet manusia yang berlabel, dan angka itu
+    // memang disebut §S6.
+    labelSkala: '1,7 m',
+    labelDek: 'Dek KIP — alat hanya sebagian kecil dari kapal',
+    tombol: {
+      xray: 'Mode X-ray',
+      dekat: 'Bidikan dekat',
+      lebar: 'Posisi di kapal',
+    },
+    padananTeks: 'Model tiga dimensi rakitan TIRAM di atas dek Kapal Isap Produksi, dapat diputar dan diperbesar. Lima penanda bernomor menandai tiap komponen, dan tiga tombol menyorot jalur aliran yang berbeda. Seluruh keterangan komponen tersedia sebagai teks di bagian sebelumnya.',
+
     referensiSkala: 'Siluet manusia setinggi 1,7 m dan garis panjang lambung, agar terbaca bahwa modul hanya sebagian kecil dari kapal.',
     penandaBernomor: 'Penanda bernomor 1–5 yang bisa diklik; klik memindahkan kamera ke komponen itu, kartu ringkas muncul, dan penanda lain meredup.',
     sorotJalur: {

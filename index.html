@@ -129,8 +129,13 @@
 
     <!-- S6 — Integrasi: rakitan di atas dek KIP -->
     <section id="s6-integrasi" class="section" data-section="s6" aria-label="Integrasi">
-      <div class="section__sticky" data-component="canvas-3d-rakitan" aria-hidden="true"></div>
-      <div class="section__content"></div>
+      <div class="section__content s6__kepala"></div>
+      <div class="panggung">
+        <div class="panggung__scene" data-component="canvas-3d-rakitan"></div>
+        <div class="panggung__kendali" data-s6-kendali></div>
+        <div class="panggung__kartu" data-s6-kartu hidden></div>
+      </div>
+      <div class="section__content s6__catatan"></div>
     </section>
 
     <!-- S7 — Sinema: alat itu bekerja -->

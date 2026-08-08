@@ -164,41 +164,8 @@ p {
   margin-inline: auto;
 }
 
-/* Layout dua kolom untuk section scrollytelling (S2, S5) */
-.section--scrolly {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(2rem, 5vw, 4rem);
-}
-
-@media (min-width: 900px) {
-  .section--scrolly {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
-}
-
-.section__scroll {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(3rem, 10vw, 8rem);
-}
-
-.section__sticky {
-  position: relative;
-  min-height: 60vh;
-  background: var(--lambung);
-  border: 1px solid var(--garis);
-  border-radius: 4px;
-}
-
-@media (min-width: 900px) {
-  .section__sticky {
-    position: sticky;
-    top: 10vh;
-    height: 60vh;
-  }
-}
+/* Primitif .section--scrolly / .section__scroll / .section__sticky dibuang:
+   S2 dan S5 kini memakai .scrolly, S6 dan S7 memakai .panggung. */
 
 .subsection {
   min-height: 40vh;
@@ -1041,6 +1008,150 @@ p {
   border-left: 2px solid var(--garis);
   padding-left: 0.9rem;
 }
+
+/* ===== Panggung 3D lebar penuh (S6, nanti S7) ===== */
+.panggung {
+  position: relative;
+  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--garis);
+  border-radius: 4px;
+  background: var(--lambung);
+  overflow: hidden;
+}
+
+.panggung__scene {
+  position: relative;
+  height: clamp(340px, 62vh, 660px);
+  touch-action: pan-y;
+}
+
+.panggung__scene--fallback { display: flex; align-items: flex-start; }
+
+/* Lapisan anotasi: penanda bernomor & label skala.
+   z-index perlu: scene.js memasang canvas ke wadah ini setiap kali section
+   diaktifkan, jadi canvas selalu jadi saudara yang lebih akhir dan akan
+   menimpa lapisan ini kalau hanya mengandalkan urutan DOM. */
+.anotasi {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.anotasi > * {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: auto;
+  transition: opacity var(--durasi-transisi) var(--easing);
+}
+
+.penanda {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--gamma);
+  background: var(--abisal);
+  color: var(--gamma);
+  font-family: var(--font-mono);
+  font-size: var(--step-13);
+  line-height: 1;
+  cursor: pointer;
+  transition: transform var(--durasi-mikro) var(--easing), opacity var(--durasi-transisi) var(--easing);
+}
+
+.penanda:hover { transform: translate(-50%, -50%) scale(1.18); }
+.penanda--redup { opacity: 0.28; }
+
+.anotasi__label {
+  font-size: var(--step-13);
+  color: var(--baja);
+  background: rgba(7, 16, 22, 0.78);
+  border: 1px solid var(--garis);
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* Label panjang (keterangan dek) harus membungkus, kalau tidak ia menjulur
+   keluar bingkai di layar sempit. */
+.anotasi__label--kabur {
+  color: var(--kabut);
+  white-space: normal;
+  max-width: min(15rem, 55%);
+  text-align: center;
+  line-height: 1.35;
+}
+
+/* Kendali panggung — blok biasa di bawah scene, bukan overlay. Di layar sempit
+   tombolnya membungkus jadi beberapa baris dan akan menutupi hampir seluruh
+   model kalau ditumpangkan di atasnya. */
+.panggung__kendali {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  padding: 0.75rem clamp(0.75rem, 2vw, 1.25rem);
+  border-top: 1px solid var(--garis);
+  background: var(--abisal);
+}
+
+.kendali__gugus { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+.kendali__tombol {
+  font-family: var(--font-mono);
+  font-size: var(--step-13);
+  color: var(--kabut);
+  background: rgba(15, 29, 38, 0.9);
+  border: 1px solid var(--garis);
+  border-radius: 3px;
+  padding: 0.32rem 0.7rem;
+  cursor: pointer;
+  transition: color var(--durasi-mikro) var(--easing), border-color var(--durasi-mikro) var(--easing);
+}
+
+.kendali__tombol:hover { color: var(--baja); border-color: var(--kabut); }
+
+.kendali__tombol--aktif {
+  color: var(--gamma);
+  border-color: var(--gamma);
+}
+
+/* Kartu ringkas komponen */
+.panggung__kartu {
+  position: absolute;
+  top: clamp(0.75rem, 2vw, 1.25rem);
+  left: clamp(0.75rem, 2vw, 1.25rem);
+  width: min(26rem, calc(100% - 2.5rem));
+  padding: 1rem 1.15rem;
+  background: rgba(7, 16, 22, 0.94);
+  border: 1px solid var(--garis);
+  border-radius: 4px;
+}
+
+.panggung__kartu[hidden] { display: none; }
+
+.kartu__tutup {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.5rem;
+  background: none;
+  border: 0;
+  color: var(--kabut);
+  font-size: var(--step-21);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.kartu__tutup:hover { color: var(--baja); }
+
+.kartu-ringkas__nama { font-size: var(--step-21); margin-bottom: 0.2em; }
+.kartu-ringkas__sub { color: var(--kabut); font-size: var(--step-13); margin: 0 0 0.75rem; }
+.kartu-ringkas__apa { font-size: var(--step-15); }
+
+.s6__catatan { margin-top: 1.5rem; }
+.s6__catatan-baris { color: var(--kabut); font-size: var(--step-15); }
+.s6__catatan-baris + .s6__catatan-baris { margin-top: 0.6rem; }
 
 /* ===== Widget simulasi komponen ===== */
 .widget {
