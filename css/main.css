@@ -1493,22 +1493,30 @@ p {
 /* Widget dengan dua slider: keduanya berdiri sendiri, tidak berdesakan. */
 .widget--whims .widget__kendali + .widget__kendali { margin-top: -0.2rem; }
 
-/* Kendali model S5 (urai / potongan / label). Panel S5 sticky, jadi kendalinya
-   ikut menempel tepat di bawahnya alih-alih tertinggal saat teks bergulir. */
-.s5__kendali {
+/* Panel S5 + kendalinya adalah satu kolom, satu anak grid `.scrolly`.
+   Stickiness dipegang oleh pembungkus ini, bukan oleh masing-masing elemen:
+   dengan begitu kendali selalu menempel tepat di bawah panel, dan kolom teks
+   tetap berada di kolom kanan alih-alih terdorong ke baris di bawah panel. */
+.s5__kolom {
   position: sticky;
-  top: 45svh;
-  z-index: 2;
+  top: 0;
+  z-index: 1;
   order: -1;
+}
+
+@media (min-width: 900px) {
+  .s5__kolom { top: 12vh; order: 0; }
+}
+
+/* Sticky-nya sudah dipindah ke .s5__kolom; panel cukup mengalir di dalamnya. */
+#s5-komponen .scrolly__panel { position: static; }
+
+.s5__kendali {
   align-items: center;
   border: 1px solid var(--garis);
   border-top: none;
   border-radius: 0 0 4px 4px;
   margin-bottom: 1rem;
-}
-
-@media (min-width: 900px) {
-  .s5__kendali { top: calc(12vh + 66vh); order: 0; }
 }
 
 .s5__petunjuk-gestur {

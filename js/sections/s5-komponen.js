@@ -179,7 +179,13 @@ export function rakitS5(CONTENT) {
     el('div', { class: 'kendali__gugus' }, [tombolUrai, tombolPotong, tombolAnotasi]),
     el('p', { class: 's5__petunjuk-gestur', text: km.petunjukGestur }),
   ]);
-  wadahPanel.insertAdjacentElement('afterend', kendaliModel);
+
+  // Panel dan kendalinya harus jadi SATU anak grid `.scrolly`, bukan dua.
+  // Kalau dua, kendali merebut kolom kanan dan kolom teks terdorong ke baris
+  // berikutnya — persis di bawah panel yang sticky, sehingga teksnya tertimpa.
+  const kolomModel = el('div', { class: 's5__kolom' });
+  wadahPanel.replaceWith(kolomModel);
+  kolomModel.append(wadahPanel, kendaliModel);
 
   /* --- pemicu scroll: model mengikuti komponen yang sedang dibaca --- */
   for (const k of s5.komponen) {

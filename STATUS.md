@@ -329,6 +329,32 @@ aktif dan selalu nomor yang benar; klik kelimanya mendarat persis pada offset ya
 (`top: 80` untuk kelimanya). Denyutnya dimatikan di bawah `prefers-reduced-motion`, warnanya
 tetap supaya penandanya tidak hilang.
 
+**31. (Sesi ini) Bilah kendali S5 merebut kolom teks sehingga teks tertimpa panel — selesai.**
+Dilaporkan penulis lewat screenshot, bukan tertangkap verifikasi saya sendiri — dan itu
+menandakan lubang nyata pada cara saya memeriksa: pengukuran overflow horizontal yang saya
+jalankan memang bersih di ketiga lebar, sebab tumpang-tindih ini **vertikal antar kolom**, bukan
+meluber ke samping. Tidak ada satu pun pemeriksaan saya yang menanyakan "apakah kolom model dan
+kolom teks saling bertindih".
+
+Sebabnya: `kendaliModel` disisipkan lewat `insertAdjacentElement('afterend', …)` pada panel,
+sehingga ia menjadi **anak grid `.scrolly` yang ketiga**. Grid dua kolom lalu menempatkan panel
+di (baris 1, kolom 1), kendali di (baris 1, kolom 2) — merebut tempat kolom teks — dan kolom
+teks terdorong ke (baris 2, kolom 1), persis di bawah panel yang `position: sticky`, sehingga
+tertimpa sepanjang scroll.
+
+Diperbaiki dengan membungkus panel dan kendalinya dalam satu elemen `.s5__kolom` yang menjadi
+anak grid tunggal; stickiness dipindah dari panel ke pembungkus itu (`#s5-komponen
+.scrolly__panel { position: static }`), jadi kendali otomatis mengikuti tepat di bawah panel
+tanpa perlu offset sticky yang dihitung tangan. **Terverifikasi:** `.scrolly` kembali punya dua
+anak, kolom model berakhir di x=684 dan kolom teks mulai di x=741 (tidak bertindih); ditelusuri
+di kelima komponen panel terkunci di 108px dengan kendali menempel di celah 0px dan tak pernah
+menumpang teks; di 360px dan 768px model duduk di atas teks seperti seharusnya; ketiga tombol
+(urai, potongan, label) tetap berfungsi setelah pemindahan DOM.
+
+*Pelajaran untuk verifikasi berikutnya:* menambahkan pemeriksaan tumpang-tindih antar kolom
+(bandingkan kotak batas `.s5__kolom` vs `.scrolly__teks`) ke daftar periksa lebar, sebab
+pemeriksaan `scrollWidth` saja buta terhadap kelas cacat ini.
+
 ## Cacat terbuka
 
 **29. Empat widget baru belum diverifikasi lewat pengamatan piksel, hanya lewat bacaan angkanya.**
