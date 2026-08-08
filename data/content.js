@@ -664,6 +664,8 @@ export const CONTENT = {
 
   // ===== S9 — Peta jalan menuju penerapan =====
   s9: {
+    eyebrow: 'Peta jalan',
+    judul: 'Peta jalan menuju penerapan',
     langkah: [
       'Ukur kadar & ukuran butir monasit pada tailing KIP Bangka',
       'Uji kinerja pemisah magnetik pada rentang butir tersebut',
@@ -681,6 +683,15 @@ export const CONTENT = {
   // 16/2012 masing-masing satu entri tersendiri). Seluruh 18 disalin apa adanya dari sumber;
   // tidak ada yang ditambah atau dihilangkan supaya cocok dengan angka "17".
   s10: {
+    eyebrow: 'Daftar pustaka',
+    judul: 'Daftar pustaka & kredit',
+    ui: {
+      cariPlaceholder: 'Cari penulis, tahun, atau judul…',
+      cariLabel: 'Cari daftar pustaka',
+      hasilKosong: 'Tidak ada entri yang cocok.',
+      bukaTab: 'buka di tab baru',
+      kreditJudul: 'Tentang situs ini',
+    },
     catatanJumlah: 'TODO: butuh konfirmasi penulis — spesifikasi menyebut 17 entri, naskah esai memuat 18. Ditampilkan seluruhnya (18) sesuai sumber.',
     pustaka: [
       { penulis: 'Andini, D. E., & Sari, F. I. P.', tahun: '2020', judul: 'Study of Rare Earth Elements and Heavy Metals in Tin Tailing from Mining Activities on North Bangka Island', sumber: 'Journal of Physics: Conference Series, 1517, 012084', url: 'https://doi.org/10.1088/1742-6596/1517/1/012084' },

@@ -1855,6 +1855,150 @@ p {
   max-width: none;
 }
 
+/* ===== S9 Peta jalan ===== */
+.s9__jalur {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.75rem;
+  list-style: none;
+  margin: clamp(2rem, 5vw, 3.5rem) 0;
+  padding: 0;
+}
+
+.s9__langkah {
+  flex: 1 1 12rem;
+  min-width: 0;
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  border-radius: 4px;
+  padding: 1.1rem 1.25rem;
+}
+
+.s9__nomor {
+  display: block;
+  color: var(--gamma);
+  font-size: var(--step-21);
+  margin-bottom: 0.5rem;
+}
+
+.s9__teks { margin: 0; font-size: var(--step-15); color: var(--baja); }
+
+.s9__panah {
+  align-self: center;
+  flex: 0 0 auto;
+  color: var(--kabut);
+  font-size: var(--step-21);
+}
+
+.s9__panah::before { content: '→'; }
+
+@media (max-width: 640px) {
+  .s9__jalur { flex-direction: column; }
+  .s9__panah { transform: rotate(90deg); align-self: flex-start; margin-left: 1.25rem; }
+}
+
+.s9__penutup {
+  font-family: var(--font-display);
+  font-stretch: 118%;
+  font-weight: 700;
+  font-size: var(--step-40);
+  line-height: 1.2;
+  max-width: 26ch;
+  color: var(--baja);
+  margin: clamp(2rem, 5vw, 3.5rem) 0 0;
+}
+
+/* ===== S10 Daftar pustaka & kredit ===== */
+.s10__kepala { margin-bottom: clamp(2rem, 6vw, 3.5rem); }
+
+.pustaka__cari { margin: 1.5rem 0 0.75rem; max-width: 32rem; }
+
+.pustaka__cari-input {
+  width: 100%;
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  border-radius: 4px;
+  padding: 0.7rem 1rem;
+  color: var(--baja);
+  font-family: var(--font-mono);
+  font-size: var(--step-15);
+}
+
+.pustaka__cari-input::placeholder { color: var(--kabut); }
+
+/* Chrome/Safari menambah tombol X dan ikon kaca pembesar bawaan yang tidak
+   mengikuti sistem warna situs. */
+.pustaka__cari-input::-webkit-search-cancel-button,
+.pustaka__cari-input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.pustaka__status {
+  color: var(--kabut);
+  font-size: var(--step-13);
+  margin: 0 0 1.5rem;
+}
+
+.pustaka__daftar {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+}
+
+.pustaka__daftar[hidden] { display: none; }
+
+.pustaka__kartu {
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  border-radius: 4px;
+  padding: 1.1rem 1.25rem;
+  font-size: var(--step-13);
+  line-height: 1.6;
+  transition: border-color var(--durasi-transisi) var(--easing), background var(--durasi-transisi) var(--easing);
+}
+
+.pustaka__kartu[hidden] { display: none; }
+
+/* Sasaran lompatan sitasi (§5: "klik → melompat ke S10 dengan entri
+   tersorot"). Dilepas lagi lewat setTimeout di buatSitasi(). */
+.pustaka__kartu--sorot {
+  border-color: var(--gamma);
+  background: rgba(233, 185, 58, 0.09);
+}
+
+.pustaka__penulis { margin: 0 0 0.5rem; color: var(--baja); font-weight: 700; }
+.pustaka__judul { margin: 0 0 0.4rem; color: var(--baja); }
+.pustaka__sumber { margin: 0 0 0.6rem; color: var(--kabut); }
+
+.pustaka__tautan {
+  color: var(--magnet);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--magnet);
+}
+
+.pustaka__tautan:hover { border-bottom-style: solid; }
+
+.pustaka__catatan-jumlah {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--garis);
+  color: var(--kabut);
+  font-size: var(--step-13);
+  max-width: 60ch;
+}
+
+.s10-kredit__catatan { color: var(--kabut); font-size: var(--step-15); max-width: 56ch; }
+.s10-kredit__catatan + .s10-kredit__catatan { margin-top: 0.75rem; }
+
+[data-subsection="kredit"] { margin-top: clamp(2.5rem, 7vw, 4.5rem); }
+
+#slot-foto-kip {
+  min-height: 1px;
+  margin: 1.25rem 0;
+}
+
 /* ===== Gerak terhormat ===== */
 @media (prefers-reduced-motion: reduce) {
   *,

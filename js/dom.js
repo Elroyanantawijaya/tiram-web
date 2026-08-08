@@ -25,6 +25,42 @@ export const kosongkan = (node) => { while (node.firstChild) node.removeChild(no
 export const kurangiGerak = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**
+ * Instance Lenis aktif, didaftarkan oleh main.js setelah dibuat. Dipakai
+ * gulirKe() di bawah — lihat catatan di sana untuk alasannya.
+ */
+let lenisAktif = null;
+export const daftarkanLenis = (l) => { lenisAktif = l; };
+
+/**
+ * Gulir ke sebuah elemen. Lewat Lenis kalau instance-nya aktif, BUKAN lewat
+ * `target.scrollIntoView({behavior:'smooth'})` native.
+ *
+ * Alasannya terukur, bukan dugaan: loop raf Lenis (dipasang lewat
+ * `gsap.ticker.add` di main.js) berjalan setiap frame terlepas dari input
+ * pengguna dan terus menimpa posisi scroll balik ke target internalnya
+ * sendiri. Permintaan gulir native yang tidak lewat Lenis kalah setiap
+ * frame, sehingga `window.scrollY` nyaris tidak berubah sama sekali — ini
+ * dikonfirmasi lewat pengukuran langsung (bukan cuma dugaan dari kode):
+ * `scrollIntoView({behavior:'smooth'})` pada tombol nav rel pipa maupun pada
+ * lompatan sitasi sama-sama meninggalkan `scrollY` di 0, sementara
+ * `behavior:'auto'` (instan) berhasil dan bertahan.
+ */
+export function gulirKe(target, offset = -96) {
+  if (!target) return;
+  if (kurangiGerak()) { target.scrollIntoView({ behavior: 'auto', block: 'start' }); return; }
+  if (lenisAktif) {
+    // Jaring pengaman murah: scene 3D yang dimuat malas (§CLAUDE.md IntersectionObserver)
+    // bisa mengubah tinggi dokumen setelah Lenis terakhir mengukur dirinya.
+    lenisAktif.resize();
+    lenisAktif.scrollTo(target, { offset });
+    return;
+  }
+  // Fallback kalau dipanggil sebelum Lenis terdaftar (mis. gerak tidak
+  // dikurangi tapi siapkanScroll() belum sempat jalan).
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/**
  * Pecah teks sebuah elemen menjadi baris-baris visual, tiap baris dibungkus
  * mask (overflow hidden) supaya bisa di-reveal naik. Dipanggil ulang saat resize.
  * Mengembalikan array elemen bagian dalam yang boleh dianimasikan.
@@ -164,7 +200,17 @@ export const cariPustakaId = (id, pustaka) => pustaka.find((p) => idPustaka(p) =
  */
 export function buatSitasi(teks, entri, petunjuk) {
   if (!entri) return document.createTextNode(teks);
-  const buka = () => { location.hash = '#s10-referensi'; };
+  // Melompat ke kartu entri yang tepat di S10, bukan cuma ke sectionnya (§5:
+  // "klik → melompat ke S10 dengan entri tersorot"). idPustaka() dipakai
+  // sebagai satu-satunya sumber id kartu, dijaga sama di kedua sisi.
+  const buka = () => {
+    const target = document.getElementById(`pustaka-${idPustaka(entri)}`);
+    if (!target) { location.hash = '#s10-referensi'; return; }
+    gulirKe(target, -160);
+    target.focus({ preventScroll: true });
+    target.classList.add('pustaka__kartu--sorot');
+    setTimeout(() => target.classList.remove('pustaka__kartu--sorot'), 2200);
+  };
   return el('span', {
     class: 'sitasi',
     role: 'button',

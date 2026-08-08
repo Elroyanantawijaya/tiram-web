@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
 import { CONTENT } from '../data/content.js';
-import { el, kosongkan, kurangiGerak, formatAngka } from './dom.js';
+import { el, kosongkan, kurangiGerak, formatAngka, daftarkanLenis, gulirKe } from './dom.js';
 import { rakitS1 } from './sections/s1-hero.js';
 import { rakitS2 } from './sections/s2-pendahuluan.js';
 import { rakitS3 } from './sections/s3-argumen.js';
@@ -15,6 +15,8 @@ import { rakitS5 } from './sections/s5-komponen.js';
 import { rakitS6 } from './sections/s6-integrasi.js';
 import { rakitS7 } from './sections/s7-sinema.js';
 import { rakitS8 } from './sections/s8-kelayakan.js';
+import { rakitS9 } from './sections/s9-peta-jalan.js';
+import { rakitS10 } from './sections/s10-referensi.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,6 +28,7 @@ function siapkanScroll() {
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
+  daftarkanLenis(lenis);
   return lenis;
 }
 
@@ -196,7 +199,7 @@ function siapkanRelPipa() {
       'aria-label': n.label,
       title: n.label,
       'data-kursor': 'buka',
-      onclick: () => document.getElementById(n.id)?.scrollIntoView({ behavior: kurangiGerak() ? 'auto' : 'smooth' }),
+      onclick: () => gulirKe(document.getElementById(n.id), 0),
     });
     daftar.append(el('li', {}, tombol));
     titik.push({ tombol, id: n.id });
@@ -256,7 +259,7 @@ function siapkanTooltipSitasi() {
 
 function mulai() {
   document.documentElement.classList.add('js-siap');
-  siapkanScroll();
+  const lenis = siapkanScroll();
   siapkanKursor();
   siapkanTooltipSitasi();
 
@@ -268,13 +271,23 @@ function mulai() {
   rakitS6(CONTENT);
   rakitS7(CONTENT);
   rakitS8(CONTENT);
+  rakitS9(CONTENT);
+  rakitS10(CONTENT);
 
   siapkanRelPipa();
   ScrollTrigger.refresh();
+  // siapkanScroll() membuat Lenis sebelum section-section di atas mengisi
+  // kontennya, jadi dimensi tinggi yang di-cache-nya jauh lebih pendek
+  // daripada dokumen sesungguhnya — resize() eksplisit di sini menyamakannya,
+  // bukan mengandalkan timing ResizeObserver bawaan Lenis yang baru sempat
+  // jalan belakangan. Tanpa ini, gulirKe()/lenis.scrollTo() ke section jauh
+  // (S4 ke bawah) diam-diam macet di scrollY 0 — terukur langsung, bukan dugaan.
+  lenis?.resize();
 
   jalankanPreloader(() => {
     s1?.animasikan();
     ScrollTrigger.refresh();
+    lenis?.resize();
   });
 }
 

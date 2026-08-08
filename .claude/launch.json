@@ -4,8 +4,8 @@
     {
       "name": "tiram",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8000"],
-      "port": 8000
+      "runtimeArgs": [".claude/no-cache-server.py", "8091"],
+      "port": 8091
     }
   ]
 }
