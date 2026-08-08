@@ -251,6 +251,21 @@ export const CONTENT = {
       catatanKonduktivitas: 'TODO: butuh konfirmasi penulis — konduktivitas kuarsa tidak disebut di ketiga sumber; pada mode ini kuarsa dibiarkan netral, tidak dibelokkan ke sisi mana pun.',
       catatanProporsi: 'Jumlah partikel tiap jenis diatur agar terbaca di layar, bukan proporsi sebenarnya. Esai menyebut mineral berat hanya sebagian kecil dari tailing yang didominasi kuarsa.',
 
+      // Label antarmuka simulator. Bukan klaim baru — semuanya memparafrase
+      // atau memendekkan fakta yang sudah bersumber di atas.
+      ui: {
+        instruksi: 'Pilih satu sifat fisik untuk melihat bagaimana kelima mineral berpencar.',
+        putusan: 'Putusan',
+        petunjukSebelumSelesai: 'Coba keempat sifat untuk melihat kesimpulannya.',
+        tabelJudul: 'Ringkasan empat sifat',
+        tabelKolom: { sifat: 'Sifat', monasit: 'Monasit', mineralLain: 'Mineral lain' },
+        padananTeks: 'Simulasi partikel dua dimensi berisi lima jenis mineral. Posisi partikel berubah mengikuti sifat fisik yang dipilih; penjelasan tiap sifat tersedia di bawah kanvas.',
+        cacah: 'cacah',
+        overlayUmpanKering: 'Butuh umpan kering',
+        tidakDiketahui: 'Tidak diketahui',
+        netral: 'Netral',
+      },
+
       mode: {
         densitas: {
           label: 'Densitas',
@@ -290,8 +305,11 @@ export const CONTENT = {
       ],
       angkaKunci: {
         konsentratNaik: 'di atas 35% (rata-rata)',
+        konsentratNaikLabel: 'monasit & kasiterit pada konsentrat',
         lossesTailing: '0–0,17%',
+        lossesTailingLabel: 'losses pada tailing',
         pengotorKonsentratPeleburan: '~30%',
+        pengotorKonsentratPeleburanLabel: 'pengotor pada konsentrat umpan peleburan',
         sumberAngka: 'Rosita, 2017 — kondisi eksperimen terkendali pada satu kapal, bukan operasional rutin',
       },
       duaJalur: [

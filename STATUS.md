@@ -3,16 +3,15 @@
 Daftar periksa penerimaan ada di `spec/PROMPT_Website_TIRAM.md` Lampiran B. Berkas ini
 mencatat posisi terkini terhadap daftar itu, diperbarui di akhir tiap sesi.
 
-**Posisi:** setelah sesi S7 (sekuens sinema).
-**Cakupan yang sudah dikerjakan:** S0 preloader, S1 hero, S2 pendahuluan (a–f), S5 model
-komponen (tampil + dapat diputar, widget komponen 1 dari 5), S6 rakitan di atas dek KIP,
-S7 sekuens sinema 8 bab, infrastruktur bersama.
-**Belum disentuh:** S3, S4, S8, S9, S10.
+**Posisi:** setelah sesi S3 (simulator "Empat Sifat").
+**Cakupan yang sudah dikerjakan:** S0 preloader, S1 hero, S2 pendahuluan (a–f), S3 argumen +
+simulator empat mode, S5 model komponen (tampil + dapat diputar, widget komponen 1 dari 5),
+S6 rakitan di atas dek KIP, S7 sekuens sinema 8 bab, infrastruktur bersama.
+**Belum disentuh:** S4, S8, S9, S10.
 
-> **Catatan urutan.** S3 (simulator "Empat Sifat") dan S4 dilompati atas permintaan penulis
-> demi mengerjakan port geometri 3D (S5), rakitan (S6), dan sinema (S7) lebih dulu. Keduanya
-> masih kosong. S3 khususnya penting karena ia adalah inti argumen esai yang dibuat bisa
-> dimainkan — ini yang paling mendesak untuk sesi berikutnya.
+> **Catatan urutan.** S4 masih dilompati — naskahnya (`s4.diagramBatas`, `s4.batasKebaruan`,
+> `s4.kalimatPenutup`) sudah lengkap di content.js, section-nya tinggal dibangun. Ini yang
+> paling mendesak untuk sesi berikutnya, lalu S8/S9/S10.
 
 > **Catatan proses.** Berkas ini sempat tidak diperbarui selama dua sesi (widget komponen 1
 > dan S6) meski rencana S6 sendiri menjanjikannya. Sesi ini menutup celah itu sekaligus —
@@ -36,12 +35,13 @@ memang belum gilirannya.
 | Enam sub-bagian pendahuluan (S2a–S2f) lengkap dan terhubung ke visual sticky | Diverifikasi lewat scroll terprogram melalui keempat sub-bagian a–d: panel sticky berganti tepat mengikuti posisi baca (`panel--a` aktif saat di S2a, dst., tanpa satu pun yang salah). S2e (linimasa lima regulasi) dan S2f (kalimat celah) tampil dengan naskah lengkap dari `content.js`. |
 | Rakitan 3D lengkap dengan referensi skala, penanda bernomor, sorot jalur aliran, dan mode X-ray | Kelima fitur wajib §S6 ada dan terverifikasi lewat interaksi sungguhan, bukan hanya lewat kode: kelima penanda memindahkan kamera dan memunculkan kartu ringkas yang benar; ketiga tombol sorot jalur menghasilkan opasitas pipa yang tepat (1 vs 0,12); X-ray mengubah 6 mesh selubung dari opasitas 1 ke 0,18 dan memulihkannya; kedua bidikan (dekat & "posisi di kapal") menjaga modul tetap dalam bingkai. Proporsi modul terhadap kapal diukur 20,0% (target ~19%), dan modul hasil port punya 65 mesh dengan kotak batas identik terhadap `bAssembly` asli. |
 | Sekuens sinema 8 bab dengan kontrol putar/jeda/scrub/kecepatan dan takarir Indonesia | Diverifikasi menyeluruh: menggeser garis waktu ke enam titik berbeda memindahkan kamera dan mengganti takarir tepat pada batas bab; kecepatan 2× membuat waktu maju dua kali lebih cepat dari waktu nyata (terukur langsung); jeda benar-benar membekukan waktu; lompat bab langsung menuju waktu yang tepat. Efek visual per bab (medan WHIMS menyala/padam, selongsong katup terjepit, bunker menyala, gerbang gamma berkedip saat verifikasi) semuanya murni fungsi dari waktu — aman di-scrub ke titik mana pun tanpa kehilangan keadaan. Ringkasan tiga angka muncul tepat di bab penutup dan hilang saat digeser mundur. Rekam ke `.webm` menghasilkan berkas video valid (240 KB untuk ~2 detik rekaman, `video/webm`) yang berhenti dan bisa diunduh baik otomatis di akhir maupun dihentikan manual. Bukan berkas video statis — seluruhnya animasi di dalam scene sesuai §S7. |
+| Simulator "Empat Sifat" berfungsi untuk keempat mode dan menghasilkan verdict yang benar | **Diverifikasi bukan lewat kode, melainkan lewat piksel yang benar-benar dirender** — sebuah penyadap dipasang pada `ctx.arc()` khusus kanvas simulator untuk membaca posisi x/y dan warna fill setiap partikel pada frame final tiap mode. Hasilnya cocok persis dengan §S3: mode Magnetik — monasit & ilmenit di x≈0,13–0,14 (tertahan kiri), zirkon/kasiterit/kuarsa di x≈0,77–0,79 (lolos kanan); mode Konduktivitas — monasit & zirkon kiri (x≈0,19–0,21), ilmenit & kasiterit kanan (x≈0,75–0,79), **kuarsa persis di tengah x=0,50** (netral, tidak dibelokkan, sesuai `catatanKonduktivitas`); mode Radioaktivitas — monasit alpha≈0,99 (berpendar gamma), keempat mineral lain alpha≈0,14 (redup). Kesimpulan diuji tidak muncul sebelum 4 mode dicoba (urutan acak: magnetik→radioaktivitas→densitas→konduktivitas), muncul tepat di klik ke-4, dan tetap terlihat setelah mode diganti lagi. Tabel Lampiran A.3 menyala mengikuti mode aktif. Reduced-motion diuji lewat pembacaan piksel yang sama: posisi sudah final dalam 31 ms (bukan menunggu 900 ms), tepat 120 panggilan `arc()` per mode ganti (satu frame, tanpa loop animasi berjalan). |
 
 ## Butir yang baru terpenuhi sebagian
 
 | Butir Lampiran B | Yang sudah | Yang belum |
 |---|---|---|
-| Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | S1 **dan** S2 kini terverifikasi tanpa overflow horizontal di 360px dan 1440px. Di S2, panel sticky pindah ke atas kolom teks di layar sempit (bukan menumpuk di akhir) dan pin linimasa dilepas jadi daftar vertikal. Guard `kurangiGerak()` ada di titik yang benar dalam kode (loop gambar panel, pembuatan pin ScrollTrigger) dengan pola yang sama seperti S1 yang sudah terverifikasi jalan. | **Tidak bisa diverifikasi langsung**: lingkungan otomasi ini tidak punya cara mengemulasi `prefers-reduced-motion` di level OS, jadi perilaku reduced-motion S2 dijamin lewat pembacaan kode, bukan pengamatan runtime langsung — beda dengan S1 yang sempat diverifikasi dengan override `matchMedia`. S3–S10 belum bisa dinilai sama sekali. |
+| Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | S1, S2, **dan S3** kini terverifikasi tanpa overflow horizontal di 360px dan 1440px (S3 sempat overflow nyata 503px vs 360px akibat tabel — ditemukan dan diperbaiki sesi ini, lihat cacat #17). Reduced-motion S3 diverifikasi lewat teknik matchMedia-override + pembacaan piksel: posisi partikel final dalam 31ms tanpa animasi. Di S2, panel sticky pindah ke atas kolom teks di layar sempit dan pin linimasa dilepas jadi daftar vertikal. | S4, S8–S10 belum bisa dinilai sama sekali (section masih kosong). Reduced-motion S2 masih belum diverifikasi runtime (lihat cacat #10) meski tekniknya sudah ada sejak sesi S7. |
 | Kelima komponen punya model 3D yang dapat diputar, di-zoom, diurai, dan dipotong | Kelima geometri diport ke `js/models/komponen.js` dan **terbukti identik** dengan sumber: jumlah mesh dan kotak batas sama persis sampai 4 desimal, dibandingkan terhadap kode asli yang diambil langsung dari `spec/TIRAM_3D.html`, bukan diketik ulang. Model tampil, dapat **diputar** (diuji lewat seret pointer sungguhan: kamera berpindah dari `-6.260,5.816,-2.653` ke `0.089,8.577,3.914`) dan **di-zoom** lewat OrbitControls. Anotasi label sudah punya mekanisme umum yang terpakai nyata di S6 (`js/widgets/anotasi.js`, lihat baris rakitan di atas). | **Tampilan urai dan potongan melintang di S5 sendiri belum ada** — dua dari empat kemampuan yang diminta butir ini, spesifik untuk komponen satu-per-satu (bukan rakitan). Anotasi label komponen S5 (`s5.komponen[].anotasi`) belum disambungkan ke `js/widgets/anotasi.js` walau mekanismenya sudah ada dan terbukti jalan di S6. |
 | Kelima komponen punya blok `APA · BAGAIMANA · ILMU` dan satu widget simulasi | Ketiga blok tetap terpasang untuk kelima komponen plus hidrosiklon opsional — 18 blok, teksnya disalin utuh dari dokumen justifikasi lewat `content.js`. **Satu dari lima widget selesai**: Pengkondisi umpan (komponen 1) — simulasi kapasitor hidraulik, terverifikasi tenang sampai ~60% slider lalu jebol tajam ke 476% riak pada 88%, persis pola yang diminta §S5. | **Empat widget belum ada**: WHIMS (2), sensor gamma (3), katup (4), bunker (5). Widget WHIMS dan katup masing-masing adalah butir Lampiran B tersendiri (lihat tabel di bawah). |
 | Daftar pustaka lengkap, tertaut, dapat dicari | 18 entri lengkap dengan DOI/URL di `s10.pustaka`. Mesin tooltip sitasi makin teruji: kini menangani sitasi ganda dalam satu kurung (dipecah per titik koma, tiap sub-sitasi resolve sendiri) dan dibangun ulang sebagai `<span role="button">` karena Chrome memaksa `<button>` jadi `inline-block` sehingga sitasi tak bisa pecah antar baris. 12 elemen `.sitasi` di S1+S2, semuanya resolve ke entri benar. | S10 sendiri belum dirender, jadi belum ada daftar yang tampil dan belum ada pencarian. Klik sitasi melompat ke `#s10-referensi` yang masih kosong. |
@@ -52,8 +52,6 @@ Naskah dan angkanya sudah lengkap di `data/content.js`; yang belum ada adalah ta
 
 | Butir Lampiran B | Naskah siap di |
 |---|---|
-| Simulator "Empat Sifat" berfungsi untuk keempat mode dengan verdict yang benar | `s3.simulator` (termasuk data mineral terstruktur) |
-| Argumen "mengapa bukan sekadar menyetel ulang jig" lengkap dengan angka Rosita (2017) | `s3.b` |
 | Diagram batas sistem (hulu / TIRAM / hilir) jelas | `s4.diagramBatas` |
 | Pernyataan batas kebaruan muncul dan tidak dilunakkan | `s4.batasKebaruan` |
 | Widget WHIMS menunjukkan jatuhnya efisiensi pada butir halus | `s5.komponen[1].widget` |
@@ -174,6 +172,34 @@ dipakai pipa kecil sensor). Terverifikasi ulang: `bx.material !== motorK1.materi
 `!== aktuatorK4.material`; menyalakan X-ray sekarang hanya mengubah opasitas `bx` dan dinding
 bunker, motor dan aktuator tetap opasitas 1.
 
+**16. (Sesi S3) Kuarsa ikut masuk kotak "tidak diketahui" bersama kasiterit di mode Densitas — selesai.**
+Kuarsa dan kasiterit sama-sama punya `densitasNilai: null` di content.js (kuarsa karena
+sumbernya hanya kualitatif — "kuarsa ringan" — bukan karena benar-benar tidak diketahui).
+Kode mengecek `densitasNilai === null` LEBIH DULU sebelum mengecek `id === 'kuarsa'`, sehingga
+kuarsa ikut jatuh ke cabang "tidak diketahui" yang seharusnya khusus kasiterit. **Ditemukan
+lewat pembacaan piksel sungguhan**, bukan lewat membaca kode: rentang x kuarsa (0,77–0,93)
+identik dengan kotak kasiterit, bukan pita ringan yang dituju. Diperbaiki dengan menukar
+urutan pengecekan; diverifikasi ulang dengan teknik yang sama — kuarsa sekarang tersebar
+penuh (x 0,11–0,92) di pita ringan, terpisah jelas dari kasiterit.
+
+**17. (Sesi S3) Tabel Lampiran A.3 memaksa lebar 467px di viewport 360px, overflow horizontal — selesai.**
+`table-layout` default (auto) menghitung lebar kolom dari konten terpanjang tanpa memedulikan
+lebar container, dan kolom "Mineral lain" berisi teks panjang tanpa titik potong alami
+("zirkon ~4,6; ilmenit ~4,7; rutil ~4,3 (berimpitan)"). `document.documentElement.scrollWidth`
+terukur 503px padahal viewport diminta 360px. Diperbaiki dengan `table-layout: fixed` +
+`overflow-wrap: break-word` pada sel. Efek ikutan: `white-space: nowrap` pada `tbody th`
+(disalin dari asumsi lama bahwa nama sifat selalu muat satu baris) membuat teks seperti
+"Kerentanan magnetik" meluber keluar sel yang kini sempit dan tumpang tindih visual dengan
+baris lain — dihapus, dibiarkan wrap wajar.
+
+**18. (Sesi S3) Tiga label baris angka S3b dan tiga header kolom tabel ter-hardcode di JS — selesai.**
+`'monasit & kasiterit pada konsentrat'`, `'losses pada tailing'`,
+`'pengotor pada konsentrat umpan peleburan'` (di `s3-argumen.js`) dan `'Sifat'`/`'Monasit'`/
+`'Mineral lain'` (di `empat-sifat.js`) ditulis langsung sebagai literal, melanggar aturan
+mengikat "seluruh teks isi hidup di `data/content.js`". Ditemukan lewat `grep` sistematis atas
+kedua berkas baru sebelum sesi ditutup, bukan lolos tanpa diperiksa. Dipindah ke
+`s3.b.angkaKunci.*Label` dan `s3.simulator.ui.tabelKolom`.
+
 ## Cacat terbuka
 
 **8. Rel pipa (nav kiri, `#rel-pipa`) belum punya sambungan bernomor 1–5.**
@@ -196,6 +222,27 @@ section dari `index.html` mentah, timpa `window.matchMedia` sementara, lalu pang
 fungsi `rakitSX` section itu secara langsung. Ini terbukti bekerja untuk memverifikasi jalur
 statis S7 (lihat commit sesi ini). Belum diterapkan balik ke S2 — di luar cakupan sesi ini —
 tapi sekarang ada jalan untuk melakukannya tanpa perlu emulasi OS.
+
+**19. Aktivasi Enter/Space pada tombol lewat `computer` tool tidak bisa diandalkan diuji di sesi ini.**
+Fokus keyboard sungguhan (Tab) terverifikasi benar di S3 — outline `--gamma` tampil, dan
+`document.activeElement` mengonfirmasi elemen yang tepat. Tapi menekan Enter atau Space pada
+tombol yang fokus **tidak memicu aksinya** — diuji dua kali di tombol simulator S3 dan sekali
+lagi di tombol Putar S7 (yang sudah terbukti berfungsi lewat klik mouse), hasilnya konsisten
+gagal di ketiganya. Kode tidak melakukan apa pun yang mencegah perilaku native (`<button
+type="button">` polos, tidak ada `preventDefault` pada `keydown` di listener mana pun) — ini
+kemungkinan besar keterbatasan cara `computer` tool mengirim event keyboard di lingkungan ini,
+bukan bug produk. Dicatat sebagai keterbatasan verifikasi, bukan diklaim "terverifikasi".
+
+**20. `resize_window` macet di lebar 503px untuk permintaan di bawah itu (360px, preset mobile 375px).**
+Muncul pertama kali di sesi S3, setelah enam tab menumpuk dari sesi-sesi sebelumnya. Resize ke
+1440px berhasil normal; resize ke 360/375px konsisten menghasilkan `innerWidth: 503` meski
+dicoba ulang, di-reload, bahkan di tab browser baru. Namun `document.documentElement.clientWidth`
+(yang dipakai breakpoint CSS media query) tetap benar mengikuti permintaan (360px) — jadi
+verifikasi layout sempit tetap valid, hanya `window.innerWidth` yang menyesatkan dan sempat
+membuat pengukuran overflow horizontal pertama salah baca sebelum disadari (lihat cacat #17,
+yang overflow-nya sendiri nyata dan sudah dikonfirmasi lewat `scrollWidth` vs `clientWidth`,
+bukan `innerWidth`). Kemungkinan keterbatasan pane setelah sesi otomasi berjalan lama dengan
+banyak tab. Tab baru tidak menyelesaikannya dalam sesi ini.
 
 ---
 

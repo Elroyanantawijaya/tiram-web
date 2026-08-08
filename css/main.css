@@ -46,6 +46,13 @@ a {
   --monasit: #8C4A2F;
   --sedimen: #9A8F7E;
 
+  /* Verdict simulator "Empat Sifat" (S3) — merah/hijau tidak ada di §3.1,
+     ditambah di sini karena verdict merah/kuning/hijau memang diminta spec.
+     Kuning tetap --gamma (CLAUDE.md: dipakai untuk "status keputusan"). Redup
+     dan sengaja tidak sejenuh merah/hijau umum, supaya tetap selaras palet. */
+  --verdict-merah: #C2564F;
+  --verdict-hijau: #5FAE7A;
+
   /* Latar terang untuk S8 — §3.1 */
   --terang-latar: #E8E6E1;
   --terang-tinta: #0F1D26;
@@ -1384,6 +1391,163 @@ p {
 .scrolly__panel { touch-action: pan-y; }
 
 .scrolly__panel--fallback { display: flex; align-items: flex-start; }
+
+/* ===== S3 Simulator "Empat Sifat" ===== */
+.s3__intro { color: var(--baja); margin-top: 1rem; max-width: 60ch; }
+
+.widget--simulator { margin-top: 2rem; }
+
+.s3-sim__tata {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 900px) {
+  .s3-sim__tata { grid-template-columns: 3fr 2fr; align-items: start; }
+}
+
+.s3-sim__panggung { min-width: 0; }
+
+.s3-sim__legenda {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+}
+
+.s3-sim__legenda li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--step-13);
+  color: var(--kabut);
+}
+
+.s3-sim__swatch {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.s3-sim__samping { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+
+.s3-sim__verdict {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: var(--step-17);
+}
+
+.s3-sim__verdict-label { color: var(--kabut); font-size: var(--step-13); }
+
+.s3-sim__verdict-badge {
+  font-weight: 700;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 0.15rem 0.6rem;
+}
+
+.s3-sim__petunjuk {
+  color: var(--kabut);
+  font-size: var(--step-13);
+  margin-top: 1.25rem;
+}
+
+.s3-sim__kesimpulan {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--lambung);
+  border-left: 2px solid var(--gamma);
+}
+
+.s3-sim__kesimpulan[hidden] { display: none; }
+
+.s3-sim__kesimpulan-teks {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 700;
+  font-size: var(--step-21);
+  line-height: 1.3;
+  color: var(--baja);
+}
+
+.s3-sim__tabel {
+  width: 100%;
+  /* table-layout: fixed wajib di sini — tanpa ini, kolom "Mineral lain" yang
+     berisi teks panjang tanpa spasi-boleh-putus memaksa tabel auto-layout
+     melebar melewati lebar container (467px di viewport 360px, terukur
+     nyata), menyebabkan overflow horizontal seluruh halaman. */
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: var(--step-13);
+}
+
+.s3-sim__tabel caption {
+  text-align: left;
+  color: var(--kabut);
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: var(--step-13);
+  margin-bottom: 0.5rem;
+}
+
+.s3-sim__tabel th,
+.s3-sim__tabel td {
+  text-align: left;
+  padding: 0.5rem 0.5rem;
+  border-bottom: 1px solid var(--garis);
+  vertical-align: top;
+  overflow-wrap: break-word;
+}
+
+.s3-sim__tabel thead th { color: var(--kabut); font-weight: 500; }
+/* white-space: nowrap SENGAJA tidak dipakai di sini — dengan table-layout:
+   fixed di viewport sempit, kolom "Sifat" cuma ~72px; "Kerentanan magnetik"
+   dengan nowrap meluber keluar sel dan tumpang tindih baris lain, terlihat
+   nyata saat diverifikasi di 360px. Boleh wrap jadi beberapa baris. */
+.s3-sim__tabel tbody th { color: var(--baja); font-weight: 600; }
+.s3-sim__tabel-verdict { font-weight: 600; }
+
+.s3-sim__tabel-baris--aktif { background: rgba(233, 185, 58, 0.08); }
+.s3-sim__tabel-baris--aktif th { color: var(--gamma); }
+
+/* ===== S3b ===== */
+.s3b__angka {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin: 1.5rem 0 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--garis);
+}
+
+.s3b__angka-nilai { display: block; color: var(--gamma); font-size: var(--step-21); }
+.s3b__angka-label { display: block; color: var(--kabut); font-size: var(--step-13); max-width: 16rem; }
+.s3b__sumber { color: var(--kabut); font-size: var(--step-13); margin: 0 0 1.5rem; }
+
+.s3b__jalur {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+
+.s3b__jalur-kartu {
+  background: var(--lambung);
+  border: 1px solid var(--garis);
+  border-radius: 4px;
+  padding: 1rem 1.1rem;
+}
+
+.s3b__jalur-label { font-weight: 700; margin: 0 0 0.4rem; color: var(--baja); }
+.s3b__jalur-konsekuensi { color: var(--kabut); margin: 0; font-size: var(--step-15); }
 
 /* ===== Gerak terhormat ===== */
 @media (prefers-reduced-motion: reduce) {
