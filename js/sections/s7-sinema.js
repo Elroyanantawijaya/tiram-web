@@ -4,6 +4,7 @@
 import { el, kosongkan, paragraf, kurangiGerak, hitungNaik, buatSitasi, cariPustakaId } from '../dom.js';
 import { pengelolaScene } from '../scene.js';
 import { bangunPanggungSinema } from '../models/panggung-sinema.js';
+import { fallbackSinemaSvg } from '../models/fallback-svg.js';
 import { buatGarisWaktu } from '../cinema.js';
 
 const KECEPATAN = [0.5, 1, 1.5, 2];
@@ -310,6 +311,7 @@ function rakitPemutar(section, CONTENT, s7, par, waktu, durasi) {
       // Takarir dan transkrip tetap terisi tanpa WebGL — itu tetap memenuhi
       // inti §7 (memahami sekuens) meski panggung 3D tidak tersedia.
       wadah.classList.add('panggung__scene--fallback');
+      wadah.insertAdjacentHTML('afterbegin', fallbackSinemaSvg());
       wadah.append(
         el('div', { class: 'fallback-pesan' }, [
           el('p', { class: 'fallback-pesan__judul mono', text: CONTENT.ui.fallbackWebgl.judul }),

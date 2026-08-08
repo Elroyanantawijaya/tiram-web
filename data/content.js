@@ -45,6 +45,13 @@ export const CONTENT = {
       { id: 's10-referensi', label: 'Daftar pustaka' },
     ],
     navLabel: 'Navigasi bagian',
+    // §3.4b: rel pipa punya sambungan bernomor 1–5 yang berdenyut saat komponen
+    // terkait sedang aktif. Elemen ini berbeda dari sepuluh titik navigasi
+    // section di atasnya.
+    relSambungan: {
+      label: 'Sambungan komponen',
+      lompatKe: 'Lompat ke komponen',
+    },
     padananTeks: {
       heroScene: 'Latar beranimasi: siluet Kapal Isap Produksi di garis cakrawala senja, dengan laut gelap beriak di bawahnya.',
       panggungKomponen: 'Model tiga dimensi komponen TIRAM yang sedang dibaca, dapat diputar dan diperbesar. Seluruh keterangan komponen tersedia sebagai teks di samping model ini.',
@@ -351,6 +358,21 @@ export const CONTENT = {
       bagaimana: 'Bagaimana caranya',
       ilmu: 'Ilmu yang melandasi',
     },
+
+    // Kendali model 3D per komponen (Lampiran B: "dapat diputar, di-zoom,
+    // diurai, dan dipotong"). Putar & zoom lewat gestur OrbitControls;
+    // dua sisanya perlu tombol.
+    kendaliModel: {
+      urai: 'Urai',
+      uraiAktif: 'Pasang kembali',
+      uraiLabel: 'Uraikan bagian-bagian model',
+      potong: 'Potongan melintang',
+      potongAktif: 'Tutup potongan',
+      potongLabel: 'Potong model untuk melihat bagian dalam',
+      anotasi: 'Label bagian',
+      anotasiLabel: 'Tampilkan label bagian pada model',
+      petunjukGestur: 'Seret untuk memutar, gulir untuk memperbesar. Di layar sentuh, putar dengan dua jari.',
+    },
     komponen: [
       {
         id: 'c1',
@@ -411,6 +433,23 @@ export const CONTENT = {
           tampilan: 'Partikel mengalir melalui matriks baja; yang tertangkap menempel di tepi matriks. Pembaca mono: efisiensi tangkap.',
           perilaku: 'Wajib: pada butir sangat halus efisiensi jatuh — tampilkan pengingat bahwa gaya magnet sebanding pangkat tiga diameter sedangkan gaya seret hanya sebanding diameter. Widget ini menunjukkan keterbatasan sistem sendiri, bukan menyembunyikannya.',
           buktiRelevansi: 'Pada bahan pascapengolahan timah Bangka, pemisahan magnetik menaikkan kadar monasit dari sekitar 19% menjadi 37–46% (Widana dkk., 2024).',
+          ui: {
+            sliderMedan: 'Kuat medan',
+            sliderButir: 'Ukuran butir',
+            bacaanEfisiensi: 'efisiensi tangkap',
+            bacaanRasio: 'gaya magnet ÷ gaya seret',
+            labelMatriks: 'matriks baja',
+            labelLolos: 'non-magnetik → laut',
+            labelTertangkap: 'fraksi magnetik',
+            status: {
+              baik: 'Butir tertangkap pada matriks',
+              jatuh: 'Fraksi ultrahalus lolos — gaya magnet kalah oleh seret',
+            },
+            // Pengingat yang diwajibkan `perilaku` di atas. Ditulis di sini,
+            // bukan di kode, supaya penulis bisa mengoreksinya.
+            pengingatPangkatTiga: 'Gaya magnet sebanding dengan diameter pangkat tiga, sedangkan gaya seret hanya sebanding dengan diameter. Karena itu pada butir sangat halus gaya magnet mengecil jauh lebih cepat, dan monasit terhalus lolos — ini keterbatasan yang memang melekat pada alatnya.',
+            padananTeks: 'Simulasi pemisah magnetik: butiran mengalir melalui matriks baja bermedan magnet; butir magnetik menempel pada tepi matriks sedangkan sisanya lolos ke kanan. Dua slider mengatur kuat medan dan ukuran butir.',
+          },
         },
       },
       {
@@ -431,6 +470,22 @@ export const CONTENT = {
           tampilan: 'Sumbu energi dengan puncak Pb-212 pada 239 keV dan Tl-208 pada 2,61 MeV, latar yang dikurangi.',
           perilaku: 'Ketidakpastian relatif ≈ 1/√N ditampilkan langsung — ketelitian ~5% menuntut orde beberapa ratus cacah; cacah rendah memaksa waktu ukur lebih lama sehingga membatasi laju alir.',
           rantaiFisika: ['foton', 'kristal NaI(Tl)', 'kilau', 'PMT', 'pulsa', 'MCA', 'spektrum', 'kadar monasit'],
+          ui: {
+            slider: 'Waktu cacah',
+            bacaanCacah: 'cacah terkumpul (N)',
+            bacaanKetidakpastian: 'ketidakpastian relatif (1/√N)',
+            sumbuEnergi: 'energi',
+            labelPuncakTh: 'Pb-212 · 239 keV',
+            labelPuncakTl: 'Tl-208 · 2,61 MeV',
+            labelLatar: 'latar (dikurangi)',
+            status: {
+              cukup: 'Cacah cukup — puncak Th terbaca jelas',
+              kurang: 'Cacah masih sedikit — puncak tenggelam dalam derau',
+            },
+            // §A.2: ketelitian ±5% menuntut orde beberapa ratus cacah.
+            catatanKetelitian: 'Ketelitian ±5% menuntut orde beberapa ratus cacah. Cacah rendah memaksa waktu ukur lebih lama, dan itu membatasi laju alir yang boleh dilewatkan.',
+            padananTeks: 'Simulasi spektrometri gamma: spektrum terbentuk di sumbu energi dengan dua puncak penanda deret torium, Pb-212 pada 239 keV dan Tl-208 pada 2,61 MeV, di atas latar yang dikurangi. Slider mengatur lama waktu cacah.',
+          },
         },
       },
       {
@@ -453,6 +508,23 @@ export const CONTENT = {
           tampilan: 'Segmen bubur bergerak di pipa dari sensor ke katup. Selongsong karet terlihat terjepit oleh aktuator pneumatik.',
           perilaku: 'Pengguna menyetel tunda; jika salah, katup membelokkan segmen yang keliru ("segmen kaya monasit lolos ke laut"); jika benar, segmen yang sama yang tadi diukur yang dibelokkan.',
           catatanWajib: 'Katup tidak memisahkan apa pun — ia hanya membelokkan seluruh segmen aliran.',
+          ui: {
+            slider: 'Tunda perintah PLC',
+            tundaBenar: 'waktu tempuh sensor → katup',
+            bacaanTunda: 'tunda disetel',
+            bacaanSelisih: 'selisih dari waktu tempuh',
+            bacaanTepat: 'segmen kaya monasit tertangkap',
+            labelSensor: 'sensor gamma',
+            labelKatup: 'katup jepit',
+            labelBunker: 'ke bunker',
+            labelLaut: 'ke laut',
+            status: {
+              tepat: 'Segmen yang diukur itu juga yang dibelokkan',
+              terlaluCepat: 'Tunda terlalu pendek — katup membelok sebelum segmennya tiba',
+              terlaluLambat: 'Tunda terlalu panjang — segmen kaya monasit sudah lewat, lolos ke laut',
+            },
+            padananTeks: 'Simulasi tunda PLC: segmen bubur bergerak di sepanjang pipa dari sensor gamma menuju katup jepit. Slider mengatur berapa lama PLC menunda perintah; bila tundanya tidak sama dengan waktu tempuh, katup membelokkan segmen yang keliru.',
+          },
         },
       },
       {
@@ -472,6 +544,23 @@ export const CONTENT = {
           tampilan: 'Laju dosis di luar dinding turun mengikuti peluruhan eksponensial I = I₀e^(−µx), dibaca pada panel mono.',
           perilaku: 'Menyertakan asas proteksi radiasi: jarak, waktu, perisai.',
           catatanWajib: 'Tebal perisai adalah hasil perhitungan berdasarkan aktivitas nyata — rancangan menyebut "perisai sesuai kajian keselamatan", bukan memaku angka tertentu.',
+          ui: {
+            slider: 'Tebal perisai timbal',
+            bacaanTembus: 'gamma yang lolos (I/I₀)',
+            bacaanLapisNilai: 'setara berapa lapis nilai paruh',
+            rumus: 'I = I₀ · e^(−µx)',
+            labelSumber: 'konsentrat kaya monasit',
+            labelDinding: 'dinding berperisai',
+            labelLuar: 'di luar bunker',
+            // Tiga asas proteksi radiasi yang disebut blok "ilmu" komponen ini.
+            asasProteksi: ['jarak', 'waktu', 'perisai'],
+            asasJudul: 'Asas proteksi radiasi',
+            status: {
+              tebal: 'Peredaman kuat — laju dosis di luar dinding ditekan',
+              tipis: 'Perisai masih tipis — sebagian besar gamma menembus',
+            },
+            padananTeks: 'Simulasi perisai bunker: berkas gamma dari konsentrat kaya monasit menembus dinding timbal, dan intensitas yang lolos meluruh secara eksponensial mengikuti tebal perisai. Slider mengatur tebal dinding.',
+          },
         },
       },
     ],

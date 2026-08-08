@@ -3,27 +3,26 @@
 Daftar periksa penerimaan ada di `spec/PROMPT_Website_TIRAM.md` Lampiran B. Berkas ini
 mencatat posisi terkini terhadap daftar itu, diperbarui di akhir tiap sesi.
 
-**Posisi:** setelah sesi S9+S10 (peta jalan, daftar pustaka & kredit) + verifikasi menyeluruh.
+**Posisi:** setelah sesi penuntasan — empat widget komponen sisa, urai & potongan melintang S5,
+fallback SVG S5/S6/S7, dan sambungan bernomor rel pipa.
 **Cakupan yang sudah dikerjakan:** S0–S10 seluruhnya punya tampilan sekarang. S0 preloader, S1
 hero, S2 pendahuluan (a–f), S3 argumen + simulator empat mode, S4 gagasan, S5 model komponen
-(tampil + dapat diputar, widget komponen 1 dari 5), S6 rakitan di atas dek KIP, S7 sekuens
-sinema 8 bab, S8 kelayakan, S9 peta jalan enam langkah, S10 daftar pustaka (18 entri, dapat
-dicari) & kredit, infrastruktur bersama.
-**Belum disentuh:** tidak ada section yang kosong lagi. Yang tersisa adalah kedalaman di dalam
-section yang sudah ada (lihat "belum dikerjakan" di bawah), bukan section baru.
+(putar, zoom, urai, potongan melintang, anotasi label, **lima dari lima widget**), S6 rakitan di
+atas dek KIP, S7 sekuens sinema 8 bab, S8 kelayakan, S9 peta jalan enam langkah, S10 daftar
+pustaka (18 entri, dapat dicari) & kredit, infrastruktur bersama.
+**Belum disentuh:** tidak ada. Seluruh 20 butir Lampiran B kini punya wujudnya; yang tersisa
+hanya dua penundaan §S7 yang disengaja (depth of field & bunyi, lihat bagian bawah) dan lubang
+isi yang menunggu konfirmasi penulis.
 
-> **Catatan sesi ini.** S9 dan S10 dibangun, lalu ditemukan dan diperbaiki **bug lintas situs
-> yang cukup serius**: `scrollIntoView({behavior:'smooth'})` — dipakai baik oleh tombol nav rel
-> pipa maupun (rencana semula) lompatan sitasi — dilawan setiap frame oleh loop `raf` Lenis dan
-> gagal total, `scrollY` macet di titik awal. Diperbaiki dengan `gulirKe()` baru di `dom.js`
-> yang memakai `lenis.scrollTo()`, plus `lenis.resize()` eksplisit setelah seluruh section
-> selesai dibangun (Lenis sempat mengukur dirinya sendiri sebelum konten ada, jadi limit
-> scroll-nya keliru). Ini menutup cacat #9 (klik sitasi ke section kosong) sekaligus
-> memperbaiki nav rel pipa yang selama ini **belum pernah benar-benar diuji jalan** — lihat
-> cacat #26. Ditemukan juga celah baru: fallback non-WebGL S5/S6/S7 cuma pesan teks, tanpa
-> padanan gambar/SVG statis yang diwajibkan CLAUDE.md (S1 sudah punya) — lihat cacat #27.
-> Di luar itu masih menunggu: empat widget komponen S5, tampilan urai & potongan melintang S5,
-> dan cacat #8 (rel pipa belum punya sambungan bernomor 1–5).
+> **Catatan sesi ini.** Seluruh sisa daftar dikerjakan: keempat widget komponen yang belum ada
+> (WHIMS, sensor gamma, katup, bunker), tampilan urai & potongan melintang S5 beserta anotasi
+> label komponennya, tiga SVG fallback statis (menutup cacat #27), dan sambungan bernomor 1–5
+> pada rel pipa (menutup cacat #8). Satu bug nyata ditemukan **lewat pengukuran, bukan lewat
+> membaca kode**: widget katup semula memberi hasil terbalik — tunda yang benar menghasilkan 0%
+> tertangkap sedangkan tunda yang salah 33% — lihat cacat #28.
+>
+> *Sesi sebelumnya (S9+S10)* menemukan dan memperbaiki bug lintas situs pada gulir program
+> (`scrollIntoView({behavior:'smooth'})` dilawan loop `raf` Lenis), lihat cacat #26.
 
 Lampiran B adalah daftar penerimaan untuk **situs jadi**, bukan per sesi. Karena itu
 mayoritas butir di bawah wajar berstatus belum — bukan karena terlewat, melainkan karena
@@ -43,6 +42,10 @@ memang belum gilirannya.
 | Tidak ada angka di luar Lampiran A atau berkas esai | Seluruh angka bersumber dari `data/content.js`, yang disalin dari ketiga berkas sumber. Dua lubang data ditandai `TODO` alih-alih dikarang — lihat bagian bawah. Angka baru sesi ini (`s8.neraca.skala.modulMin/Maks/kip`) murni untuk menghitung lebar batang, bukan angka baru yang ditampilkan — teksnya tetap memakai rentang "180–200" apa adanya. |
 | Daftar pustaka lengkap, tertaut, dapat dicari | S10 kini **dirender**: 18 kartu gaya mono, tiap kartu bertaut `target="_blank" rel="noopener"` ke DOI/URL aslinya (kecuali dua entri Perka BAPETEN yang memang tidak semuanya punya URL di sumber). Kotak pencarian diuji dengan mengetik "widana" → tepat 1 dari 18 kartu tersisa; kata yang tak cocok → daftar kosong dengan pesan "Tidak ada entri yang cocok."; dikosongkan lagi → 18 kartu kembali. Klik sitasi di badan teks (diuji dari S1) melompat **tepat ke kartu yang benar** (`#pustaka-bisnis-com-2025`), menyorotnya 2,2 detik, dan memindahkan fokus keyboard ke sana — bukan cuma ke section. Ini menutup cacat #9. |
 | Argumen "mengapa bukan sekadar menyetel ulang jig" tersaji lengkap dengan angka Rosita (2017) | Diperiksa lewat `innerText` S3: kalimat "…ditekan sampai kisaran 0 hingga 0,17 persen (Rosita, 2017)" tampil apa adanya. |
+| Kelima komponen punya model 3D yang dapat diputar, di-zoom, diurai, dan dipotong | Geometri diport dan **terbukti identik** dengan sumber (jumlah mesh & kotak batas sama sampai 4 desimal terhadap `spec/TIRAM_3D.html`). **Putar** diuji lewat seret pointer sungguhan; **zoom** lewat OrbitControls. **Urai** kini ada dan diukur: keenam bagian pengkondisi bergeser ≥0,4 satuan dari posisi terpasang saat dinyalakan, lalu kembali **persis** (selisih <0,02) saat dimatikan — arah uraian diturunkan dari pusat kotak batas tiap bagian, bukan offset yang diketik manual. **Potongan melintang** memakai `renderer.clippingPlanes` global (bukan per-material, sebab material di `bahan.js` dipakai bersama S6/S7) dan **dibuktikan lewat piksel**: 65,5% piksel model hilang saat potongan menyala dan pulih persis ke jumlah semula saat dimatikan. Bidang potong terbukti tidak bocor — ia dilepas di `nonaktifkan()` dan dipasang lagi di `aktifkan()`. Anotasi label komponen (`s5.komponen[].anotasi`) kini tersambung ke `js/widgets/anotasi.js`: 4 label komponen 1 tampil, dan label ikut berganti mengikuti komponen yang sedang dibaca. |
+| Widget WHIMS menunjukkan jatuhnya efisiensi pada butir halus | **Diukur di lima setelan pada medan tetap 1,5 T** (angka yang disebut esai): 500 µm → 100%, 166 µm → 97%, 50 µm → 60%, 16 µm → 6%, 5 µm → 0%. Jatuhnya bukan kurva yang dipasang manual melainkan akibat langsung rasio gaya yang dihitung sebanding d²·B² — dan itu **terbukti dari angkanya sendiri**: butir mengecil 3,01× membuat rasio turun 8,87×, cocok dengan 3,01² = 9,06. Status berganti ke "Fraksi ultrahalus lolos" tepat saat efisiensi menembus 50%. Pengingat "gaya magnet sebanding pangkat tiga diameter sedangkan gaya seret hanya sebanding diameter" tampil dalam kotak `.widget__pengingat` berpola sama dengan catatan penting lain — tidak dikecilkan. |
+| Widget katup menunjukkan konsekuensi tunda PLC yang salah | Waktu tempuh sensor→katup 2,875 detik. **Diuji lima ulangan per setelan pada widget baru tiap kali**, supaya angkanya bukan hasil satu undian: tunda 2,87 s (selisih −0,02 s) → **100% di kelima ulangan**; tunda 0 s → **0% di kelima ulangan**; tunda 4,50 s → **0%**; tunda meleset sedang (1,50 s dan 6,00 s) → 14–44%, acak, sebab katup membelokkan segmen yang kebetulan lewat dan sebagian di antaranya memang kaya monasit. Catatan wajib "katup tidak memisahkan apa pun — ia hanya membelokkan seluruh segmen aliran" tampil di bawah kanvas. Dua bug ditemukan dan ditutup di sini — lihat cacat #28. |
+| Widget sensor gamma & bunker (melengkapi "satu widget masing-masing") | **Gamma:** ketidakpastian yang ditampilkan cocok **persis** dengan 1/√N di kelima setelan (N=38 → ±16,2%; 224 → ±6,7%; 442 → ±4,8%; 1.263 → ±2,8%; 2.552 → ±2,0%). Spektrumnya dibangkitkan cacah-per-cacah lewat sampling Poisson tiap salur, bukan kurva mulus yang ditambahi derau — jadi deraunya memang derau cacah. Ambang ±5% tercapai pada N=442, yaitu "orde beberapa ratus cacah" persis seperti §A.2. **Bunker:** cocok persis dengan I = I₀·e^(−µx) di lima setelan; pada 0,60 cm terbaca 48,68% dan tepat 1,0× lapis nilai paruh. Sengaja disajikan sebagai nisbah I/I₀ tanpa satuan, bukan laju dosis µSv/jam — angka dosis mutlak menuntut aktivitas sumber nyata, justru yang dokumen sumber tolak untuk dipaku. |
 | Preloader kalibrasi detektor tampil dan keluar mulus (< 2,2 detik) | Diukur dengan `performance.measure('preloader')` di peramban, empat kali muat berturut-turut: **1027, 1027, 1028, 1030 ms**. Hero tampil ~1,11 detik sejak navigasi. Aturan §S0 "kalau aset sudah siap lebih cepat, percepat" kini diterapkan: kemajuan hanya merayap sampai font terpasang dan `load` selesai, lalu diselesaikan cepat. |
 | Enam sub-bagian pendahuluan (S2a–S2f) lengkap dan terhubung ke visual sticky | Diverifikasi lewat scroll terprogram melalui keempat sub-bagian a–d: panel sticky berganti tepat mengikuti posisi baca (`panel--a` aktif saat di S2a, dst., tanpa satu pun yang salah). S2e (linimasa lima regulasi) dan S2f (kalimat celah) tampil dengan naskah lengkap dari `content.js`. |
 | Rakitan 3D lengkap dengan referensi skala, penanda bernomor, sorot jalur aliran, dan mode X-ray | Kelima fitur wajib §S6 ada dan terverifikasi lewat interaksi sungguhan, bukan hanya lewat kode: kelima penanda memindahkan kamera dan memunculkan kartu ringkas yang benar; ketiga tombol sorot jalur menghasilkan opasitas pipa yang tepat (1 vs 0,12); X-ray mengubah 6 mesh selubung dari opasitas 1 ke 0,18 dan memulihkannya; kedua bidikan (dekat & "posisi di kapal") menjaga modul tetap dalam bingkai. Proporsi modul terhadap kapal diukur 20,0% (target ~19%), dan modul hasil port punya 65 mesh dengan kotak batas identik terhadap `bAssembly` asli. |
@@ -55,18 +58,7 @@ memang belum gilirannya.
 
 | Butir Lampiran B | Yang sudah | Yang belum |
 |---|---|---|
-| Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | **360px/768px/1440px:** diperiksa di level **seluruh dokumen** (bukan per-section) sesi ini — `document.documentElement.scrollWidth === clientWidth` persis di ketiganya, nol elemen yang tepinya melewati viewport (linimasa S2e sengaja dikecualikan: horizontal-scroll itu disengaja dan tetap terkurung dalam pin-nya sendiri, terbukti dari scrollWidth dokumen yang tetap sama). **Reduced-motion:** S8, S9, S10 (baru) dan **S2 (celah lama, cacat #10)** kini diverifikasi runtime dengan teknik pulihkan-markup-mentah + timpa `matchMedia` + panggil ulang `rakitSX`. S2 secara khusus diuji dengan membandingkan dua `canvas.toDataURL()` panel berjarak 900ms — identik persis, jadi bukan cuma "diam sesaat" tapi benar-benar tidak beranimasi; linimasa S2e terbukti tidak ter-pin (`transform: matrix(1,0,0,1,0,0)`, `position: static`) saat gerak dikurangi. **Fallback non-WebGL:** mekanisme dispatch-nya sendiri diuji langsung (bukan cuma dibaca) dengan menyimulasikan `HTMLCanvasElement.getContext()` gagal pada instance `PengelolaScene` terisolasi — `bangun()` tidak pernah terpanggil, `fallback()` terpanggil tepat sekali dengan wadah yang benar, `dukungWebgl` terkunci `false`. **Tapi isi fallback-nya sendiri tidak lengkap** — lihat cacat #27: hanya S1 yang punya padanan SVG statis, S5/S6/S7 cuma pesan teks, padahal `CONTENT.ui.fallbackWebgl.narasi` sendiri menjanjikan "diganti gambar diam". | S4 belum diukur ulang khusus sesi ini (tapi tercakup dalam pemeriksaan overflow seluruh-dokumen di atas). Fallback non-WebGL S5/S6/S7 melanggar §CLAUDE.md secara harfiah (cacat #27, terbuka). |
-| Kelima komponen punya model 3D yang dapat diputar, di-zoom, diurai, dan dipotong | Kelima geometri diport ke `js/models/komponen.js` dan **terbukti identik** dengan sumber: jumlah mesh dan kotak batas sama persis sampai 4 desimal, dibandingkan terhadap kode asli yang diambil langsung dari `spec/TIRAM_3D.html`, bukan diketik ulang. Model tampil, dapat **diputar** (diuji lewat seret pointer sungguhan: kamera berpindah dari `-6.260,5.816,-2.653` ke `0.089,8.577,3.914`) dan **di-zoom** lewat OrbitControls. Anotasi label sudah punya mekanisme umum yang terpakai nyata di S6 (`js/widgets/anotasi.js`, lihat baris rakitan di atas). | **Tampilan urai dan potongan melintang di S5 sendiri belum ada** — dua dari empat kemampuan yang diminta butir ini, spesifik untuk komponen satu-per-satu (bukan rakitan). Anotasi label komponen S5 (`s5.komponen[].anotasi`) belum disambungkan ke `js/widgets/anotasi.js` walau mekanismenya sudah ada dan terbukti jalan di S6. |
-| Kelima komponen punya blok `APA · BAGAIMANA · ILMU` dan satu widget simulasi | Ketiga blok tetap terpasang untuk kelima komponen plus hidrosiklon opsional — 18 blok, teksnya disalin utuh dari dokumen justifikasi lewat `content.js`. **Satu dari lima widget selesai**: Pengkondisi umpan (komponen 1) — simulasi kapasitor hidraulik, terverifikasi tenang sampai ~60% slider lalu jebol tajam ke 476% riak pada 88%, persis pola yang diminta §S5. | **Empat widget belum ada**: WHIMS (2), sensor gamma (3), katup (4), bunker (5). Widget WHIMS dan katup masing-masing adalah butir Lampiran B tersendiri (lihat tabel di bawah). |
-
-## Butir yang belum dikerjakan — di luar cakupan sesi ini
-
-Naskah dan angkanya sudah lengkap di `data/content.js`; yang belum ada adalah tampilannya.
-
-| Butir Lampiran B | Naskah siap di |
-|---|---|
-| Widget WHIMS menunjukkan jatuhnya efisiensi pada butir halus | `s5.komponen[1].widget` |
-| Widget katup menunjukkan konsekuensi tunda PLC yang salah | `s5.komponen[3].widget` |
+| Berfungsi di 360px; `prefers-reduced-motion` dihormati; fallback non-WebGL tersedia | **360px/768px/1440px:** diukur ulang **setelah** seluruh perubahan sesi ini (empat widget baru, bilah kendali S5, sambungan rel pipa) — `scrollWidth === clientWidth` persis di ketiganya (360/360, 753/753, 1425/1425) dan nol elemen yang tepinya melewati viewport (linimasa S2e sengaja dikecualikan: horizontal-scroll itu disengaja dan tetap terkurung dalam pin-nya sendiri). **Reduced-motion:** S2, S8, S9, S10 diverifikasi runtime dengan teknik pulihkan-markup-mentah + timpa `matchMedia` + panggil ulang `rakitSX`; S2 khususnya diuji lewat dua `canvas.toDataURL()` berjarak 900 ms yang identik persis. Keempat widget baru punya jalur `gambarSekali()` yang menjalankan simulasinya sinkron tanpa rAF. Denyut sambungan rel pipa dimatikan lewat `@media (prefers-reduced-motion)`, warnanya tetap. **Fallback non-WebGL:** mekanismenya diuji langsung dengan menyimulasikan `getContext()` gagal — `bangun()` tak pernah terpanggil, `fallback()` terpanggil tepat sekali. **Isi fallback kini lengkap** (cacat #27 ditutup): ketiga scene punya SVG statis, terbukti bukan gambar kosong lewat rasterisasi — 439 / 292 / 399 warna unik dan 20,4% / 23,0% / 9,4% piksel berisi untuk S5 / S6 / S7. | Reduced-motion runtime S4/S5/S6 belum pernah diuji langsung (S5 kini punya empat widget baru yang jalur statisnya sudah ada tetapi belum diverifikasi lewat pemulihan markup seperti S2/S8/S9/S10). |
 
 ### Dua dari lima "detail meyakinkan" §S7 ditunda, bukan terlewat
 
@@ -288,42 +280,79 @@ akhirnya pindah ke origin/port yang belum pernah dikunjungi. Diatasi dengan serv
 dipakai `.claude/launch.json`, dan dengan selalu memanggil `tabs_select` sebelum operasi yang
 bergantung pada rAF/compositing.
 
+**28. (Sesi ini) Widget katup memberi hasil terbalik — tunda yang benar dilaporkan 0% — selesai.**
+Ditemukan **bukan dari membaca kode melainkan dari mengukur keluarannya**: pada tunda 2,85 detik
+(selisih hanya −0,02 detik dari waktu tempuh sungguhan) widget melaporkan 0% segmen kaya
+monasit tertangkap, sedangkan pada tunda 0 detik — yang jelas-jelas salah — justru 33%. Persis
+kebalikan dari yang §S5 minta ditunjukkan. Dua sebab terpisah yang bertumpuk:
+
+1. **Urutan di dalam `langkah()`.** Nasib tiap segmen diputuskan memakai nilai `katupKeBunker`
+   dari frame sebelumnya, sebab posisi katup baru dihitung *setelah* perulangan segmen. Dengan
+   tunda yang benar, perintah jatuh tempo **persis** pada frame segmennya tiba — sehingga justru
+   kasus yang benar itulah yang paling dirugikan oleh keterlambatan satu frame. Diperbaiki
+   dengan memindahkan perhitungan posisi katup ke atas, sebelum segmen digerakkan, dan membuka
+   jendela katup 0,15 detik lebih awal supaya hasilnya tidak ditentukan pembulatan langkah waktu.
+2. **Penyebut statistik dicatat di tempat yang salah.** `jumlahKaya` bertambah saat segmen
+   melewati *sensor*, padahal pembilangnya baru bisa bertambah saat segmen melewati *katup*.
+   Segmen yang masih dalam perjalanan karena itu selalu terhitung sebagai "tidak tertangkap",
+   dan persentasenya tak pernah bisa mendekati 100% walau tundanya tepat. Dipindah ke titik
+   katup, tempat nasibnya benar-benar diputuskan.
+
+Diverifikasi ulang dengan **lima ulangan pada widget yang dibangun baru tiap kali**, supaya
+angkanya bukan hasil satu undian acak: tunda benar → 100% di kelima ulangan; tunda 0 detik dan
+4,50 detik → 0% di kelima ulangan; tunda meleset sedang → 14–44% acak, yang memang semestinya
+demikian sebab katup membelokkan apa pun yang kebetulan lewat.
+
+**27. (Sesi ini) Fallback non-WebGL S5/S6/S7 cuma pesan teks, tanpa padanan gambar — selesai.**
+CLAUDE.md mensyaratkan "setiap scene 3D punya padanan gambar/SVG statis **dan** pesan singkat
+yang jelas", dan teks pesannya sendiri (`CONTENT.ui.fallbackWebgl.narasi`) menjanjikan "latar
+tiga dimensi diganti gambar diam" — janji yang tidak ditepati untuk tiga dari empat scene.
+Ditambahkan `js/models/fallback-svg.js` berisi tiga ilustrasi prosedural: komponen tunggal (S5),
+rakitan di atas dek dengan penanda bernomor 1–5 dan sosok acuan skala (S6), serta satu bidikan
+sekuens sinema dengan gerbang gamma dan percabangan bunker/laut (S7). **Dibuktikan bukan gambar
+kosong** lewat rasterisasi ke kanvas: 439 / 292 / 399 warna unik dan 20,4% / 23,0% / 9,4% piksel
+berbeda dari latarnya untuk S5 / S6 / S7. Saat WebGL disimulasikan gagal, ketiga section kini
+menampilkan SVG **dan** pesan (bukan salah satu), dan bilah kendali S5 disembunyikan karena
+urai/potongan tidak punya arti tanpa model 3D. Satu perbaikan ikutan: `bungkus()` semula tidak
+menulis `xmlns` — aman saat disisipkan lewat `innerHTML` ke dokumen HTML, tetapi markup yang
+sama gagal dimuat sebagai berkas mandiri (mis. data URL); atributnya ditambahkan.
+
+**8. (Sesi ini) Rel pipa belum punya sambungan bernomor 1–5 — selesai.**
+§3.4b meminta rel pipa punya sambungan bernomor yang berdenyut saat komponen terkait aktif —
+elemen yang berbeda dari sepuluh titik navigasi section maupun dari penanda bernomor di atas
+model S6. Ditambahkan lima tombol `.rel__sambungan` di sisi kiri pipa; posisinya dihitung dari
+letak komponen itu sebagai pecahan tinggi dokumen dan dihitung ulang tiap
+`ScrollTrigger.refresh()`, sehingga sambungan yang berdenyut selalu sejajar dengan ketinggian
+bubur yang sedang naik. **Terverifikasi:** posisi kelimanya menaik monoton (39,7 → 44,5 → 50,1 →
+55,5 → 60,0 vh) sesuai urutan komponen; saat digulir ke tiap komponen **tepat satu** sambungan
+aktif dan selalu nomor yang benar; klik kelimanya mendarat persis pada offset yang diminta
+(`top: 80` untuk kelimanya). Denyutnya dimatikan di bawah `prefers-reduced-motion`, warnanya
+tetap supaya penandanya tidak hilang.
+
 ## Cacat terbuka
 
-**27. Fallback non-WebGL S5/S6/S7 cuma pesan teks, tanpa padanan gambar/SVG statis.**
-CLAUDE.md mensyaratkan "setiap scene 3D punya padanan gambar/SVG statis **dan** pesan singkat
-yang jelas" — dan teks pesannya sendiri (`CONTENT.ui.fallbackWebgl.narasi`) menjanjikan "latar
-tiga dimensi diganti gambar diam". Hanya S1 (`fallbackHeroSvg()`) yang benar-benar memenuhi ini.
-`fallback()` di `s5-komponen.js`, `s6-integrasi.js`, dan `s7-sinema.js` hanya menambahkan blok
-`.fallback-pesan` (judul + narasi teks) tanpa elemen gambar apa pun — dikonfirmasi dari
-pembacaan langsung ketiga berkas dan CSS terkait (`.scrolly__panel--fallback`,
-`.panggung__scene--fallback` hanya mengatur `display:flex`, tidak ada `background-image` atau
-SVG). Mekanisme dispatch-nya sendiri (kapan `fallback()` dipanggil) sudah diuji benar dan
-berfungsi — lihat cacat #26 — celah ini murni soal kelengkapan isi fallback, bukan mekanismenya.
-Di luar cakupan sesi ini untuk diperbaiki (butuh tiga ilustrasi SVG prosedural baru, satu per
-scene, sesuai gaya `fallbackHeroSvg()`).
+**29. Empat widget baru belum diverifikasi lewat pengamatan piksel, hanya lewat bacaan angkanya.**
+Perilaku keempat widget (WHIMS, gamma, katup, bunker) dibuktikan dari nilai yang mereka
+tampilkan dan dari model fisikanya — dan itu memang inti tiap butir Lampiran B. Yang **belum**
+diperiksa adalah apakah gambar di kanvasnya benar-benar menampilkan yang dijanjikan `tampilan`
+di `content.js` (mis. butir magnetik benar-benar terlihat menempel di tepi matriks WHIMS,
+selongsong karet terlihat terjepit di widget katup). Teknik pembacaan piksel yang dipakai untuk
+simulator S3 bisa diterapkan di sini, tetapi lingkungan otomasi sesi ini menghentikan
+`requestAnimationFrame` setiap kali tab kehilangan fokus, sehingga animasi kanvasnya tidak
+pernah maju cukup jauh untuk diambil sampelnya secara andal. Jalur `gambarSekali()` (sinkron,
+tanpa rAF) adalah pintu masuk yang tepat untuk melakukannya di sesi mendatang.
 
+**30. Screenshot pane tidak dapat diandalkan di paruh akhir sesi ini.**
+Setelah sesi otomasi berjalan panjang, `computer{action:"screenshot"}` mulai mengembalikan
+tangkapan gelap seluruhnya — bukan hanya bagian SVG yang sedang diperiksa, tetapi juga judul dan
+teks yang jelas-jelas ada di DOM. Dikonfirmasi bahwa isinya memang terpasang lewat
+`elementFromPoint` (SVG terbukti elemen paling atas di titik tengahnya, tidak tertutup apa pun)
+dan lewat rasterisasi mandiri. Karena itu bukti visual sesi ini bersandar pada pengukuran DOM
+dan rasterisasi, bukan pada screenshot. Serumpun dengan cacat #20.
 
-**8. Rel pipa (nav kiri, `#rel-pipa`) belum punya sambungan bernomor 1–5.**
-Ini elemen berbeda dari penanda bernomor di atas model S6 (yang sudah ada dan berfungsi).
-Rel pipa saat ini hanya progres scroll dan navigasi sepuluh section, belum diberi lima titik
-tambahan yang berdenyut saat komponen terkait aktif, sesuai §3.4b. S5 dan S6 sudah selesai
-tapi penyambungan ini belum dikerjakan di keduanya — masih terbuka.
-
-**9. Klik sitasi melompat ke section kosong.**
-`#s10-referensi` belum berisi apa pun sampai sesi S10.
-
-**10. Reduced-motion S2 belum diverifikasi lewat pengamatan runtime.**
-Guard `kurangiGerak()` ada di kode (loop gambar panel, pembuatan pin ScrollTrigger), tapi
-lingkungan otomasi sesi ini tidak punya cara mengemulasi `prefers-reduced-motion` di level
-OS untuk mengonfirmasinya secara langsung — beda dari S1 yang sempat diverifikasi dengan
-override `matchMedia`.
-
-*Pembaruan sesi S7:* teknik yang lebih baik ditemukan dan berhasil dipakai — pulihkan markup
-section dari `index.html` mentah, timpa `window.matchMedia` sementara, lalu panggil ulang
-fungsi `rakitSX` section itu secara langsung. Ini terbukti bekerja untuk memverifikasi jalur
-statis S7 (lihat commit sesi ini). Belum diterapkan balik ke S2 — di luar cakupan sesi ini —
-tapi sekarang ada jalan untuk melakukannya tanpa perlu emulasi OS.
+*Cacat #8, #9, dan #10 dipindahkan ke bagian "sudah ditutup" — ketiganya selesai. #9 ditutup
+sesi S9/S10 (klik sitasi kini melompat ke kartu pustaka yang tepat), #10 ditutup di sesi yang
+sama (reduced-motion S2 akhirnya diverifikasi runtime), #8 ditutup sesi ini.*
 
 **19. Aktivasi Enter/Space pada tombol lewat `computer` tool tidak bisa diandalkan diuji di sesi ini.**
 Fokus keyboard sungguhan (Tab) terverifikasi benar di S3 — outline `--gamma` tampil, dan

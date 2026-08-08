@@ -224,6 +224,56 @@ function siapkanRelPipa() {
       onToggle: (self) => t.tombol.classList.toggle('rel__titik--aktif', self.isActive),
     });
   }
+
+  /* --- sambungan bernomor 1–5 (§3.4b) ---
+     Elemen terpisah dari sepuluh titik navigasi di atas: ini menandai kelima
+     komponen, bukan section. Letaknya di sepanjang pipa mengikuti posisi
+     komponen itu di dalam dokumen, jadi sambungan yang berdenyut selalu
+     sejajar dengan ketinggian bubur yang sedang naik. */
+  const rs = CONTENT.ui.relSambungan;
+  const wadahSambungan = el('div', { class: 'rel__sambungan-lapis', 'aria-label': rs.label, role: 'group' });
+  const sambungan = [];
+
+  for (const k of CONTENT.s5.komponen) {
+    const sasaran = document.querySelector(`[data-component-id="${k.id}"]`);
+    if (!sasaran) continue;
+    const tombol = el('button', {
+      class: 'rel__sambungan',
+      type: 'button',
+      'aria-label': `${rs.lompatKe} ${k.nomor}: ${k.nama}`,
+      title: `${k.nomor}. ${k.nama}`,
+      'data-kursor': 'buka',
+      text: String(k.nomor),
+      onclick: () => gulirKe(sasaran, -80),
+    });
+    wadahSambungan.append(tombol);
+    sambungan.push({ tombol, sasaran });
+  }
+  rel.append(wadahSambungan);
+
+  // Posisi tiap sambungan = posisi komponen sebagai pecahan tinggi dokumen,
+  // dihitung ulang tiap ScrollTrigger.refresh() supaya tetap benar setelah
+  // pin S2e disisipkan atau lebar jendela berubah.
+  const tempatkan = () => {
+    const tinggiDok = document.documentElement.scrollHeight - window.innerHeight;
+    if (tinggiDok <= 0) return;
+    for (const s of sambungan) {
+      const atas = s.sasaran.getBoundingClientRect().top + window.scrollY;
+      const pecahan = Math.min(1, Math.max(0, atas / tinggiDok));
+      s.tombol.style.top = `calc(12vh + ${(pecahan * 76).toFixed(2)}vh)`;
+    }
+  };
+  tempatkan();
+  ScrollTrigger.addEventListener('refresh', tempatkan);
+
+  for (const s of sambungan) {
+    ScrollTrigger.create({
+      trigger: s.sasaran,
+      start: 'top center',
+      end: 'bottom center',
+      onToggle: (self) => s.tombol.classList.toggle('rel__sambungan--aktif', self.isActive),
+    });
+  }
 }
 
 /* --------------------------------------------------------------- tooltip sitasi */

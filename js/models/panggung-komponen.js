@@ -49,10 +49,27 @@ export function bangunPanggungKomponen({ mutuRendah = false, renderer } = {}) {
   // --- model, satu grup per komponen ---
   const bayangTex = teksturBayangan();
   const model = {};
+  // Posisi asli tiap mesh, dipakai tampilan urai. Disimpan sekali di sini
+  // supaya urai selalu berangkat dari keadaan terpasang, bukan menumpuk.
+  const asal = new Map();
   for (const [id, bangun] of Object.entries(PEMBANGUN)) {
     const grup = new THREE.Group();
     const mesh = bangun();
     grup.add(mesh);
+
+    // Arah urai: dari pusat kotak batas model ke pusat tiap bagian. Bagian yang
+    // persis di sumbu (mis. poros pengaduk) diberi arah ke atas supaya ia tetap
+    // ikut terurai alih-alih diam di tempat.
+    const kotakModel = new THREE.Box3().setFromObject(mesh);
+    const pusat = kotakModel.getCenter(new THREE.Vector3());
+    for (const anak of mesh.children) {
+      const kotakAnak = new THREE.Box3().setFromObject(anak);
+      const pusatAnak = kotakAnak.getCenter(new THREE.Vector3());
+      const arahUrai = pusatAnak.clone().sub(pusat);
+      if (arahUrai.lengthSq() < 1e-6) arahUrai.set(0, 1, 0);
+      else arahUrai.normalize();
+      asal.set(anak, { posisi: anak.position.clone(), arah: arahUrai });
+    }
 
     // Bayangan kontak diletakkan di dasar kotak batas model itu sendiri.
     const kotak = new THREE.Box3().setFromObject(mesh);
@@ -89,6 +106,34 @@ export function bangunPanggungKomponen({ mutuRendah = false, renderer } = {}) {
 
   let aktifId = null;
 
+  /* --- tampilan urai --- */
+  // Nilai 0 = terpasang, 1 = terurai penuh. Dianimasikan lembut di perbarui().
+  let uraiTarget = 0;
+  let uraiKini = 0;
+  const JARAK_URAI = 1.5;
+
+  function terapkanUrai() {
+    if (!aktifId) return;
+    for (const anak of model[aktifId].children[0].children) {
+      const a = asal.get(anak);
+      if (!a) continue;
+      anak.position.copy(a.posisi).addScaledVector(a.arah, uraiKini * JARAK_URAI);
+    }
+  }
+
+  /* --- potongan melintang --- */
+  // Bidang potong dipasang di renderer (global), bukan di material, sebab
+  // material di bahan.js dipakai bersama oleh S6 dan S7 — memasangnya di
+  // material akan ikut memotong rakitan dan sinema. Dibersihkan lagi di
+  // nonaktifkan() supaya tidak bocor ke section lain.
+  const bidangPotong = new THREE.Plane(new THREE.Vector3(0, 0, -1), 0);
+  let memotong = false;
+
+  function terapkanPotong() {
+    renderer.localClippingEnabled = false;
+    renderer.clippingPlanes = memotong ? [bidangPotong] : [];
+  }
+
   function bidik(id, langsung) {
     const u = model[id].userData;
     const jarak = u.dist;
@@ -120,15 +165,42 @@ export function bangunPanggungKomponen({ mutuRendah = false, renderer } = {}) {
     tampilkan(id) {
       if (!model[id] || aktifId === id) return;
       const pertama = aktifId === null;
-      if (aktifId) model[aktifId].visible = false;
+      // Komponen yang ditinggalkan dikembalikan ke keadaan terpasang, kalau
+      // tidak ia tetap terurai saat pembaca kembali ke sana nanti.
+      if (aktifId) {
+        uraiKini = 0;
+        terapkanUrai();
+        model[aktifId].visible = false;
+      }
       aktifId = id;
+      uraiTarget = 0;
+      uraiKini = 0;
       model[id].visible = true;
+      terapkanUrai();
       if (!disentuh) kontrol.autoRotate = !kurangiGerak();
       bidik(id, pertama);
     },
 
-    aktifkan() { kontrol.enabled = true; },
-    nonaktifkan() { kontrol.enabled = false; },
+    /** @param {boolean} nyala */
+    setUrai(nyala) {
+      uraiTarget = nyala ? 1 : 0;
+      if (kurangiGerak()) { uraiKini = uraiTarget; terapkanUrai(); }
+    },
+    get urai() { return uraiTarget > 0.5; },
+
+    setPotong(nyala) { memotong = nyala; terapkanPotong(); },
+    get potong() { return memotong; },
+
+    /** Titik jangkar anotasi komponen aktif, dalam koordinat dunia. */
+    get idAktif() { return aktifId; },
+
+    aktifkan() { kontrol.enabled = true; terapkanPotong(); },
+    nonaktifkan() {
+      kontrol.enabled = false;
+      // Bidang potong dilepas begitu S5 tidak aktif — renderer-nya dipakai
+      // bersama seluruh halaman.
+      renderer.clippingPlanes = [];
+    },
 
     perbarui(dt) {
       if (peralihan) {
@@ -137,6 +209,10 @@ export function bangunPanggungKomponen({ mutuRendah = false, renderer } = {}) {
         camera.position.lerpVectors(peralihan.dari, peralihan.ke, e);
         kontrol.target.lerpVectors(peralihan.dariT, peralihan.keT, e);
         if (peralihan.t >= 1) peralihan = null;
+      }
+      if (Math.abs(uraiKini - uraiTarget) > 0.001) {
+        uraiKini += (uraiTarget - uraiKini) * Math.min(1, dt * 4.5);
+        terapkanUrai();
       }
       kontrol.autoRotate = !disentuh && !kurangiGerak();
       kontrol.update();

@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { el, kosongkan, paragraf } from '../dom.js';
 import { pengelolaScene } from '../scene.js';
 import { bangunPanggungRakitan } from '../models/panggung-rakitan.js';
+import { fallbackRakitanSvg } from '../models/fallback-svg.js';
 import { buatLapisanAnotasi } from '../widgets/anotasi.js';
 
 export function rakitS6(CONTENT) {
@@ -174,6 +175,7 @@ export function rakitS6(CONTENT) {
     },
     fallback: (wadah) => {
       wadah.classList.add('panggung__scene--fallback');
+      wadah.insertAdjacentHTML('afterbegin', fallbackRakitanSvg());
       wadah.append(
         el('div', { class: 'fallback-pesan' }, [
           el('p', { class: 'fallback-pesan__judul mono', text: CONTENT.ui.fallbackWebgl.judul }),
