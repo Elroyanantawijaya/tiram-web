@@ -12,8 +12,8 @@ export const CONTENT = {
   // ===== A.1 Identitas =====
   meta: {
     judulEsai: 'TIRAM: Rangkaian Pengolahan Tailing Timah Lepas Pantai untuk Memulihkan Monasit Berbasis Pemisahan Magnetik Terpandu Sensor Gamma',
-    konteks: 'Kepulauan Bangka Belitung; modul retrofit di hilir jig Kapal Isap Produksi (KIP)',
-    kompetisi: 'PCMC — Perhimpunan Ahli Pertambangan Indonesia Student Chapter, subtopik Ekstraksi Tambang Mineral',
+    konteks: 'Kepulauan Bangka Belitung, modul retrofit di hilir jig Kapal Isap Produksi (KIP)',
+    kompetisi: 'PCMC, Perhimpunan Ahli Pertambangan Indonesia Student Chapter, subtopik Ekstraksi Tambang Mineral',
   },
 
   // ===== String antarmuka =====
@@ -52,6 +52,8 @@ export const CONTENT = {
       label: 'Sambungan komponen',
       lompatKe: 'Lompat ke komponen',
     },
+    // Penanda pembuat, menempel di sudut kiri atas sepanjang halaman digulir.
+    watermark: 'by Men Love Mining',
     padananTeks: {
       heroScene: 'Latar beranimasi: siluet Kapal Isap Produksi di garis cakrawala senja, dengan laut gelap beriak di bawahnya.',
       panggungKomponen: 'Model tiga dimensi komponen TIRAM yang sedang dibaca, dapat diputar dan diperbesar. Seluruh keterangan komponen tersedia sebagai teks di samping model ini.',
@@ -60,7 +62,7 @@ export const CONTENT = {
 
   // ===== S0 — Preloader =====
   s0: {
-    label: 'KALIBRASI DETEKTOR · 0–100%',
+    label: 'KALIBRASI DETEKTOR · 0-100%',
     wordmark: 'TIRAM',
   },
 
@@ -72,7 +74,7 @@ export const CONTENT = {
     // sumberId menunjuk entri di s10.pustaka (lihat idPustaka() di js/dom.js)
     statistik: [
       { nilai: '>3,5 juta m³/bulan', label: 'kapasitas gali satu unit KIP', sumber: 'Bisnis.com, 2025', sumberId: 'bisnis-com-2025' },
-      { nilai: '10–20%', label: 'monasit dalam fraksi mineral berat tailing Bangka', sumber: 'Widana dkk., 2024', sumberId: 'widana-2024' },
+      { nilai: '10-20%', label: 'monasit dalam fraksi mineral berat tailing Bangka', sumber: 'Widana dkk., 2024', sumberId: 'widana-2024' },
       { nilai: '1 Bq/g', label: 'tingkat klierens deret Th-232 & U-238', sumber: 'Perka BAPETEN No. 16 Tahun 2012', sumberId: 'peraturan-kepala-bapeten-2012' },
     ],
     petunjukScroll: 'gulir untuk mulai',
@@ -109,8 +111,8 @@ export const CONTENT = {
           densitas: '~5,0',
           kerentananMagnetik: 'paramagnetik',
           konduktivitas: 'non-konduktor',
-          radioaktivitas: 'ya (Th/U) — pembawa utama deret luruh Th-232 & U-238, ditambah Ra-226 dan K-40 (Ngadenin dkk., 2023)',
-          catatan: 'Fokus utama rancangan: mendominasi fraksi mineral berat tailing Bangka pada kisaran 10–20%, mencapai 19% pada beberapa lokasi pengolahan (Widana dkk., 2024).',
+          radioaktivitas: 'ya (Th/U), pembawa utama deret luruh Th-232 dan U-238, ditambah Ra-226 dan K-40 (Ngadenin dkk., 2023)',
+          catatan: 'Menjadi fokus utama rancangan karena mendominasi fraksi mineral berat tailing Bangka pada kisaran 10-20%, dan mencapai 19% pada beberapa lokasi pengolahan (Widana dkk., 2024).',
         },
         {
           id: 'zirkon',
@@ -118,7 +120,7 @@ export const CONTENT = {
           densitas: '~4,6',
           kerentananMagnetik: 'non-magnetik',
           konduktivitas: 'non-konduktor',
-          radioaktivitas: 'tidak (menurut Lampiran A.3 — bukan bagian deret Th/U yang dibahas rancangan ini)',
+          radioaktivitas: 'tidak, menurut Lampiran A.3 ia bukan bagian deret Th/U yang dibahas rancangan ini',
           catatan: null,
         },
         {
@@ -128,17 +130,22 @@ export const CONTENT = {
           kerentananMagnetik: 'magnetik kuat',
           konduktivitas: 'konduktor',
           radioaktivitas: 'tidak',
-          catatan: 'Ikut tertahan bersama monasit pada pemisahan magnetik — sumber keterbatasan "masih bercampur ilmenit" (Lampiran A.6 butir 2).',
+          catatan: 'Ikut tertahan bersama monasit pada pemisahan magnetik, dan dari sinilah keterbatasan "masih bercampur ilmenit" berasal (Lampiran A.6 butir 2).',
         },
         {
           id: 'xenotim',
           nama: 'Xenotim',
-          densitas: null,
-          kerentananMagnetik: null,
-          konduktivitas: null,
-          todoDensitasDkk: 'TODO: butuh konfirmasi penulis — densitas, kerentanan magnetik, dan konduktivitas xenotim tidak disebutkan angkanya di ketiga sumber.',
-          radioaktivitas: 'ya (Th/U) — bersama monasit, satu-satunya mineral pembawa deret luruh thorium & uranium pada tailing ini, sehingga sama-sama memancarkan gamma khas (esai, Isi dan Pembahasan §Dasar Teknis)',
-          catatan: 'LTJ sekunder, sangat minor: 1–2% dari fraksi mineral berat (Zglinicki dkk., 2021; Ngadenin dkk., 2023) — jauh di bawah monasit sehingga bukan fokus rancangan.',
+          // Ketiga sumber tidak menyebut angka untuk xenotim. TODO lama di sini
+          // sudah dijawab penulis: rentang densitas 4,4-5,1 dan penulis meminta
+          // nilai tengahnya saja yang ditampilkan, ditambah paramagnetik dan
+          // non-konduktor. Provenance-nya dicatat pada `sumberSifat` supaya tetap
+          // dapat dibedakan dari angka yang datang dari ketiga berkas sumber.
+          densitas: '~4,75',
+          kerentananMagnetik: 'paramagnetik',
+          konduktivitas: 'non-konduktor',
+          sumberSifat: 'Konfirmasi penulis, nilai tengah rentang 4,4-5,1.',
+          radioaktivitas: 'ya (Th/U), bersama monasit ia satu-satunya mineral pembawa deret luruh thorium dan uranium pada tailing ini, sehingga keduanya sama-sama memancarkan gamma khas (esai, Isi dan Pembahasan §Dasar Teknis)',
+          catatan: 'LTJ sekunder yang sangat minor, hanya 1-2% dari fraksi mineral berat (Zglinicki dkk., 2021; Ngadenin dkk., 2023). Angka itu jauh di bawah monasit, sehingga xenotim tidak menjadi fokus rancangan.',
         },
       ],
     },
@@ -154,16 +161,16 @@ export const CONTENT = {
         label: 'Radiologis',
         narasi: 'Monasit tergolong TENORM (Technologically Enhanced Naturally Occurring Radioactive Material) karena membawa deret luruh Th-232 dan U-238, ditambah Ra-226 dan K-40 (Ngadenin dkk., 2023).',
       },
-      kalimatPenyeimbang: 'Keberadaan mineral ini tidak dengan sendirinya membuktikan bahwa tailing yang dilepas melewati ambang yang memerlukan pengawasan radiologis; status tersebut perlu ditentukan melalui pengukuran, dan justru di sanalah celahnya, sebab pemeriksaan semacam itu belum tampak sebagai praktik rutin sebelum material dilepas ke laut.',
+      kalimatPenyeimbang: 'Keberadaan mineral ini tidak dengan sendirinya membuktikan bahwa tailing yang dilepas melewati ambang yang memerlukan pengawasan radiologis. Status tersebut perlu ditentukan melalui pengukuran, dan justru di sanalah celahnya, sebab pemeriksaan semacam itu belum tampak sebagai praktik rutin sebelum material dilepas ke laut.',
     },
 
     // S2d · Paradoksnya
     d: {
       judul: 'Paradoksnya',
       labelBerputar: ['kontaminan', 'bahan baku'],
-      narasi: 'Monasit yang menjadi kontaminan justru bernilai tinggi karena merupakan sumber utama logam tanah jarang (LTJ), termasuk neodimium (Nd), praseodimium (Pr), lantanum (La), dan serium (Ce) — bahan yang dibutuhkan dalam pembuatan magnet permanen, motor kendaraan listrik, dan turbin angin.',
+      narasi: 'Monasit yang menjadi kontaminan justru bernilai tinggi karena merupakan sumber utama logam tanah jarang (LTJ), termasuk neodimium (Nd), praseodimium (Pr), lantanum (La), dan serium (Ce). Keempatnya dibutuhkan dalam pembuatan magnet permanen, motor kendaraan listrik, dan turbin angin.',
       alurNilai: ['Nd, Pr, La, Ce', 'magnet permanen', 'motor kendaraan listrik & turbin angin'],
-      penghambat: 'Indonesia belum memproduksi LTJ pada skala komersial, dan salah satu penghambatnya bukan dari nihilnya kandungan LTJ, melainkan thorium dan uranium yang menempel dan harus ditangani lebih dulu (Andini & Sari, 2020).',
+      penghambat: 'Indonesia belum memproduksi LTJ pada skala komersial. Salah satu penghambatnya bukan kandungan LTJ yang nihil, tetapi thorium dan uranium yang menempel dan harus ditangani lebih dulu (Andini & Sari, 2020).',
     },
 
     // S2e · Peta regulasi
@@ -172,7 +179,7 @@ export const CONTENT = {
       linimasa: [
         {
           regulasi: 'Kepmen ESDM No. 296.K/MB.01/MEM.B/2023',
-          implikasi: 'Menetapkan Logam Tanah Jarang (LTJ) sebagai mineral kritis — urgensi pemisahan monasit dari tailing makin menguat sejak regulasi ini terbit.',
+          implikasi: 'Menetapkan Logam Tanah Jarang (LTJ) sebagai mineral kritis. Sejak regulasi ini terbit, urgensi pemisahan monasit dari tailing makin menguat.',
         },
         {
           regulasi: 'Kepmen ESDM No. 69.K/MB.01/MEM.B/2024',
@@ -180,7 +187,7 @@ export const CONTENT = {
         },
         {
           regulasi: 'PP No. 96 Tahun 2021',
-          implikasi: 'Mewajibkan peningkatan nilai tambah bagi setiap mineral logam — membiarkan monasit terbuang ke dasar laut berlawanan dengan amanat ini.',
+          implikasi: 'Mewajibkan peningkatan nilai tambah bagi setiap mineral logam. Membiarkan monasit terbuang ke dasar laut berlawanan dengan amanat ini.',
         },
         {
           regulasi: 'Perka BAPETEN No. 16 Tahun 2012',
@@ -212,29 +219,29 @@ export const CONTENT = {
       {
         sifat: 'Densitas',
         monasit: '~5,0',
-        mineralLain: 'zirkon ~4,6; ilmenit ~4,7; rutil ~4,3 (berimpitan)',
-        verdict: 'Tidak — terlalu mirip',
+        mineralLain: 'zirkon ~4,6 · ilmenit ~4,7 · rutil ~4,3 (berimpitan)',
+        verdict: 'Tidak, terlalu mirip',
         warnaVerdict: 'merah',
       },
       {
         sifat: 'Kerentanan magnetik',
         monasit: 'paramagnetik',
-        mineralLain: 'ilmenit magnetik kuat; kuarsa/zirkon/kasiterit non-magnetik',
-        verdict: 'Sebagian — buang non-magnetik, tapi ilmenit ikut',
+        mineralLain: 'ilmenit magnetik kuat · kuarsa, zirkon, kasiterit non-magnetik',
+        verdict: 'Sebagian, non-magnetik terbuang tapi ilmenit ikut',
         warnaVerdict: 'kuning',
       },
       {
         sifat: 'Konduktivitas listrik',
         monasit: 'non-konduktor',
-        mineralLain: 'ilmenit/rutil/kasiterit konduktor; zirkon non-konduktor',
-        verdict: 'Sebagian — tapi butuh umpan kering',
+        mineralLain: 'ilmenit, rutil, kasiterit konduktor · zirkon non-konduktor',
+        verdict: 'Sebagian, tapi butuh umpan kering',
         warnaVerdict: 'kuning',
       },
       {
         sifat: 'Radioaktivitas',
         monasit: 'ya (Th/U)',
         mineralLain: 'ilmenit, rutil, kuarsa, kasiterit: tidak',
-        verdict: 'Ya — satu-satunya yang selektif',
+        verdict: 'Ya, satu-satunya yang selektif',
         warnaVerdict: 'hijau',
       },
     ],
@@ -254,8 +261,8 @@ export const CONTENT = {
         { id: 'kuarsa', nama: 'Kuarsa', densitas: null, densitasNilai: null, magnetik: 'non-magnetik', tertahanMagnet: false, konduktor: null, radioaktif: false },
       ],
 
-      catatanDensitas: 'Angka densitas hanya ditampilkan untuk mineral yang disebut di sumber (monasit ~5,0; ilmenit ~4,7; zirkon ~4,6; rutil ~4,3). Kuarsa ditempatkan pada lapisan ringan mengikuti keterangan "kuarsa ringan" pada dokumen justifikasi. TODO: butuh konfirmasi penulis — densitas kasiterit tidak disebut di ketiga sumber, sehingga ditampilkan tanpa angka.',
-      catatanKonduktivitas: 'TODO: butuh konfirmasi penulis — konduktivitas kuarsa tidak disebut di ketiga sumber; pada mode ini kuarsa dibiarkan netral, tidak dibelokkan ke sisi mana pun.',
+      catatanDensitas: 'Angka densitas hanya ditampilkan untuk mineral yang disebut di sumber, yaitu monasit ~5,0, ilmenit ~4,7, zirkon ~4,6, dan rutil ~4,3. Kuarsa ditempatkan pada lapisan ringan mengikuti keterangan "kuarsa ringan" pada dokumen justifikasi. TODO: butuh konfirmasi penulis, sebab densitas kasiterit tidak disebut di ketiga sumber sehingga ditampilkan tanpa angka.',
+      catatanKonduktivitas: 'TODO: butuh konfirmasi penulis, sebab konduktivitas kuarsa tidak disebut di ketiga sumber. Pada mode ini kuarsa dibiarkan netral, tidak dibelokkan ke sisi mana pun.',
       catatanProporsi: 'Jumlah partikel tiap jenis diatur agar terbaca di layar, bukan proporsi sebenarnya. Esai menyebut mineral berat hanya sebagian kecil dari tailing yang didominasi kuarsa.',
 
       // Label antarmuka simulator. Bukan klaim baru — semuanya memparafrase
@@ -266,7 +273,7 @@ export const CONTENT = {
         petunjukSebelumSelesai: 'Coba keempat sifat untuk melihat kesimpulannya.',
         tabelJudul: 'Ringkasan empat sifat',
         tabelKolom: { sifat: 'Sifat', monasit: 'Monasit', mineralLain: 'Mineral lain' },
-        padananTeks: 'Simulasi partikel dua dimensi berisi lima jenis mineral. Posisi partikel berubah mengikuti sifat fisik yang dipilih; penjelasan tiap sifat tersedia di bawah kanvas.',
+        padananTeks: 'Simulasi partikel dua dimensi berisi lima jenis mineral. Posisi partikel berubah mengikuti sifat fisik yang dipilih, dan penjelasan tiap sifat tersedia di bawah kanvas.',
         cacah: 'cacah',
         overlayUmpanKering: 'Butuh umpan kering',
         tidakDiketahui: 'Tidak diketahui',
@@ -277,29 +284,29 @@ export const CONTENT = {
         densitas: {
           label: 'Densitas',
           perilaku: 'Partikel berstratifikasi menurut berat jenis. Monasit (~5,0), ilmenit (~4,7), zirkon (~4,6), rutil (~4,3) berakhir pada lapisan yang sama dan tumpang tindih.',
-          verdict: 'Tidak — terlalu mirip',
+          verdict: 'Tidak, terlalu mirip',
           warnaVerdict: 'merah',
         },
         magnetik: {
           label: 'Kerentanan magnetik',
-          perilaku: 'Medan magnet muncul dari kiri; kuarsa/zirkon/kasiterit lolos ke kanan, monasit dan ilmenit sama-sama tertahan.',
-          verdict: 'Sebagian — ilmenit ikut',
+          perilaku: 'Medan magnet muncul dari kiri. Kuarsa, zirkon, dan kasiterit lolos ke kanan, sedangkan monasit dan ilmenit sama-sama tertahan.',
+          verdict: 'Sebagian, ilmenit ikut',
           warnaVerdict: 'kuning',
         },
         konduktivitas: {
           label: 'Konduktivitas listrik',
-          perilaku: 'Pemisahan terjadi, tetapi muncul overlay peringatan: butuh umpan kering — tidak masuk akal untuk bubur basah di atas kapal.',
-          verdict: 'Sebagian — tapi butuh umpan kering',
+          perilaku: 'Pemisahan terjadi, tetapi muncul peringatan bahwa cara ini butuh umpan kering, dan itu tidak masuk akal untuk bubur basah di atas kapal.',
+          verdict: 'Sebagian, tapi butuh umpan kering',
           warnaVerdict: 'kuning',
         },
         radioaktivitas: {
           label: 'Radioaktivitas',
-          perilaku: 'Semua partikel meredup; hanya monasit yang berpendar dan memancarkan pulsa gamma menuju detektor kecil di tepi kanvas, yang mencacah naik.',
-          verdict: 'Ya — satu-satunya yang selektif',
+          perilaku: 'Semua partikel meredup. Hanya monasit yang berpendar dan memancarkan pulsa gamma menuju detektor kecil di tepi kanvas, yang cacahnya terus naik.',
+          verdict: 'Ya, satu-satunya yang selektif',
           warnaVerdict: 'hijau',
         },
       },
-      kesimpulan: 'Magnet melakukan pemisahan fisiknya; gamma menjadi penuntun yang menunjuk mana yang benar-benar monasit.',
+      kesimpulan: 'Magnet melakukan pemisahan fisiknya, lalu gamma menjadi penuntun yang menunjuk mana yang benar-benar monasit.',
     },
 
     // S3b · Mengapa bukan sekadar menyetel ulang jig
@@ -313,11 +320,11 @@ export const CONTENT = {
       angkaKunci: {
         konsentratNaik: 'di atas 35% (rata-rata)',
         konsentratNaikLabel: 'monasit & kasiterit pada konsentrat',
-        lossesTailing: '0–0,17%',
+        lossesTailing: '0 sampai 0,17%',
         lossesTailingLabel: 'losses pada tailing',
         pengotorKonsentratPeleburan: '~30%',
         pengotorKonsentratPeleburanLabel: 'pengotor pada konsentrat umpan peleburan',
-        sumberAngka: 'Rosita, 2017 — kondisi eksperimen terkendali pada satu kapal, bukan operasional rutin',
+        sumberAngka: 'Rosita, 2017. Angka ini berasal dari kondisi eksperimen terkendali pada satu kapal, bukan dari operasional rutin.',
       },
       duaJalur: [
         { label: 'monasit ke jalur timah', konsekuensi: 'menumpuk beban di terak' },
@@ -332,16 +339,16 @@ export const CONTENT = {
   s4: {
     eyebrow: 'Solusi',
     judul: 'Gagasan TIRAM',
-    pembuka: 'TIRAM bukan kapal baru dan bukan pengganti jig, melainkan rangkaian tambahan yang disambungkan ke saluran keluar tailing. Namanya dipinjam dari tiram laut yang menyaring air untuk menahan yang bernilai lalu mengembalikan sisanya dalam keadaan lebih bersih, sekaligus mengubah butiran asing yang semula mengganggu menjadi sesuatu yang berharga, persis peran sistem ini.',
+    pembuka: 'TIRAM adalah rangkaian tambahan yang disambungkan ke saluran keluar tailing. Ia bukan kapal baru dan tidak menggantikan jig. Namanya dipinjam dari tiram laut yang menyaring air untuk menahan yang bernilai lalu mengembalikan sisanya dalam keadaan lebih bersih, sekaligus mengubah butiran asing yang semula mengganggu menjadi sesuatu yang berharga, persis peran sistem ini.',
     diagramBatas: {
       hulu: { label: 'hulu, di luar sistem', isi: 'Jig milik PT Timah.' },
       tiram: { label: 'TIRAM', isi: 'Rangkaian di antara jig dan pengolahan darat: pengkondisi umpan, pemisah magnetik, sensor gamma + PLC, katup pengarah, bunker berperisai.' },
       hilir: { label: 'hilir, di luar sistem', isi: 'Pemisahan akhir monasit dari ilmenit secara elektrostatik dan penarikan logam tanah jarang lewat proses kimia di darat, sejalan dengan pabrik yang disiapkan PT Timah bersama Perminas (Bisnis.com, 2026).' },
     },
-    kalimatPenutup: 'Magnet menjadi tangan yang memisah; gamma menjadi mata yang memilih.',
+    kalimatPenutup: 'Magnet menjadi tangan yang memisah, gamma menjadi mata yang memilih.',
     batasKebaruan: {
       judul: 'Batas kebaruan',
-      narasi: 'Konsentrator sentrifugal, pemisah magnetik, spektrometri gamma, dan katup pinch bukan barang baru; semuanya sudah lama dipakai di industri pasir mineral dunia. Kebaruan gagasan ini bukan pada penemuan alat, melainkan pada susunannya, yaitu memasang pemisahan magnetik yang dipandu sensor gamma secara inline di atas KIP, di hilir jig, untuk memulihkan monasit dari tailing timah lepas pantai. Kunci susunan itu bertumpu pada satu kenyataan sederhana: di antara semua mineral berat pada tailing hanya monasit yang radioaktif, sehingga radiasi menjadi penanda yang paling khas untuknya. Susunan semacam ini belum pernah diterapkan untuk konteks Indonesia.',
+      narasi: 'Konsentrator sentrifugal, pemisah magnetik, spektrometri gamma, dan katup pinch bukan barang baru. Semuanya sudah lama dipakai di industri pasir mineral dunia. Kebaruan gagasan ini tidak terletak pada penemuan alat, tetapi pada susunannya, yaitu memasang pemisahan magnetik yang dipandu sensor gamma secara inline di atas KIP, di hilir jig, untuk memulihkan monasit dari tailing timah lepas pantai. Susunan itu bertumpu pada satu kenyataan sederhana. Di antara semua mineral berat pada tailing hanya monasit yang radioaktif, sehingga radiasi menjadi penanda yang paling khas untuknya. Susunan semacam ini belum pernah diterapkan untuk konteks Indonesia.',
     },
   },
 
@@ -366,12 +373,13 @@ export const CONTENT = {
       urai: 'Urai',
       uraiAktif: 'Pasang kembali',
       uraiLabel: 'Uraikan bagian-bagian model',
-      potong: 'Potongan melintang',
-      potongAktif: 'Tutup potongan',
-      potongLabel: 'Potong model untuk melihat bagian dalam',
+      xray: 'Tembus pandang',
+      xrayAktif: 'Tutup kembali',
+      xrayLabel: 'Buat kulit luar tembus pandang supaya bagian dalam alat terlihat',
       anotasi: 'Label bagian',
       anotasiLabel: 'Tampilkan label bagian pada model',
       petunjukGestur: 'Seret untuk memutar, gulir untuk memperbesar. Di layar sentuh, putar dengan dua jari.',
+      petunjukDalam: 'Saat tembus pandang menyala, label berpindah ke bagian dalam alat.',
     },
     komponen: [
       {
@@ -380,8 +388,8 @@ export const CONTENT = {
         nama: 'Pengkondisi umpan',
         subjudul: 'Tangki penstabil dan de-aerasi',
         apa: 'Menerima tailing yang keluar berdenyut dari jig, meredam lonjakan aliran, membuang gelembung udara yang terperangkap, menyeragamkan kandungan padatan, lalu mengalirkannya dengan laju dan kekentalan yang stabil.',
-        bagaimana: 'Tangki ini berfungsi sebagai penampung penyangga (buffer) dengan keluaran terkontrol; ia bekerja seperti kapasitor hidraulik yang menghaluskan fluktuasi laju alir. Gelembung udara naik dan dibuang karena gaya apung, sebab udara yang terperangkap mengubah densitas semu dan mengganggu baik penangkapan magnetik maupun pembacaan gamma. Sebuah pengukur densitas menjaga persen padatan tetap konstan.',
-        ilmu: 'Mekanika fluida — asas kekekalan massa (kontinuitas) untuk aliran mantap, asas Archimedes (gaya apung) untuk de-aerasi, konsep kapasitansi hidraulik dan waktu tinggal untuk meredam lonjakan, serta reologi bubur (ada kecepatan minimum agar padatan tetap melayang dan tidak mengendap). Intinya: gaya magnet pada partikel dan laju cacah gamma sama-sama bergantung pada aliran yang stabil, sehingga menstabilkan umpan sama dengan membuat pengukuran menjadi sahih.',
+        bagaimana: 'Tangki ini berfungsi sebagai penampung penyangga (buffer) dengan keluaran terkontrol, dan bekerja seperti kapasitor hidraulik yang menghaluskan fluktuasi laju alir. Gelembung udara naik dan dibuang karena gaya apung, sebab udara yang terperangkap mengubah densitas semu dan mengganggu baik penangkapan magnetik maupun pembacaan gamma. Sebuah pengukur densitas menjaga persen padatan tetap konstan.',
+        ilmu: 'Landasannya mekanika fluida, yaitu asas kekekalan massa (kontinuitas) untuk aliran mantap, asas Archimedes (gaya apung) untuk de-aerasi, konsep kapasitansi hidraulik dan waktu tinggal untuk meredam lonjakan, serta reologi bubur (ada kecepatan minimum agar padatan tetap melayang dan tidak mengendap). Gaya magnet pada partikel dan laju cacah gamma sama-sama bergantung pada aliran yang stabil, sehingga menstabilkan umpan sama dengan membuat pengukuran menjadi sahih.',
         // Teks label pada model 3D, disalin dari pemanggilan label() di
         // spec/TIRAM_3D.html beserta titik jangkarnya dalam koordinat model.
         anotasi: [
@@ -390,10 +398,20 @@ export const CONTENT = {
           { teks: 'masuk (dari jig)', pos: [-1.7, 0.1, 0] },
           { teks: 'keluar', pos: [1.8, 0.1, 0] },
         ],
+        // Label bagian dalam, tampil hanya saat mode tembus pandang menyala.
+        // Titik jangkarnya mengikuti geometri di js/models/dalaman.js.
+        anotasiDalam: [
+          { teks: 'muka bubur', pos: [-1.05, 1.82, 0] },
+          { teks: 'ruang gelembung', pos: [0, 2.6, 0] },
+          { teks: 'baling pengaduk', pos: [0.85, 1.48, 0] },
+          { teks: 'sekat penahan pusaran', pos: [0, 1.1, 1.02] },
+          { teks: 'pipa celup masuk', pos: [-0.72, 0.05, 0] },
+          { teks: 'corong keluar', pos: [0.55, 0.32, 0] },
+        ],
         widget: {
-          jenis: 'slider tunggal — keberdenyutan keluaran jig',
+          jenis: 'slider tunggal untuk keberdenyutan keluaran jig',
           tampilan: 'Grafik kiri menunjukkan masukan berdenyut, grafik kanan menunjukkan keluaran yang dihaluskan.',
-          perilaku: 'Naikkan denyut → keluaran tetap tenang sampai kapasitas penyangga terlampaui. Gelembung naik dan keluar lewat vent.',
+          perilaku: 'Naikkan denyut dan keluaran tetap tenang sampai kapasitas penyangga terlampaui. Gelembung naik dan keluar lewat vent.',
           labelIlmu: ['kontinuitas', 'asas Archimedes', 'kapasitansi hidraulik', 'reologi bubur'],
 
           // Label antarmuka widget. Seluruhnya diturunkan dari rumusan §S5 di
@@ -419,8 +437,8 @@ export const CONTENT = {
         nama: 'Pemisah magnetik (WHIMS)',
         subjudul: 'Pemisah magnetik basah intensitas tinggi',
         apa: 'Melewatkan bubur melalui daerah bermedan magnet kuat yang diisi matriks baja (misalnya wol baja atau pelat beralur). Partikel magnetik (monasit yang paramagnetik dan ilmenit yang magnetik kuat) tertangkap dan tertahan pada matriks, sementara partikel non-magnetik (kuarsa, zirkon, kasiterit) mengalir lolos. Setelah itu medan dimatikan dan fraksi magnetik dibilas keluar sebagai aliran tersendiri.',
-        bagaimana: 'Gaya magnet pada partikel sebanding dengan volume partikel dikali kerentanan magnetiknya dikali kuat medan dikali gradien medan. Matriks baja menciptakan gradien medan lokal yang sangat tajam pada tepi-tepinya, dan gradien inilah yang melipatgandakan gaya; itu sebabnya disebut gradien tinggi. Mineral paramagnetik seperti monasit hanya punya kerentanan kecil, sehingga butuh medan tinggi (1–2 Tesla) agar tertangkap; itu sebabnya disebut intensitas tinggi. Pemisahan terjadi karena keseimbangan gaya: bagi partikel magnetik, gaya magnet mengalahkan gaya seret aliran dan gravitasi; bagi non-magnetik, tidak.',
-        ilmu: 'Kemagnetan bahan (paramagnetik vs diamagnetik), persamaan gaya magnet pada partikel, dan keseimbangan gaya (magnet vs seret fluida vs gravitasi). Ini benar-benar berbeda dari jig, yang memakai densitas dan denyut air (stratifikasi berdasarkan kecepatan mengendap), tanpa kemagnetan sama sekali. Batas jujurnya: gaya magnet sebanding dengan diameter pangkat tiga sedangkan gaya seret hanya sebanding dengan diameter, sehingga pada butir sangat halus gaya magnet mengecil lebih cepat daripada seret dan partikel halus lolos — inilah dasar keterbatasan fraksi ultrahalus.',
+        bagaimana: 'Gaya magnet pada partikel sebanding dengan volume partikel dikali kerentanan magnetiknya dikali kuat medan dikali gradien medan. Matriks baja menciptakan gradien medan lokal yang sangat tajam pada tepi-tepinya, dan gradien inilah yang melipatgandakan gaya. Dari situ datang sebutan gradien tinggi. Mineral paramagnetik seperti monasit hanya punya kerentanan kecil, sehingga butuh medan tinggi (1 sampai 2 Tesla) agar tertangkap, dan dari situ pula datang sebutan intensitas tinggi. Pemisahan terjadi karena keseimbangan gaya. Bagi partikel magnetik, gaya magnet mengalahkan gaya seret aliran dan gravitasi, sedangkan bagi partikel non-magnetik tidak.',
+        ilmu: 'Kemagnetan bahan (paramagnetik dan diamagnetik), persamaan gaya magnet pada partikel, serta keseimbangan gaya antara magnet, seret fluida, dan gravitasi. Ini benar-benar berbeda dari jig, yang memakai densitas dan denyut air (stratifikasi berdasarkan kecepatan mengendap), tanpa kemagnetan sama sekali. Batasnya perlu dikatakan terus terang. Gaya magnet sebanding dengan diameter pangkat tiga sedangkan gaya seret hanya sebanding dengan diameter, sehingga pada butir sangat halus gaya magnet mengecil lebih cepat daripada seret dan partikel halus lolos. Dari sinilah keterbatasan fraksi ultrahalus berasal.',
         anotasi: [
           { teks: 'umpan (bubur)', pos: [0, 3.6, 0.5] },
           { teks: 'kumparan magnet', pos: [-2.0, 1.4, 0] },
@@ -428,11 +446,19 @@ export const CONTENT = {
           { teks: 'fraksi magnetik', pos: [-0.7, -0.75, 0.4] },
           { teks: 'non-magnetik → laut', pos: [1.1, -0.75, 0.4] },
         ],
+        anotasiDalam: [
+          { teks: 'rangka besi pengarah fluks', pos: [-1.05, 2.15, -0.1] },
+          { teks: 'sepatu kutub', pos: [-0.78, 0.98, 0.3] },
+          { teks: 'pelat beralur (matriks baja)', pos: [0.7, 1.4, 0.3] },
+          { teks: 'kotak umpan', pos: [0, 2.4, 0.5] },
+          { teks: 'header air bilas', pos: [0.85, 1.98, 0.56] },
+          { teks: 'talang keluaran', pos: [0.95, 0.62, 0.28] },
+        ],
         widget: {
-          jenis: 'dua slider — kuat medan (0–2 T) dan ukuran butir (5–500 µm)',
-          tampilan: 'Partikel mengalir melalui matriks baja; yang tertangkap menempel di tepi matriks. Pembaca mono: efisiensi tangkap.',
-          perilaku: 'Wajib: pada butir sangat halus efisiensi jatuh — tampilkan pengingat bahwa gaya magnet sebanding pangkat tiga diameter sedangkan gaya seret hanya sebanding diameter. Widget ini menunjukkan keterbatasan sistem sendiri, bukan menyembunyikannya.',
-          buktiRelevansi: 'Pada bahan pascapengolahan timah Bangka, pemisahan magnetik menaikkan kadar monasit dari sekitar 19% menjadi 37–46% (Widana dkk., 2024).',
+          jenis: 'dua slider, yaitu kuat medan (0 sampai 2 T) dan ukuran butir (5 sampai 500 µm)',
+          tampilan: 'Partikel mengalir melalui matriks baja, dan yang tertangkap menempel di tepi matriks. Pembacaan mono menampilkan efisiensi tangkap.',
+          perilaku: 'Pada butir sangat halus efisiensi jatuh, dan widget wajib menampilkan pengingat bahwa gaya magnet sebanding pangkat tiga diameter sedangkan gaya seret hanya sebanding diameter. Widget ini menunjukkan keterbatasan sistem sendiri, bukan menyembunyikannya.',
+          buktiRelevansi: 'Pada bahan pascapengolahan timah Bangka, pemisahan magnetik menaikkan kadar monasit dari sekitar 19% menjadi 37 sampai 46% (Widana dkk., 2024).',
           ui: {
             sliderMedan: 'Kuat medan',
             sliderButir: 'Ukuran butir',
@@ -443,12 +469,12 @@ export const CONTENT = {
             labelTertangkap: 'fraksi magnetik',
             status: {
               baik: 'Butir tertangkap pada matriks',
-              jatuh: 'Fraksi ultrahalus lolos — gaya magnet kalah oleh seret',
+              jatuh: 'Fraksi ultrahalus lolos, gaya magnet kalah oleh seret',
             },
             // Pengingat yang diwajibkan `perilaku` di atas. Ditulis di sini,
             // bukan di kode, supaya penulis bisa mengoreksinya.
-            pengingatPangkatTiga: 'Gaya magnet sebanding dengan diameter pangkat tiga, sedangkan gaya seret hanya sebanding dengan diameter. Karena itu pada butir sangat halus gaya magnet mengecil jauh lebih cepat, dan monasit terhalus lolos — ini keterbatasan yang memang melekat pada alatnya.',
-            padananTeks: 'Simulasi pemisah magnetik: butiran mengalir melalui matriks baja bermedan magnet; butir magnetik menempel pada tepi matriks sedangkan sisanya lolos ke kanan. Dua slider mengatur kuat medan dan ukuran butir.',
+            pengingatPangkatTiga: 'Gaya magnet sebanding dengan diameter pangkat tiga, sedangkan gaya seret hanya sebanding dengan diameter. Karena itu pada butir sangat halus gaya magnet mengecil jauh lebih cepat, dan monasit terhalus lolos. Keterbatasan ini memang melekat pada alatnya.',
+            padananTeks: 'Simulasi pemisah magnetik. Butiran mengalir melalui matriks baja bermedan magnet, butir magnetik menempel pada tepi matriks, dan sisanya lolos ke kanan. Dua slider mengatur kuat medan dan ukuran butir.',
           },
         },
       },
@@ -457,18 +483,27 @@ export const CONTENT = {
         nomor: 3,
         nama: 'Sensor gamma + PLC',
         subjudul: 'Spektrometri gamma sebagai pengukur kadar',
-        apa: 'Detektor kilau yang dipasang di luar pipa mencacah foton gamma dari material yang lewat, memilahnya menurut energi untuk mengenali sidik deret Th/U, mengubah laju cacah menjadi aktivitas, lalu lewat kurva kalibrasi menjadi kadar monasit; PLC membandingkannya dengan ambang dan menggerakkan katup.',
-        bagaimana: 'Deret luruh Th-232 dan U-238 memancarkan gamma pada energi khas (misalnya Pb-212 pada 239 keV dan Tl-208 pada 2,61 MeV untuk deret torium) yang berfungsi sebagai sidik jari. Foton gamma menumbuk kristal NaI(Tl) dan memicu kilau cahaya yang sebanding dengan energinya; tabung pengganda foto (PMT) mengubah kilau itu menjadi pulsa listrik dan memperkuatnya melalui efek fotolistrik dan penggandaan elektron; penganalisis salur ganda (MCA) memilah pulsa menurut tingginya, yaitu menurut energi, membentuk spektrum tempat puncak Th/U dibaca dan latar dikurangi. Ketelitian mengikuti statistik Poisson: ketidakpastian relatif kira-kira satu dibagi akar jumlah cacah, sehingga makin banyak cacah makin teliti.',
-        ilmu: 'Fisika inti (peluruhan radioaktif dan pancaran gamma), efek fotolistrik dan pendaran (skintilasi), statistik cacah Poisson, dan kalibrasi. Kuncinya: gamma menembus materi (tidak seperti alfa atau beta), sehingga dapat dibaca menembus dinding pipa dan mewakili keseluruhan material, bukan hanya permukaan — ideal untuk sensor inline non-kontak. Dan karena di antara mineral ini hanya monasit yang memancarkan gamma tersebut, pembacaan gamma pada dasarnya adalah pembacaan kadar monasit.',
+        apa: 'Detektor kilau yang dipasang di luar pipa mencacah foton gamma dari material yang lewat, memilahnya menurut energi untuk mengenali sidik deret Th/U, mengubah laju cacah menjadi aktivitas, lalu lewat kurva kalibrasi menjadi kadar monasit. PLC membandingkan hasilnya dengan ambang dan menggerakkan katup.',
+        bagaimana: 'Deret luruh Th-232 dan U-238 memancarkan gamma pada energi khas (misalnya Pb-212 pada 239 keV dan Tl-208 pada 2,61 MeV untuk deret torium) yang berfungsi sebagai sidik jari. Foton gamma menumbuk kristal NaI(Tl) dan memicu kilau cahaya yang sebanding dengan energinya. Tabung pengganda foto (PMT) mengubah kilau itu menjadi pulsa listrik dan memperkuatnya melalui efek fotolistrik dan penggandaan elektron. Penganalisis salur ganda (MCA) lalu memilah pulsa menurut tingginya, yaitu menurut energi, membentuk spektrum tempat puncak Th/U dibaca dan latar dikurangi. Ketelitiannya mengikuti statistik Poisson, sebab ketidakpastian relatif kira-kira satu dibagi akar jumlah cacah, sehingga makin banyak cacah makin teliti.',
+        ilmu: 'Fisika inti (peluruhan radioaktif dan pancaran gamma), efek fotolistrik dan pendaran (skintilasi), statistik cacah Poisson, dan kalibrasi. Yang membuatnya bekerja adalah daya tembus gamma. Tidak seperti alfa atau beta, gamma dapat dibaca menembus dinding pipa dan mewakili keseluruhan material, bukan hanya permukaan, dan itulah yang membuatnya cocok untuk sensor inline non-kontak. Karena di antara mineral ini hanya monasit yang memancarkan gamma tersebut, pembacaan gamma pada dasarnya adalah pembacaan kadar monasit.',
         anotasi: [
           { teks: 'detektor NaI(Tl) + PMT', pos: [-1.3, 1.95, 0] },
           { teks: 'kabinet MCA / PLC', pos: [1.6, 1.6, 0] },
           { teks: 'fraksi magnetik masuk', pos: [0, 4.1, 0] },
         ],
+        anotasiDalam: [
+          { teks: 'kolom bubur di dalam pipa', pos: [-0.5, 0.85, 0] },
+          { teks: 'kolimator timbal', pos: [-0.62, 1.7, 0] },
+          { teks: 'kristal NaI(Tl)', pos: [0.42, 1.42, 0.42] },
+          { teks: 'tabung pengganda foto (PMT)', pos: [0.4, 2.18, 0] },
+          { teks: 'rangkaian dinode', pos: [0.42, 1.93, 0.3] },
+          { teks: 'modul MCA / PLC pada rel DIN', pos: [1.6, 1.48, 0] },
+          { teks: 'blok terminal', pos: [1.6, 0.5, 0.35] },
+        ],
         widget: {
-          jenis: 'spektrum langsung di canvas + slider waktu cacah',
+          jenis: 'spektrum langsung di canvas ditambah slider waktu cacah',
           tampilan: 'Sumbu energi dengan puncak Pb-212 pada 239 keV dan Tl-208 pada 2,61 MeV, latar yang dikurangi.',
-          perilaku: 'Ketidakpastian relatif ≈ 1/√N ditampilkan langsung — ketelitian ~5% menuntut orde beberapa ratus cacah; cacah rendah memaksa waktu ukur lebih lama sehingga membatasi laju alir.',
+          perilaku: 'Ketidakpastian relatif ≈ 1/√N ditampilkan langsung. Ketelitian ~5% menuntut orde beberapa ratus cacah, dan cacah rendah memaksa waktu ukur lebih lama sehingga membatasi laju alir.',
           rantaiFisika: ['foton', 'kristal NaI(Tl)', 'kilau', 'PMT', 'pulsa', 'MCA', 'spektrum', 'kadar monasit'],
           ui: {
             slider: 'Waktu cacah',
@@ -479,12 +514,12 @@ export const CONTENT = {
             labelPuncakTl: 'Tl-208 · 2,61 MeV',
             labelLatar: 'latar (dikurangi)',
             status: {
-              cukup: 'Cacah cukup — puncak Th terbaca jelas',
-              kurang: 'Cacah masih sedikit — puncak tenggelam dalam derau',
+              cukup: 'Cacah cukup, puncak Th terbaca jelas',
+              kurang: 'Cacah masih sedikit, puncak tenggelam dalam derau',
             },
             // §A.2: ketelitian ±5% menuntut orde beberapa ratus cacah.
             catatanKetelitian: 'Ketelitian ±5% menuntut orde beberapa ratus cacah. Cacah rendah memaksa waktu ukur lebih lama, dan itu membatasi laju alir yang boleh dilewatkan.',
-            padananTeks: 'Simulasi spektrometri gamma: spektrum terbentuk di sumbu energi dengan dua puncak penanda deret torium, Pb-212 pada 239 keV dan Tl-208 pada 2,61 MeV, di atas latar yang dikurangi. Slider mengatur lama waktu cacah.',
+            padananTeks: 'Simulasi spektrometri gamma. Spektrum terbentuk di sumbu energi dengan dua puncak penanda deret torium, yaitu Pb-212 pada 239 keV dan Tl-208 pada 2,61 MeV, di atas latar yang dikurangi. Slider mengatur lama waktu cacah.',
           },
         },
       },
@@ -494,8 +529,8 @@ export const CONTENT = {
         nama: 'Katup pengarah',
         subjudul: 'Katup jepit (pinch valve)',
         apa: 'Pembelok dua arah yang mengarahkan aliran bubur ke salah satu dari dua keluaran berdasarkan sinyal PLC.',
-        bagaimana: 'Katup jepit memiliki selongsong karet lentur yang dijepit atau dibuka oleh aktuator pneumatik; menjepit satu cabang memaksa aliran ke cabang lain. Ia dipilih karena bubur bersifat abrasif, sedangkan katup jepit berlubang penuh dan mulus tanpa celah atau dudukan logam yang mudah tergerus atau tersumbat — satu-satunya bagian yang terkena bubur adalah selongsong karet yang bisa diganti. Katup gerbang atau bola akan cepat aus dan macet oleh pasir.',
-        ilmu: 'Mekanika aktuasi pneumatik dan deformasi elastis selongsong, serta pertimbangan ketahanan aus terhadap bubur abrasif. Satu hal penting: ada jeda tempuh antara sensor dan katup, sehingga PLC harus menunda perintah persis selama waktu tempuh itu agar katup membelokkan bongkahan aliran yang sama dengan yang tadi diukur. Katup tidak memisahkan apa pun — ia hanya membelokkan seluruh segmen aliran.',
+        bagaimana: 'Katup jepit memiliki selongsong karet lentur yang dijepit atau dibuka oleh aktuator pneumatik, dan menjepit satu cabang memaksa aliran ke cabang lain. Ia dipilih karena bubur bersifat abrasif, sedangkan katup jepit berlubang penuh dan mulus tanpa celah atau dudukan logam yang mudah tergerus atau tersumbat. Satu-satunya bagian yang terkena bubur adalah selongsong karet, dan bagian itu bisa diganti. Katup gerbang atau bola akan cepat aus dan macet oleh pasir.',
+        ilmu: 'Mekanika aktuasi pneumatik dan deformasi elastis selongsong, serta pertimbangan ketahanan aus terhadap bubur abrasif. Ada jeda tempuh antara sensor dan katup, sehingga PLC harus menunda perintah persis selama waktu tempuh itu agar katup membelokkan bongkahan aliran yang sama dengan yang tadi diukur. Katup tidak memisahkan apa pun, ia hanya membelokkan seluruh segmen aliran.',
         anotasi: [
           { teks: 'aktuator pneumatik', pos: [0, 1.65, 0] },
           { teks: 'selongsong karet', pos: [-0.2, -0.95, 0] },
@@ -503,27 +538,36 @@ export const CONTENT = {
           { teks: 'ke laut', pos: [1.85, -0.95, 0] },
           { teks: 'masuk', pos: [-1.8, 0, 0] },
         ],
+        anotasiDalam: [
+          { teks: 'selongsong karet', pos: [0, -0.48, 0] },
+          { teks: 'batang penjepit', pos: [0, 0.34, 0.42] },
+          { teks: 'bubur mengalir', pos: [-1.0, 0.24, 0] },
+          { teks: 'piston', pos: [-0.4, 0.86, 0] },
+          { teks: 'pegas balik', pos: [0.36, 0.7, 0] },
+        ],
         widget: {
           jenis: 'demo waktu tunda PLC',
           tampilan: 'Segmen bubur bergerak di pipa dari sensor ke katup. Selongsong karet terlihat terjepit oleh aktuator pneumatik.',
-          perilaku: 'Pengguna menyetel tunda; jika salah, katup membelokkan segmen yang keliru ("segmen kaya monasit lolos ke laut"); jika benar, segmen yang sama yang tadi diukur yang dibelokkan.',
-          catatanWajib: 'Katup tidak memisahkan apa pun — ia hanya membelokkan seluruh segmen aliran.',
+          perilaku: 'Pengguna menyetel tunda. Bila setelannya salah, katup membelokkan segmen yang keliru dan segmen kaya monasit lolos ke laut. Bila benar, segmen yang sama dengan yang tadi diukur itulah yang dibelokkan.',
+          catatanWajib: 'Katup tidak memisahkan apa pun, ia hanya membelokkan seluruh segmen aliran.',
           ui: {
             slider: 'Tunda perintah PLC',
             tundaBenar: 'waktu tempuh sensor → katup',
             bacaanTunda: 'tunda disetel',
             bacaanSelisih: 'selisih dari waktu tempuh',
             bacaanTepat: 'segmen kaya monasit tertangkap',
+            // Ditampilkan selama belum ada satu pun segmen kaya yang lewat.
+            nilaiKosong: '· · ·',
             labelSensor: 'sensor gamma',
             labelKatup: 'katup jepit',
             labelBunker: 'ke bunker',
             labelLaut: 'ke laut',
             status: {
               tepat: 'Segmen yang diukur itu juga yang dibelokkan',
-              terlaluCepat: 'Tunda terlalu pendek — katup membelok sebelum segmennya tiba',
-              terlaluLambat: 'Tunda terlalu panjang — segmen kaya monasit sudah lewat, lolos ke laut',
+              terlaluCepat: 'Tunda terlalu pendek, katup membelok sebelum segmennya tiba',
+              terlaluLambat: 'Tunda terlalu panjang, segmen kaya monasit sudah lewat dan lolos ke laut',
             },
-            padananTeks: 'Simulasi tunda PLC: segmen bubur bergerak di sepanjang pipa dari sensor gamma menuju katup jepit. Slider mengatur berapa lama PLC menunda perintah; bila tundanya tidak sama dengan waktu tempuh, katup membelokkan segmen yang keliru.',
+            padananTeks: 'Simulasi tunda PLC. Segmen bubur bergerak di sepanjang pipa dari sensor gamma menuju katup jepit. Slider mengatur berapa lama PLC menunda perintah, dan bila tundanya tidak sama dengan waktu tempuh, katup membelokkan segmen yang keliru.',
           },
         },
       },
@@ -533,17 +577,23 @@ export const CONTENT = {
         nama: 'Bunker berperisai',
         subjudul: null,
         apa: 'Menyimpan konsentrat kaya monasit (yang sudah ditiriskan) sampai diangkut ke darat.',
-        bagaimana: 'Monasit yang terpekatkan adalah pemancar gamma kuat, dan perisai menahan gamma. Peredaman gamma mengikuti hukum eksponensial, yaitu intensitas menurun sebagai fungsi eksponen dari tebal dan koefisien serap bahan; bahan padat bernomor atom tinggi seperti timbal, atau baja dan beton tebal, menyerap lebih banyak per sentimeter. Dengan dinding berperisai, laju dosis di luar bunker ditekan ke tingkat aman.',
-        ilmu: 'Peredaman gamma (serapan eksponensial dan koefisien atenuasi), serta asas proteksi radiasi (dosis dikurangi dengan menambah jarak, mengurangi waktu, dan menambah perisai). Ketebalan perisai adalah hasil perhitungan berdasarkan aktivitas nyata, sehingga rancangan menyebut "perisai sesuai kajian keselamatan", bukan memaku tebal timbal tertentu.',
+        bagaimana: 'Monasit yang terpekatkan adalah pemancar gamma kuat, dan perisai menahan gamma. Peredaman gamma mengikuti hukum eksponensial, yaitu intensitas menurun sebagai fungsi eksponen dari tebal dan koefisien serap bahan. Bahan padat bernomor atom tinggi seperti timbal, atau baja dan beton tebal, menyerap lebih banyak per sentimeter. Dengan dinding berperisai, laju dosis di luar bunker ditekan ke tingkat aman.',
+        ilmu: 'Peredaman gamma (serapan eksponensial dan koefisien atenuasi), serta asas proteksi radiasi (dosis dikurangi dengan menambah jarak, mengurangi waktu, dan menambah perisai). Ketebalan perisai adalah hasil perhitungan berdasarkan aktivitas nyata, sehingga rancangan menyebut "perisai sesuai kajian keselamatan" dan tidak memaku tebal timbal tertentu.',
         anotasi: [
           { teks: 'masuk: konsentrat kaya monasit', pos: [0, 2.35, 0] },
           { teks: 'dinding berperisai (timbal)', pos: [-1.7, 0.96, 0] },
         ],
+        anotasiDalam: [
+          { teks: 'pelapis baja', pos: [-0.9, 1.05, 0] },
+          { teks: 'timbunan konsentrat', pos: [0.62, 0.62, 0] },
+          { teks: 'penyebar isian', pos: [-0.45, 1.3, 0] },
+          { teks: 'sensor tinggi isian', pos: [0.62, 1.62, 0] },
+        ],
         widget: {
-          jenis: 'slider — tebal perisai timbal',
+          jenis: 'slider untuk tebal perisai timbal',
           tampilan: 'Laju dosis di luar dinding turun mengikuti peluruhan eksponensial I = I₀e^(−µx), dibaca pada panel mono.',
-          perilaku: 'Menyertakan asas proteksi radiasi: jarak, waktu, perisai.',
-          catatanWajib: 'Tebal perisai adalah hasil perhitungan berdasarkan aktivitas nyata — rancangan menyebut "perisai sesuai kajian keselamatan", bukan memaku angka tertentu.',
+          perilaku: 'Menyertakan tiga asas proteksi radiasi, yaitu jarak, waktu, dan perisai.',
+          catatanWajib: 'Tebal perisai adalah hasil perhitungan berdasarkan aktivitas nyata. Rancangan menyebut "perisai sesuai kajian keselamatan" dan tidak memaku angka tertentu.',
           ui: {
             slider: 'Tebal perisai timbal',
             bacaanTembus: 'gamma yang lolos (I/I₀)',
@@ -556,8 +606,8 @@ export const CONTENT = {
             asasProteksi: ['jarak', 'waktu', 'perisai'],
             asasJudul: 'Asas proteksi radiasi',
             status: {
-              tebal: 'Peredaman kuat — laju dosis di luar dinding ditekan',
-              tipis: 'Perisai masih tipis — sebagian besar gamma menembus',
+              tebal: 'Peredaman kuat, laju dosis di luar dinding ditekan',
+              tipis: 'Perisai masih tipis, sebagian besar gamma menembus',
             },
             padananTeks: 'Simulasi perisai bunker: berkas gamma dari konsentrat kaya monasit menembus dinding timbal, dan intensitas yang lolos meluruh secara eksponensial mengikuti tebal perisai. Slider mengatur tebal dinding.',
           },
@@ -569,16 +619,16 @@ export const CONTENT = {
       nama: 'Hidrosiklon (desliming)',
       badge: 'opsional, di hulu',
       apa: 'Memisahkan partikel halus dari yang lebih kasar berdasarkan kecepatan mengendap.',
-      bagaimana: 'Bubur masuk secara tangensial dengan kecepatan tinggi dan membentuk pusaran; gaya sentrifugal melempar partikel kasar ke dinding lalu turun ke keluaran bawah, sedangkan partikel halus terbawa ke keluaran atas.',
+      bagaimana: 'Bubur masuk secara tangensial dengan kecepatan tinggi dan membentuk pusaran. Gaya sentrifugal melempar partikel kasar ke dinding lalu turun ke keluaran bawah, sedangkan partikel halus terbawa ke keluaran atas.',
       ilmu: 'Sedimentasi sentrifugal dan hukum Stokes (kecepatan mengendap sebanding dengan kuadrat diameter dan selisih densitas). Tanpa bagian bergerak, alat ini murah dan tahan lama.',
       guna: 'Melindungi matriks magnetik dari lumpur ultrahalus yang memang tidak dapat dipulihkan.',
     },
     keputusanDesain: [
-      'Jig / konsentrator gravitasi ditolak sebagai pemisah selektif. Ia hanya bekerja pada densitas, sementara monasit, zirkon, dan ilmenit berdensitas hampir sama sehingga tak terpisah. Selain itu jig sudah beroperasi di hulu; menambah tahap densitas lagi hanya mengulang proses yang sama tanpa selektivitas baru.',
+      'Jig dan konsentrator gravitasi ditolak sebagai pemisah selektif. Keduanya hanya bekerja pada densitas, sementara monasit, zirkon, dan ilmenit berdensitas hampir sama sehingga tak terpisah. Jig pun sudah beroperasi di hulu, dan menambah tahap densitas lagi hanya mengulang proses yang sama tanpa selektivitas baru.',
       'Pemisah magnetik basah (WHIMS) dipilih sebagai pemisah fisik utama. Ia bekerja pada kerentanan magnetik, sifat yang berbeda dari densitas, sehingga mampu membuat belahan yang mustahil dibuat jig. Versi basahnya realistis di atas kapal, tidak memakai reagen, dan mekanismenya sederhana.',
       'Elektrostatik dan flotasi ditunda ke darat. Pemisahan elektrostatik menuntut umpan kering pada suhu tinggi sehingga tidak masuk akal dijalankan pada bubur basah di kapal. Flotasi menuntut reagen kimia, pengaturan pH, dan pengelolaan buih yang rumit dan sulit distabilkan di kapal yang bergoyang.',
-      'Sensor gamma dipilih sebagai otak (bukan XRF). Gamma unik karena selektif (hanya monasit radioaktif), kuantitatif (aktivitas sebanding dengan kadar monasit), dan non-kontak (menembus dinding pipa dan membaca material secara menyeluruh, bukan hanya permukaan). Alternatif XRF hanya membaca permukaan, peka terhadap kadar air dan matriks.',
-      'Ditempatkan di atas KIP, bukan di darat. Alasannya: memverifikasi material sebelum dilepas ke lingkungan, memusatkan material pembawa radionuklida menjadi satu aliran kecil terkendali di sumbernya, dan menjaga monasit keluar dari aliran konsentrat timah sejak awal. Diakui jujur: model pengolahan di darat seperti pabrik amang Malaysia juga sah; ini pilihan desain, bukan yang terbukti paling optimal.',
+      'Sensor gamma dipilih sebagai otak, bukan XRF. Gamma unik karena selektif (hanya monasit yang radioaktif), kuantitatif (aktivitas sebanding dengan kadar monasit), dan non-kontak (menembus dinding pipa dan membaca material secara menyeluruh, bukan hanya permukaan). Alternatif XRF hanya membaca permukaan dan peka terhadap kadar air serta matriks.',
+      'Ditempatkan di atas KIP, bukan di darat. Alasannya ada tiga, yaitu memverifikasi material sebelum dilepas ke lingkungan, memusatkan material pembawa radionuklida menjadi satu aliran kecil terkendali di sumbernya, dan menjaga monasit keluar dari aliran konsentrat timah sejak awal. Perlu diakui terus terang bahwa model pengolahan di darat seperti pabrik amang Malaysia juga sah. Ini pilihan desain, bukan pilihan yang sudah terbukti paling optimal.',
     ],
   },
 
@@ -593,7 +643,7 @@ export const CONTENT = {
     // dari esai. Hanya tinggi siluet manusia yang berlabel, dan angka itu
     // memang disebut §S6.
     labelSkala: '1,7 m',
-    labelDek: 'Dek KIP — alat hanya sebagian kecil dari kapal',
+    labelDek: 'Dek KIP, alat hanya sebagian kecil dari kapal',
     tombol: {
       xray: 'Mode X-ray',
       dekat: 'Bidikan dekat',
@@ -602,7 +652,7 @@ export const CONTENT = {
     padananTeks: 'Model tiga dimensi rakitan TIRAM di atas dek Kapal Isap Produksi, dapat diputar dan diperbesar. Lima penanda bernomor menandai tiap komponen, dan tiga tombol menyorot jalur aliran yang berbeda. Seluruh keterangan komponen tersedia sebagai teks di bagian sebelumnya.',
 
     referensiSkala: 'Siluet manusia setinggi 1,7 m dan garis panjang lambung, agar terbaca bahwa modul hanya sebagian kecil dari kapal.',
-    penandaBernomor: 'Penanda bernomor 1–5 yang bisa diklik; klik memindahkan kamera ke komponen itu, kartu ringkas muncul, dan penanda lain meredup.',
+    penandaBernomor: 'Penanda bernomor 1 sampai 5 yang bisa diklik. Klik memindahkan kamera ke komponen itu, kartu ringkas muncul, dan penanda lain meredup.',
     sorotJalur: {
       tombol: ['seluruh aliran', 'jalur fraksi magnetik → bunker', 'jalur non-magnetik → laut'],
       warna: {
@@ -610,10 +660,10 @@ export const CONTENT = {
         konsentrat: '--monasit',
         buangan: '--sedimen',
       },
-      catatan: 'Pipa yang tidak aktif menjadi abu-abu transparan; pipa aktif menyala dengan partikel yang mengalir di dalamnya.',
+      catatan: 'Pipa yang tidak aktif menjadi abu-abu transparan, sedangkan pipa aktif menyala dengan partikel yang mengalir di dalamnya.',
     },
     modeXray: 'Material menjadi wireframe/transparan sehingga isi WHIMS dan bunker terlihat.',
-    togglePosisiKapal: 'Kamera mundur jauh memperlihatkan seluruh KIP dengan modul disorot di dek — menegaskan ini retrofit, bukan kapal baru.',
+    togglePosisiKapal: 'Kamera mundur jauh memperlihatkan seluruh KIP dengan modul disorot di dek, dan dari situ terbaca bahwa ini retrofit, bukan kapal baru.',
   },
 
   // ===== S7 — Sinema: alat itu bekerja =====
@@ -637,19 +687,19 @@ export const CONTENT = {
       padananTeks: 'Sekuens sinematik tiga dimensi berdurasi sekitar satu menit yang menunjukkan modul TIRAM bekerja dalam delapan babak, dari bubur tailing keluar dari pipa jig sampai aliran buangan diverifikasi dan dilepas ke laut lewat sisi kapal. Transkrip lengkap kedelapan babak tersedia sebagai teks dan dapat disalin di bawah pemutar.',
     },
 
-    catatanTeknis: 'Yang diminta adalah "video". Bukan berkas video — sekuens sinematik 3D yang dianimasikan di dalam scene, dengan kontrol pemutar layaknya video (putar/jeda, garis waktu bisa di-scrub, lompat bab, kecepatan 0,5×–2×). Tombol "Rekam ke .webm" tersedia via canvas.captureStream() + MediaRecorder bagi yang benar-benar butuh berkas video.',
+    catatanTeknis: 'Yang diminta adalah "video", dan yang dibuat bukan berkas video melainkan sekuens sinematik 3D yang dianimasikan di dalam scene, dengan kontrol pemutar layaknya video (putar dan jeda, garis waktu bisa di-scrub, lompat bab, kecepatan 0,5 sampai 2 kali). Tombol "Rekam ke .webm" tersedia lewat canvas.captureStream() dan MediaRecorder bagi yang benar-benar butuh berkas video.',
     durasiTotal: '±60 detik',
     bab: [
       { waktu: '0:00', judul: 'Keluar dari jig', deskripsi: 'Bubur tailing berdenyut keluar dari pipa jig, masuk ke modul. Kamera mengikuti aliran.' },
-      { waktu: '0:07', judul: 'Penstabilan', deskripsi: 'Di dalam pengkondisi: denyut mereda, gelembung naik dan keluar lewat vent, keluaran menjadi rata.' },
-      { waktu: '0:15', judul: 'Pemisahan magnetik', deskripsi: 'Potongan melintang WHIMS: medan menyala, partikel magnetik (monasit + ilmenit) menempel pada matriks; kuarsa, zirkon, kasiterit lolos ke kanan.' },
-      { waktu: '0:24', judul: 'Pembilasan', deskripsi: 'Medan dimatikan; fraksi magnetik dibilas keluar sebagai aliran tersendiri.' },
-      { waktu: '0:31', judul: 'Pembacaan gamma', deskripsi: 'Kamera menempel pada detektor. Cacah naik, spektrum terbentuk, puncak Th teridentifikasi, PLC menyalakan keputusan.' },
-      { waktu: '0:39', judul: 'Keputusan katup', deskripsi: 'Selongsong terjepit; segmen kaya monasit dibelokkan ke bunker (warna --monasit), sisanya lurus.' },
-      { waktu: '0:46', judul: 'Verifikasi & pelepasan', deskripsi: 'Aliran buangan melewati gerbang gamma, bacaan dibandingkan dengan acuan klierens, lalu dilepas lewat sisi luar kapal — bukan ke bawah.' },
+      { waktu: '0:07', judul: 'Penstabilan', deskripsi: 'Dinding pengkondisi menjadi tembus pandang. Di dalamnya baling pengaduk berputar, gelembung naik dari muka bubur dan keluar lewat vent, denyut mereda, dan keluaran menjadi rata.' },
+      { waktu: '0:15', judul: 'Pemisahan magnetik', deskripsi: 'Rumah WHIMS dibuka. Medan menyala, butir magnetik berupa monasit dan ilmenit tertahan di pelat matriks, sedangkan kuarsa, zirkon, dan kasiterit terus turun melewatinya.' },
+      { waktu: '0:24', judul: 'Pembilasan', deskripsi: 'Medan dimatikan. Butir yang tadi menempel terlepas dari matriks dan meluncur keluar sebagai aliran tersendiri.' },
+      { waktu: '0:31', judul: 'Pembacaan gamma', deskripsi: 'Pipa menjadi tembus pandang dan kolom bubur di dalamnya terlihat. Pulsa gamma melesat dari kolom itu ke kristal NaI(Tl) yang berpendar, cacah naik, puncak Th teridentifikasi, lalu PLC menyalakan keputusan.' },
+      { waktu: '0:39', judul: 'Keputusan katup', deskripsi: 'Badan katup dibuka. Piston turun, batang penjepit merapat, selongsong terjepit, dan segmen kaya monasit dibelokkan ke bunker sementara sisanya lurus.' },
+      { waktu: '0:46', judul: 'Verifikasi dan pelepasan', deskripsi: 'Aliran buangan melewati gerbang gamma, bacaan dibandingkan dengan acuan klierens, lalu dilepas lewat sisi luar kapal, bukan ke bawah.' },
       { waktu: '0:54', judul: 'Penutup', deskripsi: 'Kamera naik menjadi bidikan lebar: modul kecil di atas dek KIP, ringkasan tiga angka muncul.' },
     ],
-    kontrolPemutar: ['putar/jeda', 'garis waktu scrub', 'lompat bab', 'kecepatan 0,5×–2×', 'rekam ke .webm'],
+    kontrolPemutar: ['putar dan jeda', 'garis waktu scrub', 'lompat bab', 'kecepatan 0,5 sampai 2 kali', 'rekam ke .webm'],
     detailMeyakinkan: [
       'Sistem partikel GPU untuk bubur (bukan mesh per butir)',
       'Depth of field ringan pada bidikan dekat',
@@ -669,7 +719,7 @@ export const CONTENT = {
         pipa: 'Ø200 mm',
         kecepatan: '2,5 m/s',
         debit: '0,08 m³/detik ≈ 280 m³/jam',
-        padatan: '180–200 ton padatan/jam pada kandungan padatan ±25%',
+        padatan: '180-200 ton padatan/jam pada kandungan padatan ±25%',
       },
       modulLabel: {
         pipa: 'Diameter pipa',
@@ -696,7 +746,7 @@ export const CONTENT = {
       // bukan cacat gambar melainkan isi pernyataannya, jadi dikatakan terus
       // terang alih-alih dibesarkan supaya "terbaca".
       catatanSkala: 'Kedua batang digambar pada satu skala yang sama. Batang modul memang setipis itu.',
-      padananTeks: 'Diagram batang perbandingan pada satu skala yang sama: keluaran tailing satu Kapal Isap Produksi berorde ±7.000 ton padatan per jam, digambar sebagai batang penuh; satu modul TIRAM menangani 180–200 ton padatan per jam, digambar sebagai batang yang jauh lebih pendek di skala yang sama. Modul dipasang pada satu aliran cabang sebagai unit uji, bukan untuk menangani seluruh keluaran kapal.',
+      padananTeks: 'Diagram batang perbandingan pada satu skala yang sama. Keluaran tailing satu Kapal Isap Produksi berorde ±7.000 ton padatan per jam dan digambar sebagai batang penuh, sedangkan satu modul TIRAM menangani 180 sampai 200 ton padatan per jam dan digambar sebagai batang yang jauh lebih pendek di skala yang sama. Modul dipasang pada satu aliran cabang sebagai unit uji, bukan untuk menangani seluruh keluaran kapal.',
     },
     tigaSudutJudul: 'Tiga sudut manfaat',
     tigaSudut: [
@@ -728,7 +778,7 @@ export const CONTENT = {
       },
       {
         judul: 'Masih bercampur ilmenit',
-        narasi: 'Monasit murni baru diperoleh setelah pemisahan elektrostatik di darat; modul di kapal menghasilkan konsentrat antara, bukan produk akhir.',
+        narasi: 'Monasit murni baru diperoleh setelah pemisahan elektrostatik di darat. Modul di kapal menghasilkan konsentrat antara, bukan produk akhir.',
       },
       {
         judul: 'Bacaan gamma peka',
@@ -740,7 +790,7 @@ export const CONTENT = {
       },
       {
         judul: 'Menambah biaya dan kompleksitas',
-        narasi: 'Pada kapal; penempatan di kapal alih-alih mengolah tumpukan di darat adalah pilihan yang menekankan pemeriksaan sebelum pelepasan, bukan sesuatu yang sudah terbukti paling ekonomis.',
+        narasi: 'Penempatan di kapal alih-alih mengolah tumpukan di darat adalah pilihan yang menekankan pemeriksaan sebelum pelepasan, bukan sesuatu yang sudah terbukti paling ekonomis.',
       },
       {
         judul: 'Seluruh rancangan masih konseptual',
@@ -748,7 +798,7 @@ export const CONTENT = {
       },
     ],
     pernyataanKalibrasiJudul: 'Pernyataan kalibrasi klaim',
-    pernyataanKalibrasi: 'Karena monasit hanya pecahan kecil dari tailing yang didominasi kuarsa, aktivitas rata-rata aliran yang dilepas kemungkinan besar memang sudah rendah, dan tidak ada bukti publik bahwa pembuangan tailing KIP selama ini menimbulkan persoalan radiologis. Karena itu, nilai radiologis TIRAM bukanlah klaim membersihkan laut dari radioaktivitas, melainkan dua hal yang lebih terukur. Pertama, gerbang memberi verifikasi pada setiap pelepasan sekaligus jaring pengaman terhadap segmen aliran yang sewaktu-waktu terbaca jauh di atas ambang, sesuatu yang tidak akan terpantau bila hanya kekeruhan yang diawasi. Kedua, dan lebih penting, justru fraksi pekat yang diangkatlah yang benar-benar bersifat radiologis, sebab begitu monasit terkonsentrasi ia menjadi TENORM yang panas dan wajib ditangani terkendali, sebagaimana PT Timah pun menyimpan mineral ikutan yang terkumpul alih-alih membuangnya. Dengan mengangkat monasit di jalur tailing yang terpisah, ia tidak ikut mencemari aliran konsentrat timah menuju peleburan.',
+    pernyataanKalibrasi: 'Karena monasit hanya pecahan kecil dari tailing yang didominasi kuarsa, aktivitas rata-rata aliran yang dilepas kemungkinan besar memang sudah rendah, dan tidak ada bukti publik bahwa pembuangan tailing KIP selama ini menimbulkan persoalan radiologis. Nilai radiologis TIRAM karena itu tidak boleh dibaca sebagai klaim membersihkan laut dari radioaktivitas. Yang bisa dipertanggungjawabkan ada dua dan keduanya lebih terukur. Gerbang gamma memberi verifikasi pada setiap pelepasan sekaligus jaring pengaman terhadap segmen aliran yang sewaktu-waktu terbaca jauh di atas ambang, sesuatu yang tidak akan terpantau bila hanya kekeruhan yang diawasi. Yang lebih penting, justru fraksi pekat yang diangkatlah yang benar-benar bersifat radiologis, sebab begitu monasit terkonsentrasi ia menjadi TENORM yang panas dan wajib ditangani terkendali, sebagaimana PT Timah pun menyimpan mineral ikutan yang terkumpul alih-alih membuangnya. Dengan mengangkat monasit di jalur tailing yang terpisah, monasit itu tidak ikut mencemari aliran konsentrat timah menuju peleburan.',
   },
 
   // ===== S9 — Peta jalan menuju penerapan =====
@@ -781,7 +831,7 @@ export const CONTENT = {
       bukaTab: 'buka di tab baru',
       kreditJudul: 'Tentang situs ini',
     },
-    catatanJumlah: 'TODO: butuh konfirmasi penulis — spesifikasi menyebut 17 entri, naskah esai memuat 18. Ditampilkan seluruhnya (18) sesuai sumber.',
+    catatanJumlah: 'TODO: butuh konfirmasi penulis. Spesifikasi menyebut 17 entri, sedangkan naskah esai memuat 18. Seluruh 18 entri ditampilkan sesuai sumber.',
     pustaka: [
       { penulis: 'Andini, D. E., & Sari, F. I. P.', tahun: '2020', judul: 'Study of Rare Earth Elements and Heavy Metals in Tin Tailing from Mining Activities on North Bangka Island', sumber: 'Journal of Physics: Conference Series, 1517, 012084', url: 'https://doi.org/10.1088/1742-6596/1517/1/012084' },
       { penulis: 'Awang Kechik, N. A. H., & Ku Ishak, K. E. H.', tahun: '2025', judul: 'Optimizing Monazite Recovery from Tin Tailings: A Comprehensive Review of Physical Techniques and Methodologies', sumber: 'Physicochemical Problems of Mineral Processing, 61(6), 215442', url: 'https://doi.org/10.37190/ppmp/215442' },
@@ -804,24 +854,24 @@ export const CONTENT = {
     ],
     catatanPresentasi: 'Situs ini adalah presentasi konsep untuk PCMC.',
     slotFoto: '#slot-foto-kip',
-    pernyataanProsedural: 'Seluruh visual pada situs ini dibuat prosedural (three.js, canvas, SVG) — tidak ada foto, logo, atau aset pihak ketiga yang disisipkan.',
+    pernyataanProsedural: 'Seluruh visual pada situs ini dibuat prosedural dengan three.js, canvas, dan SVG. Tidak ada foto, logo, atau aset pihak ketiga yang disisipkan.',
   },
 
   // ===== Lampiran A.2 — angka latar belakang yang dipakai lintas section =====
   angkaLatarBelakang: {
     kapasitasKip: '>3,5 juta m³/bulan (Bisnis.com, 2025)',
-    monasitFraksiBerat: '10–20%, mencapai 19% pada beberapa lokasi pengolahan (Widana dkk., 2024)',
-    xenotimFraksiBerat: '1–2% (Zglinicki dkk., 2021; Ngadenin dkk., 2023)',
-    peningkatanKadarMagnetik: 'dari sekitar 19% menjadi 37–46% (Widana dkk., 2024)',
-    recoverySenegal: '94,8% (Dieye dkk., 2021) — konteks lain, bukan KIP',
-    medanMagnetDibutuhkan: '1–2 Tesla (sekitar 1,5 T disebut di esai)',
+    monasitFraksiBerat: '10-20%, mencapai 19% pada beberapa lokasi pengolahan (Widana dkk., 2024)',
+    xenotimFraksiBerat: '1-2% (Zglinicki dkk., 2021; Ngadenin dkk., 2023)',
+    peningkatanKadarMagnetik: 'dari sekitar 19% menjadi 37-46% (Widana dkk., 2024)',
+    recoverySenegal: '94,8% (Dieye dkk., 2021), berasal dari konteks lain dan bukan dari KIP',
+    medanMagnetDibutuhkan: '1-2 Tesla (sekitar 1,5 T disebut di esai)',
     tingkatKlierens: '1.000 Bq/kg = 1 Bq/g (Perka BAPETEN No. 16 Tahun 2012)',
     selisihKlierens: 'dua sampai tiga orde besaran',
-    kip11SetelahOptimasi: 'fraksi monasit & kasiterit pada konsentrat naik hingga rata-rata di atas 35%, losses pada tailing 0–0,17% (Rosita, 2017) — kondisi eksperimen terkendali, bukan operasional rutin',
+    kip11SetelahOptimasi: 'fraksi monasit dan kasiterit pada konsentrat naik hingga rata-rata di atas 35%, losses pada tailing 0 sampai 0,17% (Rosita, 2017), pada kondisi eksperimen terkendali dan bukan operasional rutin',
     pengotorKonsentratPeleburan: 'sekitar 30%',
-    kapasitasModul: 'pipa Ø200 mm, kecepatan 2,5 m/s → 0,08 m³/detik ≈ 280 m³/jam ≈ 180–200 ton padatan/jam pada kandungan padatan ±25%',
+    kapasitasModul: 'pipa Ø200 mm, kecepatan 2,5 m/s, menghasilkan 0,08 m³/detik ≈ 280 m³/jam ≈ 180-200 ton padatan/jam pada kandungan padatan ±25%',
     keluaranTailingSatuKip: 'orde ±7.000 ton padatan/jam',
-    ketelitianCacah: 'ketidakpastian relatif ≈ 1/√N; ketelitian ±5% menuntut orde beberapa ratus cacah',
+    ketelitianCacah: 'ketidakpastian relatif ≈ 1/√N, sehingga ketelitian ±5% menuntut orde beberapa ratus cacah',
     energiGammaPenanda: 'Pb-212 pada 239 keV, Tl-208 pada 2,61 MeV (deret torium)',
   },
 };

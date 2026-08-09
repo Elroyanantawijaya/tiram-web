@@ -276,6 +276,18 @@ function siapkanRelPipa() {
   }
 }
 
+/* ------------------------------------------------------------------ watermark */
+
+// Penanda pembuat di sudut kiri atas. Dipasang position:fixed supaya ia tetap di
+// sana sepanjang halaman digulir. Diberi latar sendiri, bukan sekadar warna teks,
+// sebab ia juga melintas di atas S8 yang latarnya terang — tanpa latar itu
+// kontrasnya jatuh persis di section tersebut.
+function pasangWatermark() {
+  const teks = CONTENT.ui.watermark;
+  if (!teks) return;
+  document.body.append(el('p', { class: 'watermark mono', text: teks }));
+}
+
 /* --------------------------------------------------------------- tooltip sitasi */
 
 function siapkanTooltipSitasi() {
@@ -311,6 +323,7 @@ function mulai() {
   document.documentElement.classList.add('js-siap');
   const lenis = siapkanScroll();
   siapkanKursor();
+  pasangWatermark();
   siapkanTooltipSitasi();
 
   const s1 = rakitS1(CONTENT);

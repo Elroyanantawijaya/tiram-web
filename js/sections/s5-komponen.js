@@ -98,6 +98,10 @@ export function rakitS5(CONTENT) {
   // keadaan tersendiri, bukan dibaca dari kelas tombol — tombolnya dibuat
   // setelah fungsi ini dan pembacaan lintas-urutan itu gampang putus diam-diam.
   let anotasiNyala = true;
+  // Mode tembus pandang disimpan di sini untuk alasan yang sama seperti
+  // anotasiNyala: label yang dipasang bergantung padanya, dan membacanya dari
+  // kelas tombol berarti bergantung pada urutan pembuatan elemen.
+  let xrayNyala = false;
 
   /** Anotasi label bagian untuk komponen yang sedang tampil. */
   const pasangAnotasi = (id) => {
@@ -105,9 +109,12 @@ export function rakitS5(CONTENT) {
     lapisan.kosongkan();
     if (!anotasiNyala) return;
     const k = s5.komponen.find((x) => x.id === id);
-    for (const a of k?.anotasi ?? []) {
+    // Saat kulit luar tembus pandang, label kulit tidak lagi menunjuk apa pun
+    // yang menonjol; yang relevan justru bagian dalamnya.
+    const daftar = xrayNyala ? (k?.anotasiDalam ?? k?.anotasi ?? []) : (k?.anotasi ?? []);
+    for (const a of daftar) {
       lapisan.tambah(
-        el('span', { class: 'anotasi__label mono', text: a.teks }),
+        el('span', { class: `anotasi__label mono${xrayNyala ? ' anotasi__label--dalam' : ''}`, text: a.teks }),
         new THREE.Vector3(...a.pos)
       );
     }
@@ -139,8 +146,9 @@ export function rakitS5(CONTENT) {
           el('p', { text: CONTENT.ui.fallbackWebgl.narasi }),
         ])
       );
-      // Tanpa WebGL, urai/potongan tidak punya arti — tombolnya disembunyikan
-      // alih-alih dibiarkan sebagai kendali yang diam saja saat ditekan.
+      // Tanpa WebGL, urai/tembus pandang tidak punya arti — tombolnya
+      // disembunyikan alih-alih dibiarkan sebagai kendali yang diam saja
+      // saat ditekan.
       kendaliModel.hidden = true;
     },
   });
@@ -167,7 +175,13 @@ export function rakitS5(CONTENT) {
   };
 
   const tombolUrai = tombolSakelar(km.urai, km.uraiAktif, km.uraiLabel, (n) => panggung?.setUrai(n));
-  const tombolPotong = tombolSakelar(km.potong, km.potongAktif, km.potongLabel, (n) => panggung?.setPotong(n));
+  const tombolXray = tombolSakelar(km.xray, km.xrayAktif, km.xrayLabel, (n) => {
+    xrayNyala = n;
+    panggung?.setXray(n);
+    // Label ikut berpindah ke bagian dalam pada saat yang sama, bukan menunggu
+    // komponen berikutnya digulir.
+    if (panggung) pasangAnotasi(panggung.idAktif);
+  });
   const tombolAnotasi = tombolSakelar(km.anotasi, km.anotasi, km.anotasiLabel, (n) => {
     anotasiNyala = n;
     if (panggung) pasangAnotasi(panggung.idAktif);
@@ -176,8 +190,9 @@ export function rakitS5(CONTENT) {
   tombolAnotasi.classList.toggle('kendali__tombol--aktif', anotasiNyala);
 
   const kendaliModel = el('div', { class: 'panggung__kendali s5__kendali' }, [
-    el('div', { class: 'kendali__gugus' }, [tombolUrai, tombolPotong, tombolAnotasi]),
+    el('div', { class: 'kendali__gugus' }, [tombolUrai, tombolXray, tombolAnotasi]),
     el('p', { class: 's5__petunjuk-gestur', text: km.petunjukGestur }),
+    el('p', { class: 's5__petunjuk-gestur', text: km.petunjukDalam }),
   ]);
 
   // Panel dan kendalinya harus jadi SATU anak grid `.scrolly`, bukan dua.

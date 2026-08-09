@@ -56,6 +56,9 @@ export function rakitS2(CONTENT) {
     const isi = [el('h4', { class: 'kartu__nama', text: k.nama }), ...baris];
     // Lubang data ditandai apa adanya, bukan diisi angka karangan.
     if (k.todoDensitasDkk) isi.push(el('p', { class: 'kartu__todo', text: k.todoDensitasDkk }));
+    // Sifat yang datang dari konfirmasi penulis, bukan dari ketiga berkas sumber,
+    // tetap disebut asalnya alih-alih diam-diam disamakan dengan yang tersitasi.
+    if (k.sumberSifat) isi.push(el('p', { class: 'kartu__sumber-sifat', text: k.sumberSifat }));
     if (k.catatan) isi.push(par(k.catatan, 'kartu__catatan'));
 
     // Sengaja <article> yang dapat difokus, bukan <button>: catatan di dalamnya

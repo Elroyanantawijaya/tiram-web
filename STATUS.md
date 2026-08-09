@@ -3,11 +3,46 @@
 Daftar periksa penerimaan ada di `spec/PROMPT_Website_TIRAM.md` Lampiran B. Berkas ini
 mencatat posisi terkini terhadap daftar itu, diperbarui di akhir tiap sesi.
 
-**Posisi:** setelah sesi penuntasan — empat widget komponen sisa, urai & potongan melintang S5,
-fallback SVG S5/S6/S7, dan sambungan bernomor rel pipa.
+**Posisi:** setelah sesi bagian dalam alat — geometri interior kelima komponen, mode tembus
+pandang sungguhan di S5, pengolahan tailing yang terlihat di dalam alat sepanjang sinema S7,
+watermark tetap, data xenotim dari konfirmasi penulis, dan penyisiran naskah dari ciri tulisan AI.
+
+> **Catatan sesi bagian dalam alat (10 Agustus 2026).**
+>
+> 1. **Geometri bagian dalam** (`js/models/dalaman.js`, baru). Berkas sumber
+>    `spec/TIRAM_3D.html` hanya memodelkan kulit luar, sehingga tombol "potongan melintang"
+>    lama tidak punya apa pun untuk diperlihatkan: mengiris cangkang berongga hanya
+>    menyingkap rongga. Kelima komponen kini punya isi. Pengkondisi mendapat muka bubur,
+>    poros penuh, dua tingkat baling, empat sekat, pipa celup masuk, dan corong keluar. WHIMS
+>    mendapat rangka besi pengarah fluks, sepasang sepatu kutub, kanister berisi pelat
+>    beralur, kotak umpan, header air bilas, dan talang. Sensor mendapat kolom bubur,
+>    kolimator timbal, kristal NaI(Tl), tabung pengganda foto berikut rangkaian dinode, papan
+>    pembagi tegangan, serta isi kabinet berupa rel DIN dengan modul dan blok terminal. Katup
+>    mendapat selongsong, batang penjepit, piston, dan pegas balik. Bunker mendapat pelapis
+>    baja, timbunan konsentrat, penyebar isian, dan sensor tinggi isian.
+> 2. **Mode tembus pandang menggantikan bidang potong** di S5. Kulit luar ditandai
+>    `userData.selubung`, materialnya disalin per mesh, lalu opasitasnya dianimasikan ke 0,14.
+>    Label bagian ikut berpindah ke `anotasiDalam` saat mode itu menyala.
+> 3. **Sinema S7 memperlihatkan pengolahan di dalam alat.** Tiap bab membuka kulit komponen
+>    yang sedang disorot selama beberapa detik dan menjalankan isinya: baling berputar dan
+>    gelembung naik di pengkondisi, butir magnetik tertahan di matriks lalu terlepas saat
+>    medan dipadamkan, pulsa gamma melesat dari kolom bubur ke kristal yang berpendar, piston
+>    dan batang penjepit menutup selongsong. Seluruhnya tetap fungsi murni dari waktu `t`,
+>    sehingga garis waktu masih aman di-scrub.
+> 4. **Watermark "by Men Love Mining"** di sudut kiri atas, `position: fixed`, berlatar
+>    sendiri supaya kontrasnya tetap cukup ketika melintas di atas S8 yang berlatar terang.
+> 5. **Xenotim** kini punya densitas ~4,75 (nilai tengah rentang 4,4-5,1 dari konfirmasi
+>    penulis), paramagnetik, dan non-konduktor. Asal angkanya dicatat di kartu itu sendiri.
+> 6. **Penyisiran naskah.** Seluruh tanda hubung panjang dan titik koma dihapus dari prosa,
+>    begitu pula pola pembuka seperti "Intinya:", "Kuncinya:", dan "Batas jujurnya:". Diukur
+>    dari `innerText` seluruh halaman: dari ~29.800 karakter teks tampil, tersisa 1 tanda
+>    hubung panjang, 2 tanda hubung sedang, dan 2 titik koma, dan **kelimanya ada di dalam
+>    entri daftar pustaka** (judul artikel dan rentang halaman yang disalin apa adanya, serta
+>    pemisah antar-sitasi bergaya APA). Angka, sitasi, dan makna tidak berubah.
 **Cakupan yang sudah dikerjakan:** S0–S10 seluruhnya punya tampilan sekarang. S0 preloader, S1
 hero, S2 pendahuluan (a–f), S3 argumen + simulator empat mode, S4 gagasan, S5 model komponen
-(putar, zoom, urai, potongan melintang, anotasi label, **lima dari lima widget**), S6 rakitan di
+(putar, zoom, urai, tembus pandang berikut geometri bagian dalam, anotasi label kulit dan
+bagian dalam, **lima dari lima widget**), S6 rakitan di
 atas dek KIP, S7 sekuens sinema 8 bab, S8 kelayakan, S9 peta jalan enam langkah, S10 daftar
 pustaka (18 entri, dapat dicari) & kredit, infrastruktur bersama.
 **Belum disentuh:** tidak ada. Seluruh 20 butir Lampiran B kini punya wujudnya; yang tersisa
@@ -427,8 +462,11 @@ Ditandai `TODO: butuh konfirmasi penulis` di `data/content.js`, tidak diisi angk
    "kuarsa ringan" pada dokumen justifikasi.
 2. **Konduktivitas kuarsa** — tidak disebut di ketiga sumber; pada mode Konduktivitas ia
    dibiarkan netral, tidak dibelokkan ke sisi mana pun.
-3. **Densitas, kerentanan magnetik, dan konduktivitas xenotim** — tidak disebut; kartu
-   xenotim di S2b hanya memuat sifat radioaktif dan proporsi 1–2% yang memang bersumber.
+3. ~~**Densitas, kerentanan magnetik, dan konduktivitas xenotim**~~ — **sudah dijawab
+   penulis (10 Agustus 2026).** Densitas diisi nilai tengah rentang 4,4–5,1, yaitu ~4,75,
+   ditambah paramagnetik dan non-konduktor. Asal angka dicatat pada kartu itu sendiri lewat
+   baris `sumberSifat`, supaya tetap dapat dibedakan dari angka yang datang dari ketiga
+   berkas sumber.
 4. **Jumlah entri daftar pustaka** — Lampiran A.7 menyebut 17 entri, naskah esai memuat 18
    (Perka BAPETEN 9/2009 dan 16/2012 masing-masing entri tersendiri). Ditampilkan seluruhnya
    sesuai sumber, tidak dipangkas agar cocok dengan angka 17.

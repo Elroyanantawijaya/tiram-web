@@ -225,6 +225,37 @@ p {
   border-radius: 4px;
 }
 
+/* Penanda pembuat — menempel di kiri atas sepanjang halaman digulir.
+   Latarnya sendiri, bukan sekadar warna teks, sebab ia juga melintas di atas
+   S8 yang berlatar terang. pointer-events dimatikan supaya ia tidak pernah
+   menghalangi klik pada isi di bawahnya. */
+.watermark {
+  position: fixed;
+  left: clamp(0.6rem, 1.8vw, 1.4rem);
+  top: clamp(0.6rem, 1.6vw, 1.1rem);
+  z-index: 480;
+  pointer-events: none;
+  margin: 0;
+  padding: 0.3rem 0.6rem;
+  font-size: var(--step-13);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--baja);
+  background: rgba(7, 16, 22, 0.74);
+  border: 1px solid var(--garis);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+}
+
+/* Di layar sempit ia mengecil supaya tidak menabrak isi hero. */
+@media (max-width: 480px) {
+  .watermark {
+    padding: 0.24rem 0.48rem;
+    letter-spacing: 0.04em;
+    opacity: 0.85;
+  }
+}
+
 /* Rel pipa — indikator progres + navigasi (§3.4b) */
 .rel-pipa {
   position: fixed;
@@ -965,6 +996,7 @@ p {
 .kartu__nilai { color: var(--baja); min-width: 0; }
 
 .kartu__todo,
+.kartu__sumber-sifat,
 .kartu__catatan {
   margin-top: 0.6rem;
   font-size: var(--step-13);
@@ -973,6 +1005,12 @@ p {
 }
 
 .kartu__todo { color: var(--gamma); }
+
+.kartu__sumber-sifat {
+  font-style: italic;
+  border-left: 2px solid var(--garis);
+  padding-left: 0.55rem;
+}
 
 /* ===== S2c penyeimbang ===== */
 .s2-c__pasangan {
@@ -1165,6 +1203,14 @@ p {
   padding: 0.1rem 0.4rem;
   border-radius: 3px;
   white-space: nowrap;
+}
+
+/* Label bagian dalam dibedakan dari label kulit luar dengan garis tepi --magnet,
+   sebab keduanya bisa muncul pada model yang sama persis dan pembaca perlu tahu
+   yang sedang ditunjuk ada di dalam, bukan di permukaan. */
+.anotasi__label--dalam {
+  border-color: var(--magnet);
+  background: rgba(7, 16, 22, 0.88);
 }
 
 /* Label panjang (keterangan dek) harus membungkus, kalau tidak ia menjulur

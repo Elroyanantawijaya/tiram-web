@@ -228,7 +228,8 @@ export function buatWidgetKatup(k) {
     nilaiTunda.textContent = `${t.toFixed(2)} s`;
     bacaanTunda.textContent = `${t.toFixed(2)} s`;
     bacaanSelisih.textContent = `${selisih >= 0 ? '+' : ''}${selisih.toFixed(2)} s`;
-    bacaanTepat.textContent = jumlahKaya > 0 ? `${persen.toFixed(0)}%` : '—';
+    // Penanda "belum ada bacaan" diambil dari content.js, bukan ditulis di sini.
+    bacaanTepat.textContent = jumlahKaya > 0 ? `${persen.toFixed(0)}%` : u.nilaiKosong;
     status.textContent = u.status[kunci];
     status.classList.toggle('widget__status--awas', kunci !== 'tepat');
     kanvas.setAttribute('aria-label',
