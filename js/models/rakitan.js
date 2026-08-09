@@ -35,6 +35,22 @@ function bahanRakitan() {
     innerM: M(0x3a4048, 0.3, 0.9),
     lambung: M(0x2c3540, 0.5, 0.7),
     dek: M(0x3a4653, 0.5, 0.75),
+    // Material bagian dalam. Sengaja disalin di sini juga, bukan diambil dari
+    // bahanDalam di bahan.js, dengan alasan yang sama seperti material di atas:
+    // sekuens sinema mengubah-ubah opasitasnya per bab dan itu tidak boleh
+    // merembet ke model komponen S5.
+    besi: M(0x9aa4ae, 0.5, 0.5),
+    pelat: M(0x8b949c, 0.88, 0.28),
+    papan: M(0x2f3a42, 0.2, 0.8),
+    konsentrat: M(0x8c4a2f, 0.15, 0.92),
+    bubur: new THREE.MeshStandardMaterial({
+      color: 0x7a6b55, metalness: 0.05, roughness: 0.88,
+      transparent: true, opacity: 0.5, envMapIntensity: 0.5,
+    }),
+    kristal: new THREE.MeshStandardMaterial({
+      color: 0xdfe7c6, metalness: 0, roughness: 0.12,
+      transparent: true, opacity: 0.85, envMapIntensity: 1.2,
+    }),
   };
 }
 
@@ -55,14 +71,48 @@ function bangunModul(b) {
   g.add(route([[-5, 0.97, -1.6], [-5, 0.97, 1.6]], 0.045, b.yellow));
   g.add(route([[5, 0.97, -1.6], [5, 0.97, 1.6]], 0.045, b.yellow));
 
+  // Bagian dalam tiap komponen dikumpulkan di sini supaya sekuens sinema bisa
+  // membuka satu komponen pada satu waktu dan menganimasikan isinya.
+  const dalam = {};
+  const kulit = (m) => { m.userData.selubung = true; return m; };
+  const isiDalam = (m) => { m.traverse((o) => { if (o.isMesh) o.userData.dalam = true; }); return m; };
+
   // ---- 1 pengkondisi ----
   const k1 = new THREE.Group();
   (function () {
-    const t = cyl(0.55, 0.55, 1.5, b.steel); t.position.set(Xc, 0.92, 0); k1.add(t);
-    const dt = sphere(0.55, b.steel); dt.scale.y = 0.5; dt.position.set(Xc, 1.67, 0); k1.add(dt);
-    const db = sphere(0.55, b.steel); db.scale.y = 0.5; db.position.set(Xc, 0.25, 0); k1.add(db);
+    const t = kulit(cyl(0.55, 0.55, 1.5, b.steel)); t.position.set(Xc, 0.92, 0); k1.add(t);
+    const dt = kulit(sphere(0.55, b.steel)); dt.scale.y = 0.5; dt.position.set(Xc, 1.67, 0); k1.add(dt);
+    const db = kulit(sphere(0.55, b.steel)); db.scale.y = 0.5; db.position.set(Xc, 0.25, 0); k1.add(db);
     const mo = cyl(0.16, 0.16, 0.3, b.dark); mo.position.set(Xc, 1.9, 0); k1.add(mo);
     const mb = box(0.3, 0.2, 0.3, b.dark); mb.position.set(Xc, 2.1, 0); k1.add(mb);
+
+    // Isi: muka bubur, poros, dua tingkat baling pengaduk, dan tiga sekat.
+    const isi = cyl(0.51, 0.51, 1.06, b.bubur); isi.position.set(Xc, 0.74, 0); k1.add(isiDalam(isi));
+    const poros = cyl(0.03, 0.03, 1.5, b.steel); poros.position.set(Xc, 1.0, 0); k1.add(isiDalam(poros));
+
+    const baling = new THREE.Group();
+    for (const y of [0.5, 1.02]) {
+      const tingkat = new THREE.Group();
+      for (let i = 0; i < 4; i++) {
+        const a = (i / 4) * Math.PI * 2;
+        const bl = box(0.34, 0.04, 0.09, b.steel);
+        bl.position.set(Math.cos(a) * 0.17, 0, Math.sin(a) * 0.17);
+        bl.rotation.y = -a; bl.rotation.x = 0.5;
+        tingkat.add(bl);
+      }
+      tingkat.position.set(Xc, y, 0);
+      baling.add(tingkat);
+    }
+    k1.add(isiDalam(baling));
+    dalam.c1 = { baling, isi };
+
+    for (let i = 0; i < 3; i++) {
+      const a = (i / 3) * Math.PI * 2 + 0.5;
+      const s = box(0.09, 1.1, 0.03, b.steel);
+      s.position.set(Xc + Math.cos(a) * 0.46, 0.85, Math.sin(a) * 0.46);
+      s.rotation.y = -a;
+      k1.add(isiDalam(s));
+    }
   })();
   g.add(k1);
 
@@ -78,31 +128,123 @@ function bangunModul(b) {
     // b.copper eksklusif milik kumparan ini, aman dipakai langsung tanpa klon.
     const cl = cyl(0.28, 0.28, 0.4, b.copper); cl.rotation.z = Math.PI / 2; cl.position.set(Xw - 0.72, 0.795, 0); cl.userData.kumparan = true; k2.add(cl);
     const cr = cl.clone(); cr.position.x = Xw + 0.72; k2.add(cr);
-    const rg = torus(0.42, 0.1, b.steel); rg.position.set(Xw, 0.795, 0.56); k2.add(rg);
+    // Cincin di muka depan ikut ditandai kulit: ia tepat menghalangi pandangan
+    // ke kanister matriks di belakangnya saat bab pemisahan magnetik dibuka.
+    const rg = kulit(torus(0.42, 0.1, b.steel)); rg.position.set(Xw, 0.795, 0.56); k2.add(rg);
+
+    // Rangka besi pengarah fluks, sepasang sepatu kutub, dan kanister matriks.
+    const rangka = new THREE.Group();
+    for (const x of [-0.56, 0.56]) {
+      const kaki = box(0.13, 0.86, 0.4, b.besi);
+      kaki.position.set(Xw + x, 0.795, -0.08);
+      rangka.add(kaki);
+    }
+    for (const y of [1.18, 0.41]) {
+      const palang = box(1.25, 0.13, 0.4, b.besi);
+      palang.position.set(Xw, y, -0.08);
+      rangka.add(palang);
+    }
+    k2.add(isiDalam(rangka));
+
+    const sepatu = new THREE.Group();
+    for (const x of [-1, 1]) {
+      const s = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.12, 0.3, 14), b.besi);
+      s.rotation.z = Math.PI / 2;
+      s.position.set(Xw + x * 0.42, 0.795, 0.16);
+      sepatu.add(s);
+    }
+    k2.add(isiDalam(sepatu));
+
+    const kanister = new THREE.Group();
+    for (let i = 0; i < 4; i++) {
+      const p = box(0.5, 0.5, 0.016, b.pelat);
+      p.position.set(Xw, 0.795, 0.16 + (i / 3 - 0.5) * 0.26);
+      kanister.add(p);
+    }
+    k2.add(isiDalam(kanister));
+
+    // Kotak umpan dan talang keluaran, penanda arah masuk dan keluar di dalam.
+    const kotak = box(0.36, 0.2, 0.26, b.pelat); kotak.position.set(Xw, 1.28, 0.3);
+    k2.add(isiDalam(kotak));
+    const talang = box(1.0, 0.04, 0.4, b.pelat); talang.position.set(Xw, 0.3, 0.14);
+    k2.add(isiDalam(talang));
+
+    dalam.c2 = { kanister, pusat: new THREE.Vector3(Xw, 0.795, 0.16) };
   })();
   g.add(k2);
 
   // ---- 3 sensor ----
   const k3 = new THREE.Group();
   (function () {
-    const p = cyl(0.16, 0.16, 1.25, b.pipe); p.position.set(Xs, 0.925, 0); k3.add(p);
-    const co = cyl(0.32, 0.32, 0.42, b.yellow); co.position.set(Xs, 0.98, 0); k3.add(co);
-    const cab = box(0.5, 0.8, 0.4, b.steel); cab.position.set(Xs + 0.7, 0.57, 0.1); k3.add(cab);
+    const p = kulit(cyl(0.16, 0.16, 1.25, b.pipe)); p.position.set(Xs, 0.925, 0); k3.add(p);
+    const co = kulit(cyl(0.32, 0.32, 0.42, b.yellow)); co.position.set(Xs, 0.98, 0); k3.add(co);
+    const cab = kulit(box(0.5, 0.8, 0.4, b.steel)); cab.position.set(Xs + 0.7, 0.57, 0.1); k3.add(cab);
     k3.add(pipeBetween([Xs + 0.16, 0.98, 0], [Xs + 0.5, 0.7, 0.1], 0.035, b.rubber));
+
+    // Kolom bubur yang sedang dibaca, kristal NaI(Tl) menghadap pipa, tabung
+    // pengganda foto tepat di atasnya, dan isi kabinet berupa modul pada rel.
+    const kolom = cyl(0.13, 0.13, 1.24, b.bubur); kolom.position.set(Xs, 0.925, 0);
+    k3.add(isiDalam(kolom));
+
+    const kris = box(0.08, 0.14, 0.16, b.kristal); kris.position.set(Xs + 0.21, 0.92, 0);
+    k3.add(isiDalam(kris));
+    const pmt = cyl(0.055, 0.055, 0.2, b.steel); pmt.position.set(Xs + 0.21, 1.12, 0);
+    k3.add(isiDalam(pmt));
+
+    const isiKabinet = new THREE.Group();
+    for (const y of [0.78, 0.44]) {
+      const rel = box(0.36, 0.02, 0.04, b.pelat);
+      rel.position.set(Xs + 0.7, y, 0.02);
+      isiKabinet.add(rel);
+    }
+    for (let i = 0; i < 3; i++) {
+      const m = box(0.06, 0.16, 0.18, b.papan);
+      m.position.set(Xs + 0.6 + i * 0.075, 0.87, 0.06);
+      isiKabinet.add(m);
+    }
+    k3.add(isiDalam(isiKabinet));
+
+    dalam.c3 = { kristal: kris, kolom, pusat: new THREE.Vector3(Xs, 0.92, 0) };
   })();
   g.add(k3);
 
   // ---- 4 katup ----
   const k4 = new THREE.Group();
   (function () {
-    k4.add(pipeBetween([Xv - 0.55, 0.62, 0], [Xv + 0.15, 0.62, 0], 0.16, b.pipe));
+    k4.add(kulit(pipeBetween([Xv - 0.55, 0.62, 0], [Xv + 0.15, 0.62, 0], 0.16, b.pipe)));
     // Selongsong ditandai untuk animasi terjepit di S7. b.rubber juga dipakai
     // pipa kecil sensor (k3) — klon dulu, seperti alasan bx di atas.
     const bd = cyl(0.22, 0.22, 0.5, b.rubber.clone()); bd.rotation.z = Math.PI / 2; bd.position.set(Xv - 0.15, 0.62, 0); bd.userData.selongsong = true; k4.add(bd);
-    k4.add(pipeBetween([Xv, 0.62, 0], [Xv + 0.4, 1.05, 0], 0.15, b.pipe));
-    k4.add(pipeBetween([Xv, 0.62, 0], [Xv, 0.62, 0.5], 0.15, b.pipe));
-    const ac = cyl(0.18, 0.18, 0.4, b.dark); ac.position.set(Xv - 0.15, 0.95, 0); k4.add(ac);
+    k4.add(kulit(pipeBetween([Xv, 0.62, 0], [Xv + 0.4, 1.05, 0], 0.15, b.pipe)));
+    k4.add(kulit(pipeBetween([Xv, 0.62, 0], [Xv, 0.62, 0.5], 0.15, b.pipe)));
+    const ac = kulit(cyl(0.18, 0.18, 0.4, b.dark)); ac.position.set(Xv - 0.15, 0.95, 0); k4.add(ac);
     const kn = cyl(0.1, 0.1, 0.14, b.yellow); kn.position.set(Xv - 0.15, 1.2, 0); k4.add(kn);
+
+    // Isi: bubur di dalam selongsong dan kedua cabang, sepasang batang penjepit,
+    // serta piston di dalam aktuator.
+    const aliranDalam = new THREE.Group();
+    const dl = cyl(0.15, 0.15, 0.52, b.bubur); dl.rotation.z = Math.PI / 2; dl.position.set(Xv - 0.15, 0.62, 0);
+    aliranDalam.add(dl);
+    aliranDalam.add(pipeBetween([Xv - 0.54, 0.62, 0], [Xv - 0.4, 0.62, 0], 0.11, b.bubur));
+    aliranDalam.add(pipeBetween([Xv + 0.06, 0.68, 0], [Xv + 0.38, 1.02, 0], 0.1, b.bubur));
+    aliranDalam.add(pipeBetween([Xv, 0.62, 0.08], [Xv, 0.62, 0.48], 0.1, b.bubur));
+    k4.add(isiDalam(aliranDalam));
+
+    const jepit = new THREE.Group();
+    for (const dy of [0.2, -0.2]) {
+      const bt = cyl(0.03, 0.03, 0.34, b.steel);
+      bt.rotation.x = Math.PI / 2;
+      bt.position.set(Xv - 0.15, 0.62 + dy, 0);
+      jepit.add(bt);
+    }
+    k4.add(isiDalam(jepit));
+
+    const piston = cyl(0.14, 0.14, 0.06, b.steel); piston.position.set(Xv - 0.15, 1.02, 0);
+    k4.add(isiDalam(piston));
+    const batang = cyl(0.03, 0.03, 0.3, b.steel); batang.position.set(Xv - 0.15, 0.87, 0);
+    k4.add(isiDalam(batang));
+
+    dalam.c4 = { jepit, piston, batang };
   })();
   g.add(k4);
 
@@ -116,8 +258,26 @@ function bangunModul(b) {
     wl(w, h, t, Xb, yB + h / 2, -d / 2 + t / 2);
     wl(t, h, d, Xb - w / 2 + t / 2, yB + h / 2, 0);
     wl(t, h, d, Xb + w / 2 - t / 2, yB + h / 2, 0);
-    // b.innerM eksklusif milik isi bunker — aman ditandai tanpa klon.
-    const inr = box(w - 2 * t, h - t, d - 2 * t, b.innerM); inr.position.set(Xb, yB + h / 2 + 0.05, 0); inr.userData.konsentratDalam = true; k5.add(inr);
+    // Balok pejal pengisi rongga diganti timbunan konsentrat, sebab balok itu
+    // memenuhi seluruh isi bunker dan tidak menyisakan apa pun untuk dilihat.
+    // Penanda konsentratDalam ikut pindah ke timbunan: sekuens sinema memakainya
+    // untuk menyalakan isi bunker pada bab penyimpanan.
+    const timbunan = new THREE.Group();
+    const alas = box(w - 2 * t - 0.04, 0.26, d - 2 * t - 0.04, b.konsentrat);
+    alas.position.set(Xb, yB + 0.2, 0);
+    timbunan.add(alas);
+    const puncak = new THREE.Mesh(new THREE.ConeGeometry(0.5, 0.46, 18), b.konsentrat);
+    puncak.position.set(Xb, yB + 0.55, 0);
+    timbunan.add(puncak);
+    for (const anak of timbunan.children) { anak.userData.konsentratDalam = true; anak.userData.dalam = true; }
+    k5.add(timbunan);
+
+    // Penyebar di bawah mulut corong isi.
+    const penyebar = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.18, 14), b.steel);
+    penyebar.position.set(Xb, yB + 1.1, 0);
+    k5.add(isiDalam(penyebar));
+
+    dalam.c5 = { timbunan };
     const tre = new THREE.Mesh(new THREE.PlaneGeometry(0.55, 0.55), new THREE.MeshBasicMaterial({ map: trefoilTexture() }));
     tre.position.set(Xb + w / 2 - t / 2 + 0.01, yB + h * 0.55, 0); tre.rotation.y = Math.PI / 2; k5.add(tre);
   })();
@@ -171,7 +331,7 @@ function bangunModul(b) {
     { id: 'c5', nomor: 5, pos: new THREE.Vector3(Xb, 1.95, 0) },
   ];
 
-  return { grup: g, jalur, lintasan, penanda, komponen: { c1: k1, c2: k2, c3: k3, c4: k4, c5: k5 } };
+  return { grup: g, jalur, lintasan, penanda, dalam, komponen: { c1: k1, c2: k2, c3: k3, c4: k4, c5: k5 } };
 }
 
 /** Siluet manusia 1,7 m sebagai acuan skala. */
@@ -221,7 +381,7 @@ export function bangunRakitan() {
   const kapal = bangunKapal(b);
   akar.add(kapal);
 
-  const { grup: modul, jalur, lintasan, penanda, komponen } = bangunModul(b);
+  const { grup: modul, jalur, lintasan, penanda, komponen, dalam } = bangunModul(b);
   const bungkus = new THREE.Group();
   bungkus.add(modul);
   bungkus.scale.setScalar(SKALA);
@@ -245,7 +405,7 @@ export function bangunRakitan() {
   akar.add(garis);
 
   return {
-    akar, kapal, modul: bungkus, jalur, lintasan, penanda, komponen, orang, bahan: b,
+    akar, kapal, modul: bungkus, jalur, lintasan, penanda, komponen, dalam, orang, bahan: b,
     /** Titik jangkar penanda dalam koordinat dunia. */
     penandaDunia: () => penanda.map((p) => ({
       ...p, dunia: bungkus.localToWorld(p.pos.clone().multiplyScalar(1)),

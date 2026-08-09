@@ -25,6 +25,29 @@ export const bahan = {
   innerM: M(0x3a4048, 0.3, 0.9),
 };
 
+/* Material khusus bagian dalam alat. Dipisah dari `bahan` di atas supaya jelas
+ * mana yang menyusun kulit luar dan mana yang hanya terlihat saat mode tembus
+ * pandang menyala. Beberapa di antaranya memang transparan sejak awal (bubur,
+ * kristal, kaca PMT) sebab benda aslinya pun tembus cahaya. */
+export const bahanDalam = {
+  besi: M(0x9aa4ae, 0.5, 0.5),              // rangka pengarah fluks & sepatu kutub
+  pelat: M(0x8b949c, 0.88, 0.28),           // pelat beralur matriks WHIMS
+  papan: M(0x2f3a42, 0.2, 0.8),             // papan rangkaian, rel DIN
+  konsentrat: M(0x8c4a2f, 0.15, 0.92),      // timbunan konsentrat kaya monasit
+  bubur: new THREE.MeshStandardMaterial({
+    color: 0x7a6b55, metalness: 0.05, roughness: 0.88,
+    transparent: true, opacity: 0.46, envMapIntensity: 0.5,
+  }),
+  kristal: new THREE.MeshStandardMaterial({
+    color: 0xdfe7c6, metalness: 0, roughness: 0.12,
+    transparent: true, opacity: 0.82, envMapIntensity: 1.2,
+  }),
+  kaca: new THREE.MeshStandardMaterial({
+    color: 0xa9bcc7, metalness: 0.1, roughness: 0.06,
+    transparent: true, opacity: 0.32, envMapIntensity: 1.4,
+  }),
+};
+
 /* -------------------------------------------------------------- primitif */
 
 // §2 meminta segmen silinder disederhanakan 28 → 12 di bawah 768px. Faktor ini
@@ -95,6 +118,43 @@ export function routeArrow(pts, r, mat) {
   cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d);
   g.add(cone);
   return g;
+}
+
+/**
+ * Cangkang melengkung setebal `tebal`, dirakit dari sejumlah balok kecil yang
+ * disusun mengikuti busur. Dipakai untuk kolimator timbal di sekitar pipa dan
+ * pelapis dinding bunker.
+ *
+ * Cara ini dipilih ketimbang CylinderGeometry ber-thetaLength karena silinder
+ * terpotong menutup ujungnya dengan juring penuh, bukan menyisakan rongga di
+ * tengah — bentuk yang justru salah untuk sebuah selubung.
+ *
+ * @param {number} rDalam jari-jari sisi dalam cangkang
+ * @param {number} mulai  sudut awal (radian)
+ * @param {number} panjang panjang busur (radian)
+ */
+export function busur(rDalam, tebal, tinggi, mat, mulai, panjang, ruas) {
+  const g = new THREE.Group();
+  const n = Math.max(4, Math.round((ruas || 18) * detail));
+  const dSudut = panjang / n;
+  const rTengah = rDalam + tebal / 2;
+  // Lebar tiap balok dilebihkan sedikit supaya sambungan antarbalok tidak
+  // menyisakan celah tipis yang terlihat sebagai garis-garis saat tembus pandang.
+  const lebar = 2 * rTengah * Math.tan(dSudut / 2) * 1.08;
+  for (let i = 0; i < n; i++) {
+    const a = mulai + dSudut * (i + 0.5);
+    const m = box(tebal, tinggi, lebar, mat);
+    m.position.set(Math.cos(a) * rTengah, 0, Math.sin(a) * rTengah);
+    m.rotation.y = -a;
+    g.add(m);
+  }
+  return g;
+}
+
+/** Menandai seluruh mesh di bawah `obj` dengan sepasang kunci userData. */
+export function tandai(obj, kunci, nilai = true) {
+  obj.traverse((o) => { if (o.isMesh) o.userData[kunci] = nilai; });
+  return obj;
 }
 
 /* ------------------------------------------------- tekstur trefoil (bunker) */

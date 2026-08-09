@@ -52,10 +52,23 @@ export function bangunPanggungKomponen({ mutuRendah = false, renderer } = {}) {
   // Posisi asli tiap mesh, dipakai tampilan urai. Disimpan sekali di sini
   // supaya urai selalu berangkat dari keadaan terpasang, bukan menumpuk.
   const asal = new Map();
+  // Kulit luar tiap model beserta keadaan asli materialnya, dipakai mode X-ray.
+  const selubung = [];
   for (const [id, bangun] of Object.entries(PEMBANGUN)) {
     const grup = new THREE.Group();
-    const mesh = bangun();
+    const mesh = bangun({ ringkas: mutuRendah });
     grup.add(mesh);
+
+    // Material di bahan.js dipakai bersama oleh banyak mesh sekaligus — `steel`
+    // yang sama menyusun dinding tangki dan juga poros pengaduk di dalamnya.
+    // Menembuspandangkan kulit lewat objek Material bersama akan ikut
+    // menembuspandangkan isinya, sehingga tidak ada yang tersisa untuk dilihat.
+    // Karena itu tiap mesh kulit diberi salinan materialnya sendiri.
+    mesh.traverse((o) => {
+      if (!o.isMesh || !o.userData.selubung) return;
+      o.material = o.material.clone();
+      selubung.push({ mesh: o, opacityAsli: o.material.opacity, transparanAsli: o.material.transparent });
+    });
 
     // Arah urai: dari pusat kotak batas model ke pusat tiap bagian. Bagian yang
     // persis di sumbu (mis. poros pengaduk) diberi arah ke atas supaya ia tetap
@@ -121,17 +134,30 @@ export function bangunPanggungKomponen({ mutuRendah = false, renderer } = {}) {
     }
   }
 
-  /* --- potongan melintang --- */
-  // Bidang potong dipasang di renderer (global), bukan di material, sebab
-  // material di bahan.js dipakai bersama oleh S6 dan S7 — memasangnya di
-  // material akan ikut memotong rakitan dan sinema. Dibersihkan lagi di
-  // nonaktifkan() supaya tidak bocor ke section lain.
-  const bidangPotong = new THREE.Plane(new THREE.Vector3(0, 0, -1), 0);
-  let memotong = false;
+  /* --- mode X-ray --- */
+  // Versi sebelumnya memasang bidang potong di renderer. Bidang itu memang
+  // mengiris cangkang, tetapi selama alatnya masih berongga yang tersingkap
+  // hanyalah rongga kosong. Sejak dalaman.js mengisi rongga tersebut, cara yang
+  // benar-benar memperlihatkan isinya adalah menembuspandangkan kulit luar dan
+  // membiarkan bagian dalam terbaca utuh dari segala sudut.
+  //
+  // Nilai 0 = kulit pejal, 1 = kulit tembus pandang penuh. Dianimasikan lembut
+  // di perbarui() dengan pola yang sama seperti urai.
+  let xrayTarget = 0;
+  let xrayKini = 0;
+  const OPASITAS_XRAY = 0.14;
 
-  function terapkanPotong() {
-    renderer.localClippingEnabled = false;
-    renderer.clippingPlanes = memotong ? [bidangPotong] : [];
+  function terapkanXray() {
+    for (const s of selubung) {
+      const op = THREE.MathUtils.lerp(s.opacityAsli, OPASITAS_XRAY, xrayKini);
+      const tembus = xrayKini > 0.001;
+      s.mesh.material.opacity = op;
+      s.mesh.material.transparent = tembus || s.transparanAsli;
+      // depthWrite dimatikan hanya saat benar-benar tembus pandang: kalau tidak,
+      // kulit tetap menulis kedalaman dan justru menyembunyikan isi di baliknya.
+      s.mesh.material.depthWrite = !tembus;
+      s.mesh.material.side = tembus ? THREE.DoubleSide : THREE.FrontSide;
+    }
   }
 
   function bidik(id, langsung) {
@@ -188,19 +214,18 @@ export function bangunPanggungKomponen({ mutuRendah = false, renderer } = {}) {
     },
     get urai() { return uraiTarget > 0.5; },
 
-    setPotong(nyala) { memotong = nyala; terapkanPotong(); },
-    get potong() { return memotong; },
+    /** @param {boolean} nyala kulit luar ditembuspandangkan atau dikembalikan pejal */
+    setXray(nyala) {
+      xrayTarget = nyala ? 1 : 0;
+      if (kurangiGerak()) { xrayKini = xrayTarget; terapkanXray(); }
+    },
+    get xray() { return xrayTarget > 0.5; },
 
     /** Titik jangkar anotasi komponen aktif, dalam koordinat dunia. */
     get idAktif() { return aktifId; },
 
-    aktifkan() { kontrol.enabled = true; terapkanPotong(); },
-    nonaktifkan() {
-      kontrol.enabled = false;
-      // Bidang potong dilepas begitu S5 tidak aktif — renderer-nya dipakai
-      // bersama seluruh halaman.
-      renderer.clippingPlanes = [];
-    },
+    aktifkan() { kontrol.enabled = true; },
+    nonaktifkan() { kontrol.enabled = false; },
 
     perbarui(dt) {
       if (peralihan) {
@@ -213,6 +238,10 @@ export function bangunPanggungKomponen({ mutuRendah = false, renderer } = {}) {
       if (Math.abs(uraiKini - uraiTarget) > 0.001) {
         uraiKini += (uraiTarget - uraiKini) * Math.min(1, dt * 4.5);
         terapkanUrai();
+      }
+      if (Math.abs(xrayKini - xrayTarget) > 0.001) {
+        xrayKini += (xrayTarget - xrayKini) * Math.min(1, dt * 4.5);
+        terapkanXray();
       }
       kontrol.autoRotate = !disentuh && !kurangiGerak();
       kontrol.update();
