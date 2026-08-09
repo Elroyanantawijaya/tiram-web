@@ -1554,8 +1554,18 @@ p {
   .s5__kolom { top: 12vh; order: 0; }
 }
 
-/* Sticky-nya sudah dipindah ke .s5__kolom; panel cukup mengalir di dalamnya. */
-#s5-komponen .scrolly__panel { position: static; }
+/* Sticky-nya sudah dipindah ke .s5__kolom, jadi panel cukup mengalir di dalamnya.
+   Tetap `relative`, bukan `static`: .scene-canvas adalah `position: absolute;
+   inset: 0`, dan blok penampungnya selalu leluhur ber-posisi terdekat. Kalau
+   panel dibuat static, penampung itu melompat ke .s5__kolom yang sticky,
+   sehingga kanvas terentang setinggi panel ditambah bilah kendali lalu menutupi
+   ketiga tombolnya. `overflow: hidden` panel tidak mencegahnya, sebab elemen
+   absolut hanya diklip oleh leluhur yang ber-posisi. */
+   `top` wajib dikembalikan ke auto. Aturan dasar `.scrolly__panel` menyetel
+   `top: 12vh` untuk keperluan sticky-nya; nilai itu diabaikan selama panel
+   `static`, tetapi pada `relative` ia menggeser panel turun 108px tanpa
+   mengubah alirannya, sehingga panel justru menimpa bilah kendali di bawahnya. */
+#s5-komponen .scrolly__panel { position: relative; top: auto; }
 
 .s5__kendali {
   align-items: center;
