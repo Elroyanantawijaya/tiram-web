@@ -455,13 +455,18 @@ yang benar. Kemungkinan memang gejala sesi otomasi yang sudah panjang, bukan cac
 
 ## Lubang isi yang menunggu konfirmasi penulis
 
-Ditandai `TODO: butuh konfirmasi penulis` di `data/content.js`, tidak diisi angka karangan:
+Penulis meminta seluruh penanda `TODO` dihapus dari teks yang tampil (10 Agustus 2026).
+Lubang datanya sendiri **tidak** ditutup dengan angka karangan: catatannya tetap ada di
+halaman, hanya tanpa kata "TODO". Daftar di bawah kini menjadi satu-satunya tempat lubang
+itu dilacak.
 
-1. **Densitas kasiterit** — tidak disebut di ketiga sumber. Di mode Densitas simulator nanti
-   ia ditampilkan tanpa angka. Kuarsa ditempatkan di lapisan ringan mengikuti keterangan
-   "kuarsa ringan" pada dokumen justifikasi.
-2. **Konduktivitas kuarsa** — tidak disebut di ketiga sumber; pada mode Konduktivitas ia
-   dibiarkan netral, tidak dibelokkan ke sisi mana pun.
+1. **Densitas kasiterit** — tidak disebut di ketiga sumber. Di mode Densitas simulator ia
+   ditampilkan tanpa angka, di kotak "Tidak diketahui" yang terpisah dari kedua lapisan.
+   Kuarsa ditempatkan di lapisan ringan mengikuti keterangan "kuarsa ringan" pada dokumen
+   justifikasi. Disebutkan pada `s3.simulator.catatanDensitas`.
+2. **Konduktivitas kuarsa** — tidak disebut di ketiga sumber. Pada mode Konduktivitas ia
+   dibiarkan netral, tidak dibelokkan ke sisi mana pun. Disebutkan pada
+   `s3.simulator.catatanKonduktivitas`.
 3. ~~**Densitas, kerentanan magnetik, dan konduktivitas xenotim**~~ — **sudah dijawab
    penulis (10 Agustus 2026).** Densitas diisi nilai tengah rentang 4,4–5,1, yaitu ~4,75,
    ditambah paramagnetik dan non-konduktor. Asal angka dicatat pada kartu itu sendiri lewat
@@ -469,4 +474,13 @@ Ditandai `TODO: butuh konfirmasi penulis` di `data/content.js`, tidak diisi angk
    berkas sumber.
 4. **Jumlah entri daftar pustaka** — Lampiran A.7 menyebut 17 entri, naskah esai memuat 18
    (Perka BAPETEN 9/2009 dan 16/2012 masing-masing entri tersendiri). Ditampilkan seluruhnya
-   sesuai sumber, tidak dipangkas agar cocok dengan angka 17.
+   sesuai sumber, tidak dipangkas agar cocok dengan angka 17. Catatan tentang selisih ini
+   dulu tampil di bawah daftar pustaka, kini dihapus bersama penanda `TODO` lain dan hanya
+   tercatat di sini.
+
+**Hidrosiklon dihapus (10 Agustus 2026).** Kartu "Hidrosiklon (desliming)" yang berdiri
+sebagai komponen opsional di hulu dihapus atas permintaan penulis, beserta kerangka HTML,
+perakit, dan gayanya. Modul kini terdiri atas lima komponen inti saja. Satu kalimat yang
+masih menyinggung fungsinya belum disentuh dan menunggu keputusan penulis: keterbatasan
+pertama pada S8 berbunyi "sebagian sengaja dibuang lewat desliming", dan kalimat itu berasal
+dari Lampiran A.6 sehingga tidak diubah sendiri.

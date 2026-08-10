@@ -72,23 +72,6 @@ export function rakitS5(CONTENT) {
     if (wadah) isiKomponen(k, wadah);
   }
 
-  // Hidrosiklon: kartu tambahan bertanda opsional, di hulu.
-  const wadahOpsional = kolom.querySelector('[data-component-id="hidrosiklon"]');
-  if (wadahOpsional) {
-    const o = s5.opsional;
-    kosongkan(wadahOpsional);
-    wadahOpsional.append(
-      el('div', { class: 'kartu-opsional' }, [
-        el('p', { class: 'eyebrow kartu-opsional__badge', text: o.badge }),
-        el('h3', { class: 'komponen__nama', text: o.nama }),
-        blok(s5.labelBlok.apa, o.apa),
-        blok(s5.labelBlok.bagaimana, o.bagaimana),
-        blok(s5.labelBlok.ilmu, o.ilmu),
-        par(o.guna, 'kartu-opsional__guna'),
-      ])
-    );
-  }
-
   /* --- panggung 3D --- */
   let panggung = null;
   let lapisan = null;

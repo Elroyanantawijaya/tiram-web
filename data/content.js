@@ -11,6 +11,10 @@ export const CONTENT = {
 
   // ===== A.1 Identitas =====
   meta: {
+    // Nama halaman: inilah yang muncul di tab peramban dan sebagai nama tautan
+    // ketika alamat situs dibagikan. Nilai yang sama ditulis ulang di <title>
+    // index.html sebagai cadangan sebelum modul JavaScript sempat dimuat.
+    judulHalaman: 'TIRAM by Men Love Mining',
     judulEsai: 'TIRAM: Rangkaian Pengolahan Tailing Timah Lepas Pantai untuk Memulihkan Monasit Berbasis Pemisahan Magnetik Terpandu Sensor Gamma',
     konteks: 'Kepulauan Bangka Belitung, modul retrofit di hilir jig Kapal Isap Produksi (KIP)',
     kompetisi: 'PCMC, Perhimpunan Ahli Pertambangan Indonesia Student Chapter, subtopik Ekstraksi Tambang Mineral',
@@ -83,7 +87,7 @@ export const CONTENT = {
   // ===== S2 — Pendahuluan =====
   s2: {
     eyebrow: 'Pendahuluan',
-    judul: 'Dari mana masalahnya',
+    judul: 'Akar permasalahan',
 
     // S2a · Bagaimana KIP bekerja
     a: {
@@ -152,7 +156,7 @@ export const CONTENT = {
 
     // S2c · Dua masalah bertautan
     c: {
-      judul: 'Dua masalah bertautan',
+      judul: 'Korelasi masalah',
       fisik: {
         label: 'Fisik',
         narasi: 'Pembuangan menaikkan kekeruhan, menebalkan endapan di dasar, dan menekan biota bentik di sekitar parit galian.',
@@ -203,7 +207,7 @@ export const CONTENT = {
     // S2f · Celahnya
     f: {
       judul: 'Celahnya',
-      kalimatUtama: 'Sejauh penelusuran penulis, belum ada rancangan yang menyatukan pemulihan monasit dan verifikasi radioaktivitas dalam satu alur, sebelum pasir dikembalikan ke dasar laut.',
+      kalimatUtama: 'Dalam praktik saat ini, belum terdapat rancangan yang menyatukan pemulihan monasit dan verifikasi radioaktivitas dalam satu alur, sebelum pasir dikembalikan ke dasar laut.',
       narasiLengkap: 'Kajian tentang penimbunan dan penutupan tailing di dasar air umumnya memperlakukan tailing sebagai limbah yang perlu dibuang seaman mungkin (USACE-ERDC, 2005). Meskipun paradigma evaluasi tersebut rasional untuk sebagian besar komoditas, penerapannya pada konteks timah Bangka dinilai kurang memadai. Keterbatasan ini bersumber dari sifat ambivalen monasit, yang tidak hanya membawa risiko bahaya tetapi juga menyimpan potensi nilai strategis.',
     },
   },
@@ -261,8 +265,10 @@ export const CONTENT = {
         { id: 'kuarsa', nama: 'Kuarsa', densitas: null, densitasNilai: null, magnetik: 'non-magnetik', tertahanMagnet: false, konduktor: null, radioaktif: false },
       ],
 
-      catatanDensitas: 'Angka densitas hanya ditampilkan untuk mineral yang disebut di sumber, yaitu monasit ~5,0, ilmenit ~4,7, zirkon ~4,6, dan rutil ~4,3. Kuarsa ditempatkan pada lapisan ringan mengikuti keterangan "kuarsa ringan" pada dokumen justifikasi. TODO: butuh konfirmasi penulis, sebab densitas kasiterit tidak disebut di ketiga sumber sehingga ditampilkan tanpa angka.',
-      catatanKonduktivitas: 'TODO: butuh konfirmasi penulis, sebab konduktivitas kuarsa tidak disebut di ketiga sumber. Pada mode ini kuarsa dibiarkan netral, tidak dibelokkan ke sisi mana pun.',
+      // Catatan di bawah tetap menyebut lubang datanya apa adanya, hanya tanpa
+      // penanda kerja "TODO" yang memang bukan untuk mata pembaca.
+      catatanDensitas: 'Angka densitas hanya ditampilkan untuk mineral yang disebut di sumber, yaitu monasit ~5,0, ilmenit ~4,7, zirkon ~4,6, dan rutil ~4,3. Kuarsa ditempatkan pada lapisan ringan mengikuti keterangan "kuarsa ringan" pada dokumen justifikasi. Densitas kasiterit tidak disebut di ketiga sumber, sehingga ia ditampilkan tanpa angka.',
+      catatanKonduktivitas: 'Konduktivitas kuarsa tidak disebut di ketiga sumber. Pada mode ini kuarsa dibiarkan netral, tidak dibelokkan ke sisi mana pun.',
       catatanProporsi: 'Jumlah partikel tiap jenis diatur agar terbaca di layar, bukan proporsi sebenarnya. Esai menyebut mineral berat hanya sebagian kecil dari tailing yang didominasi kuarsa.',
 
       // Label antarmuka simulator. Bukan klaim baru — semuanya memparafrase
@@ -614,15 +620,9 @@ export const CONTENT = {
         },
       },
     ],
-    opsional: {
-      id: 'hidrosiklon',
-      nama: 'Hidrosiklon (desliming)',
-      badge: 'opsional, di hulu',
-      apa: 'Memisahkan partikel halus dari yang lebih kasar berdasarkan kecepatan mengendap.',
-      bagaimana: 'Bubur masuk secara tangensial dengan kecepatan tinggi dan membentuk pusaran. Gaya sentrifugal melempar partikel kasar ke dinding lalu turun ke keluaran bawah, sedangkan partikel halus terbawa ke keluaran atas.',
-      ilmu: 'Sedimentasi sentrifugal dan hukum Stokes (kecepatan mengendap sebanding dengan kuadrat diameter dan selisih densitas). Tanpa bagian bergerak, alat ini murah dan tahan lama.',
-      guna: 'Melindungi matriks magnetik dari lumpur ultrahalus yang memang tidak dapat dipulihkan.',
-    },
+    // Kartu hidrosiklon (desliming) yang sebelumnya berdiri sebagai komponen
+    // opsional di hulu dihapus atas permintaan penulis. Modul kini terdiri atas
+    // lima komponen inti saja.
     keputusanDesain: [
       'Jig dan konsentrator gravitasi ditolak sebagai pemisah selektif. Keduanya hanya bekerja pada densitas, sementara monasit, zirkon, dan ilmenit berdensitas hampir sama sehingga tak terpisah. Jig pun sudah beroperasi di hulu, dan menambah tahap densitas lagi hanya mengulang proses yang sama tanpa selektivitas baru.',
       'Pemisah magnetik basah (WHIMS) dipilih sebagai pemisah fisik utama. Ia bekerja pada kerentanan magnetik, sifat yang berbeda dari densitas, sehingga mampu membuat belahan yang mustahil dibuat jig. Versi basahnya realistis di atas kapal, tidak memakai reagen, dan mekanismenya sederhana.',
@@ -831,7 +831,6 @@ export const CONTENT = {
       bukaTab: 'buka di tab baru',
       kreditJudul: 'Tentang situs ini',
     },
-    catatanJumlah: 'TODO: butuh konfirmasi penulis. Spesifikasi menyebut 17 entri, sedangkan naskah esai memuat 18. Seluruh 18 entri ditampilkan sesuai sumber.',
     pustaka: [
       { penulis: 'Andini, D. E., & Sari, F. I. P.', tahun: '2020', judul: 'Study of Rare Earth Elements and Heavy Metals in Tin Tailing from Mining Activities on North Bangka Island', sumber: 'Journal of Physics: Conference Series, 1517, 012084', url: 'https://doi.org/10.1088/1742-6596/1517/1/012084' },
       { penulis: 'Awang Kechik, N. A. H., & Ku Ishak, K. E. H.', tahun: '2025', judul: 'Optimizing Monazite Recovery from Tin Tailings: A Comprehensive Review of Physical Techniques and Methodologies', sumber: 'Physicochemical Problems of Mineral Processing, 61(6), 215442', url: 'https://doi.org/10.37190/ppmp/215442' },

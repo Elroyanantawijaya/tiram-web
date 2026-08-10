@@ -321,6 +321,9 @@ function siapkanTooltipSitasi() {
 
 function mulai() {
   document.documentElement.classList.add('js-siap');
+  // Judul halaman ikut dari content.js supaya penulis bisa mengubahnya tanpa
+  // menyentuh HTML. <title> di index.html hanya cadangan sebelum modul dimuat.
+  if (CONTENT.meta.judulHalaman) document.title = CONTENT.meta.judulHalaman;
   const lenis = siapkanScroll();
   siapkanKursor();
   pasangWatermark();
