@@ -101,8 +101,7 @@ export function rakitS10(CONTENT) {
       cariInput,
     ]),
     status,
-    daftar,
-    el('p', { class: 'pustaka__catatan-jumlah', text: s10.catatanJumlah })
+    daftar
   );
 
   /* --------------------------------------------------------------- kredit */

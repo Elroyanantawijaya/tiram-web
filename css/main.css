@@ -995,7 +995,6 @@ p {
 .kartu__kunci { color: var(--kabut); flex: 0 0 6.5rem; }
 .kartu__nilai { color: var(--baja); min-width: 0; }
 
-.kartu__todo,
 .kartu__sumber-sifat,
 .kartu__catatan {
   margin-top: 0.6rem;
@@ -1003,8 +1002,6 @@ p {
   line-height: 1.45;
   color: var(--kabut);
 }
-
-.kartu__todo { color: var(--gamma); }
 
 .kartu__sumber-sifat {
   font-style: italic;
@@ -1123,21 +1120,6 @@ p {
   margin-bottom: 0.4rem;
   padding-bottom: 0.4rem;
   border-bottom: 1px solid var(--garis);
-}
-
-.kartu-opsional {
-  border: 1px dashed var(--garis);
-  border-radius: 4px;
-  padding: clamp(1rem, 3vw, 1.75rem);
-}
-
-.kartu-opsional__badge { color: var(--gamma); margin-bottom: 0.75rem; }
-
-.kartu-opsional__guna {
-  margin-top: 1.25rem;
-  color: var(--kabut);
-  border-left: 2px solid var(--garis);
-  padding-left: 0.9rem;
 }
 
 /* ===== Panggung 3D lebar penuh (S6, nanti S7) ===== */
@@ -2147,14 +2129,6 @@ p {
 
 .pustaka__tautan:hover { border-bottom-style: solid; }
 
-.pustaka__catatan-jumlah {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--garis);
-  color: var(--kabut);
-  font-size: var(--step-13);
-  max-width: 60ch;
-}
 
 .s10-kredit__catatan { color: var(--kabut); font-size: var(--step-15); max-width: 56ch; }
 .s10-kredit__catatan + .s10-kredit__catatan { margin-top: 0.75rem; }
