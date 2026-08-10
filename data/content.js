@@ -669,7 +669,7 @@ export const CONTENT = {
   // ===== S7 — Sinema: alat itu bekerja =====
   s7: {
     eyebrow: 'Sinema',
-    judul: 'Alat itu bekerja',
+    judul: 'Alur Kerja Alat',
 
     // Label antarmuka pemutar. Bukan isi esai, tapi tetap tinggal di sini
     // supaya tidak ada teks yang ter-hardcode di luar content.js.
@@ -687,7 +687,8 @@ export const CONTENT = {
       padananTeks: 'Sekuens sinematik tiga dimensi berdurasi sekitar satu menit yang menunjukkan modul TIRAM bekerja dalam delapan babak, dari bubur tailing keluar dari pipa jig sampai aliran buangan diverifikasi dan dilepas ke laut lewat sisi kapal. Transkrip lengkap kedelapan babak tersedia sebagai teks dan dapat disalin di bawah pemutar.',
     },
 
-    catatanTeknis: 'Yang diminta adalah "video", dan yang dibuat bukan berkas video melainkan sekuens sinematik 3D yang dianimasikan di dalam scene, dengan kontrol pemutar layaknya video (putar dan jeda, garis waktu bisa di-scrub, lompat bab, kecepatan 0,5 sampai 2 kali). Tombol "Rekam ke .webm" tersedia lewat canvas.captureStream() dan MediaRecorder bagi yang benar-benar butuh berkas video.',
+    // catatanTeknis dihapus atas permintaan penulis: isinya menjelaskan cara
+    // pembuatan sekuens ini kepada pembaca, dan itu bukan bagian dari esai.
     durasiTotal: '±60 detik',
     bab: [
       { waktu: '0:00', judul: 'Keluar dari jig', deskripsi: 'Bubur tailing berdenyut keluar dari pipa jig, masuk ke modul. Kamera mengikuti aliran.' },

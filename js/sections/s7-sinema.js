@@ -1,5 +1,6 @@
 // js/sections/s7-sinema.js — S7 Sinema: sekuens 8 bab dengan pemutar.
-// Seluruh teks dari CONTENT.s7. Bukan berkas video — lihat s7.catatanTeknis.
+// Seluruh teks dari CONTENT.s7. Ini bukan berkas video melainkan sekuens 3D
+// yang dianimasikan di dalam scene, dengan kontrol pemutar layaknya video.
 
 import { el, kosongkan, paragraf, kurangiGerak, hitungNaik, buatSitasi, cariPustakaId } from '../dom.js';
 import { pengelolaScene } from '../scene.js';
@@ -25,8 +26,7 @@ export function rakitS7(CONTENT) {
   kosongkan(kepala);
   kepala.append(
     el('p', { class: 'eyebrow', text: s7.eyebrow }),
-    el('h2', { class: 'section__judul', text: s7.judul }),
-    par(s7.catatanTeknis, 's7__catatan-teknis')
+    el('h2', { class: 'section__judul', text: s7.judul })
   );
 
   const { waktu, durasi } = buatGarisWaktu(s7.bab);

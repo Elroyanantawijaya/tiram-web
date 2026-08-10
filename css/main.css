@@ -1271,8 +1271,6 @@ p {
 .kartu-ringkas__apa { font-size: var(--step-15); }
 
 /* ===== S7 Sinema ===== */
-.s7__catatan-teknis { color: var(--kabut); margin-top: 1rem; }
-
 .kendali__tombol--utama {
   color: var(--gamma);
   border-color: var(--gamma);
