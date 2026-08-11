@@ -18,13 +18,40 @@
 //      justru menutupi isinya, jadi diganti timbunan konsentrat di dalaman.js.
 
 import * as THREE from 'three';
-import { bahan, M, box, cyl, torus, sphere, pipeBetween, arrowPipe, trefoilTexture } from './bahan.js';
+import { bahan, M, box, cyl, torus, sphere, pipeBetween, trefoilTexture } from './bahan.js';
 import { PEMBANGUN_DALAM } from './dalaman.js';
 
 const { steel, dark, copper, yellow, lead, pipe, rubber } = bahan;
 
-/** Menandai mesh sebagai kulit luar, yaitu yang ditembuspandangkan di mode X-ray. */
-const kulit = (m) => { m.userData.selubung = true; return m; };
+/**
+ * Menandai kulit luar, yaitu bagian yang ditembuspandangkan di mode X-ray.
+ * Memakai traverse supaya Group (mis. mulutPipa) ikut tertandai sampai ke
+ * mesh-nya; penanda yang hanya menempel di Group tidak akan terbaca, sebab
+ * panggung-komponen.js mencari `o.isMesh && o.userData.selubung`.
+ */
+const kulit = (o) => { o.traverse((n) => { if (n.isMesh) n.userData.selubung = true; }); return o; };
+
+/**
+ * Mulut pipa: tabung lurus dari `a` ke `b`, ditutup flensa tipis di ujung `b`.
+ *
+ * Berkas sumber memakai arrowPipe untuk semua sambungan masuk dan keluar, dan
+ * kerucut panah di ujungnya terbaca sebagai pipa yang meruncing seperti tombak,
+ * bukan sebagai pipa. Arah aliran tetap terbaca dari label bagian ("masuk",
+ * "ke bunker", "ke laut"), jadi kerucutnya tidak lagi diperlukan.
+ *
+ * Flensa membuat ujung potongan terlihat sengaja, bukan seperti tabung yang
+ * terpotong begitu saja di tengah udara.
+ */
+function mulutPipa(a, b, r, mat) {
+  const g = new THREE.Group();
+  g.add(pipeBetween(a, b, r, mat));
+  const A = new THREE.Vector3(...a);
+  const B = new THREE.Vector3(...b);
+  const arah = new THREE.Vector3().subVectors(B, A).normalize();
+  const pangkal = B.clone().addScaledVector(arah, -0.05);
+  g.add(pipeBetween(pangkal.toArray(), B.toArray(), r * 1.28, steel));
+  return g;
+}
 
 /* 1 · Pengkondisi umpan */
 export function bangunPengkondisi() {
@@ -56,8 +83,9 @@ export function bangunWhims() {
   const coilL = cyl(0.34, 0.34, 0.5, copper); coilL.rotation.z = Math.PI / 2; coilL.position.set(-1.2, 1.4, 0); g.add(coilL);
   const coilR = coilL.clone(); coilR.position.x = 1.2; g.add(coilR);
   g.add(pipeBetween([0, 2.6, 0.5], [0, 3.3, 0.5], 0.15, pipe));
-  g.add(arrowPipe([-0.5, 0.5, 0.4], [-0.5, -0.4, 0.4], 0.14, pipe));
-  g.add(arrowPipe([0.5, 0.5, 0.4], [0.5, -0.4, 0.4], 0.14, pipe));
+  // Dua keluaran di bawah rumah: fraksi magnetik di kiri, non-magnetik di kanan.
+  g.add(mulutPipa([-0.5, 0.5, 0.4], [-0.5, -0.62, 0.4], 0.14, pipe));
+  g.add(mulutPipa([0.5, 0.5, 0.4], [0.5, -0.62, 0.4], 0.14, pipe));
   g.userData = { focus: new THREE.Vector3(0, 1.4, 0), dist: 9 };
   return g;
 }
@@ -71,8 +99,11 @@ export function bangunSensor() {
   const cab = kulit(box(0.9, 1.3, 0.6, steel)); cab.position.set(1.6, 0.75, 0); g.add(cab);
   const door = box(0.02, 1.1, 0.5, M(0x778391, 0.6, 0.4)); door.position.set(1.14, 0.8, 0); g.add(door);
   g.add(pipeBetween([0.55, 1.7, 0], [1.2, 1.1, 0], 0.05, rubber));
-  g.add(arrowPipe([0, 3.2, 0], [0, 3.9, 0], 0.1, pipe));
-  g.add(arrowPipe([0, 0, 0], [0, -0.5, 0], 0.1, pipe));
+  // Sambungan masuk di atas dan keluar di bawah kini seukuran pipa utamanya
+  // (r = 0,28), jadi terbaca sebagai satu pipa yang menerus, bukan tusuk sate
+  // tipis yang menempel di kedua ujungnya.
+  g.add(kulit(mulutPipa([0, 3.2, 0], [0, 3.95, 0], 0.28, pipe)));
+  g.add(kulit(mulutPipa([0, 0, 0], [0, -0.62, 0], 0.28, pipe)));
   g.userData = { focus: new THREE.Vector3(0.6, 1.6, 0), dist: 8 };
   return g;
 }
@@ -82,11 +113,11 @@ export function bangunKatup() {
   const g = new THREE.Group();
   g.add(kulit(pipeBetween([-1.5, 0, 0], [0, 0, 0], 0.24, pipe)));
   const bodyv = kulit(cyl(0.34, 0.34, 0.7, rubber)); bodyv.rotation.z = Math.PI / 2; g.add(bodyv);
-  // arrowPipe mengembalikan Group, jadi penandaannya lewat traverse, bukan kulit().
-  for (const cabang of [arrowPipe([0, 0, 0], [1.3, 0.85, 0], 0.22, pipe), arrowPipe([0, 0, 0], [1.3, -0.85, 0], 0.22, pipe)]) {
-    cabang.traverse((o) => { if (o.isMesh) o.userData.selubung = true; });
-    g.add(cabang);
-  }
+  // Dua cabang keluar. Panjangnya dijaga sampai ±1,95 satuan dari titik asal,
+  // yaitu sejauh jangkauan panah lama termasuk kerucutnya, supaya siluet katup
+  // tidak mengerut setelah kerucutnya dilepas.
+  g.add(kulit(mulutPipa([0, 0, 0], [1.63, 1.07, 0], 0.22, pipe)));
+  g.add(kulit(mulutPipa([0, 0, 0], [1.63, -1.07, 0], 0.22, pipe)));
   const act = kulit(cyl(0.3, 0.3, 0.7, dark)); act.position.y = 0.75; g.add(act);
   const knob = cyl(0.18, 0.18, 0.25, yellow); knob.position.y = 1.2; g.add(knob);
   g.userData = { focus: new THREE.Vector3(0, 0, 0), dist: 7 };

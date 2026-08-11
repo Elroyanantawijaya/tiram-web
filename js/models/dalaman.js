@@ -214,8 +214,10 @@ export function dalamSensor({ ringkas = false } = {}) {
   // Kolom bubur yang sedang lewat. Justru inilah yang dibaca detektor: gamma
   // menembus dinding pipa, sehingga bacaannya mewakili seluruh isi, bukan
   // permukaannya saja.
-  const kolom = cyl(0.235, 0.235, 3.16, bubur);
-  kolom.position.y = 1.6;
+  // Panjangnya mengikuti pipa termasuk kedua mulut sambungannya, supaya kolom
+  // buburnya tidak terputus di tempat pipa masuk dan keluar bersambung.
+  const kolom = cyl(0.235, 0.235, 4.5, bubur);
+  kolom.position.y = 1.66;
   g.add(kolom);
 
   // Kolimator timbal: menutup 290° dan menyisakan jendela ke arah +x. Tanpa
@@ -317,8 +319,8 @@ export function dalamKatup({ ringkas = false } = {}) {
   dalamSelongsong.rotation.z = Math.PI / 2;
   aliran.add(dalamSelongsong);
   aliran.add(pipeBetween([-1.46, 0, 0], [-0.34, 0, 0], 0.17, bubur));
-  aliran.add(pipeBetween([0.3, 0.2, 0], [1.22, 0.8, 0], 0.15, bubur));
-  aliran.add(pipeBetween([0.3, -0.2, 0], [1.22, -0.8, 0], 0.15, bubur));
+  aliran.add(pipeBetween([0.3, 0.2, 0], [1.55, 1.02, 0], 0.15, bubur));
+  aliran.add(pipeBetween([0.3, -0.2, 0], [1.55, -1.02, 0], 0.15, bubur));
   g.add(aliran);
 
   // Sepasang batang penjepit. Menjepit satu cabang memaksa seluruh aliran ke
